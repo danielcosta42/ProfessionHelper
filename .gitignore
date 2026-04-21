@@ -24,6 +24,14 @@ desktop.ini
 *.zip
 releases/
 
+# Developer Documentation (not needed in repo)
+LOCALIZATION.md
+PUBLISHING.md
+SCREENSHOTS.md
+MARKETING.md
+PACKAGE-STATUS.md
+CREATE-PACKAGE.md
+
 # Test files
 test/
 temp/
