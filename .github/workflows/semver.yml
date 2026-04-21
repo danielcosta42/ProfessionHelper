@@ -67,14 +67,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📦 Published to:" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ GitHub Releases" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -n "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
-            echo "- ✅ CurseForge" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ -n "${{ secrets.WOWI_API_TOKEN }}" ]; then
-            echo "- ✅ WoWInterface" >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "- ⚙️ CurseForge (if token configured)" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚙️ WoWInterface (if token configured)" >> $GITHUB_STEP_SUMMARY
 
       - name: No Release
         if: steps.new_version.outputs.version == steps.current_version.outputs.version

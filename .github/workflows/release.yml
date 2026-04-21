@@ -97,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to CurseForge
-        if: ${{ secrets.CURSEFORGE_TOKEN != '' }}
+        continue-on-error: true
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
@@ -112,7 +112,7 @@ jobs:
           release_type: release
 
       - name: Upload to WoWInterface
-        if: ${{ secrets.WOWI_API_TOKEN != '' }}
+        continue-on-error: true
         run: |
           # WoWInterface API upload
           curl -X POST "https://api.wowinterface.com/addons/update" \
@@ -132,17 +132,8 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 📦 Published to:" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ GitHub Releases" >> $GITHUB_STEP_SUMMARY
-          
-          if [ -n "${{ secrets.CURSEFORGE_TOKEN }}" ]; then
-            echo "- ✅ CurseForge" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ CurseForge (token not configured)" >> $GITHUB_STEP_SUMMARY
-          fi
-          
-          if [ -n "${{ secrets.WOWI_API_TOKEN }}" ]; then
-            echo "- ✅ WoWInterface" >> $GITHUB_STEP_SUMMARY
-          else
-            echo "- ⏭️ WoWInterface (token not configured)" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚙️ CurseForge (if token configured)" >> $GITHUB_STEP_SUMMARY
+          echo "- ⚙️ WoWInterface (if token configured)" >> $GITHUB_STEP_SUMMARY
           fi
           
           echo "" >> $GITHUB_STEP_SUMMARY
