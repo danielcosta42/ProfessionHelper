@@ -93,10 +93,11 @@ jobs:
 
       - name: Upload to CurseForge
         continue-on-error: true
+        if: ${{ secrets.CURSEFORGE_PROJECT_ID != '' && secrets.CURSEFORGE_TOKEN != '' }}
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
-          project_id: '000000'
+          project_id: '1520857'
           game_endpoint: wow
           file_path: ProfessionHelper-v${{ github.event.inputs.version }}.zip
           changelog_type: markdown

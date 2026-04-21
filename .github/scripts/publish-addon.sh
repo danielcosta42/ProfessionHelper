@@ -40,22 +40,28 @@ SIZE=$(stat -c%s "ProfessionHelper-v${VERSION}.zip" 2>/dev/null || stat -f%z "Pr
 SIZE_KB=$((SIZE / 1024))
 echo "✅ Package created: ProfessionHelper-v${VERSION}.zip (${SIZE_KB} KB)"
 
+CURSEFORGE_PROJECT_ID="1520857"
+
 # Upload to CurseForge (if token configured)
 if [ -n "$CURSEFORGE_TOKEN" ]; then
-    echo "📤 Uploading to CurseForge..."
+    echo "📤 Uploading to CurseForge (project: $CURSEFORGE_PROJECT_ID)..."
     
-    curl -X POST "https://wow.curseforge.com/api/projects/1520857/upload-file" \
+    RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+        "https://wow.curseforge.com/api/projects/${CURSEFORGE_PROJECT_ID}/upload-file" \
         -H "X-Api-Token: $CURSEFORGE_TOKEN" \
         -F "metadata={\"changelog\":\"See CHANGELOG.md\",\"changelogType\":\"markdown\",\"displayName\":\"Profession Helper v${VERSION}\",\"gameVersions\":[11302,11303],\"releaseType\":\"release\"}" \
-        -F "file=@ProfessionHelper-v${VERSION}.zip"
+        -F "file=@ProfessionHelper-v${VERSION}.zip")
     
-    if [ $? -eq 0 ]; then
+    HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+    
+    if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
         echo "✅ Uploaded to CurseForge"
     else
-        echo "⚠️ CurseForge upload failed (non-fatal)"
+        echo "⚠️ CurseForge upload failed (HTTP $HTTP_CODE) — non-fatal"
+        echo "$RESPONSE" | head -n-1
     fi
 else
-    echo "⏭️ Skipping CurseForge (token not configured)"
+    echo "⏭️ Skipping CurseForge (CURSEFORGE_TOKEN secret not configured)"
 fi
 
 # Upload to WoWInterface (if token configured)
