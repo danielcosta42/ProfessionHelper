@@ -44,7 +44,7 @@ echo "✅ Package created: ProfessionHelper-v${VERSION}.zip (${SIZE_KB} KB)"
 if [ -n "$CURSEFORGE_TOKEN" ]; then
     echo "📤 Uploading to CurseForge..."
     
-    curl -X POST "https://wow.curseforge.com/api/projects/YOUR_PROJECT_ID/upload-file" \
+    curl -X POST "https://wow.curseforge.com/api/projects/1520857/upload-file" \
         -H "X-Api-Token: $CURSEFORGE_TOKEN" \
         -F "metadata={\"changelog\":\"See CHANGELOG.md\",\"changelogType\":\"markdown\",\"displayName\":\"Profession Helper v${VERSION}\",\"gameVersions\":[11302,11303],\"releaseType\":\"release\"}" \
         -F "file=@ProfessionHelper-v${VERSION}.zip"

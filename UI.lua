@@ -120,6 +120,94 @@ local function ProfIcon2(profName)
 end
 
 -------------------------------------------------------------------------------
+-- Home panel (banner + credits)
+-------------------------------------------------------------------------------
+function PH:BuildHomePanel(parent)
+    local y = -30
+
+    y = y - 10
+
+    -- Gold separator
+    local sep1 = parent:CreateTexture(nil, "ARTWORK")
+    sep1:SetHeight(1)
+    sep1:SetPoint("TOPLEFT", 14, y)
+    sep1:SetPoint("TOPRIGHT", -14, y)
+    sep1:SetColorTexture(T.gold[1], T.gold[2], T.gold[3], 0.4)
+    y = y - 20
+
+    -- Addon name
+    local nameText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalHuge")
+    nameText:SetPoint("TOP", 0, y)
+    nameText:SetText(hexc(T.gold) .. "Profession Helper|r")
+    y = y - 30
+
+    -- Version + Author
+    local verText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    verText:SetPoint("TOP", 0, y)
+    verText:SetText(
+        hexc(T.accent) .. "v" .. PH.version .. "|r  " ..
+        hexc(T.textMuted) .. "by |r" ..
+        hexc(T.textPrimary) .. PH.author .. "|r"
+    )
+    y = y - 22
+
+    -- License
+    local licText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    licText:SetPoint("TOP", 0, y)
+    licText:SetText(hexc(T.textMuted) .. PH.license .. "|r")
+    y = y - 26
+
+    -- Separator
+    local sep2 = parent:CreateTexture(nil, "ARTWORK")
+    sep2:SetHeight(1)
+    sep2:SetPoint("TOPLEFT", 80, y)
+    sep2:SetPoint("TOPRIGHT", -80, y)
+    sep2:SetColorTexture(rgba(T.border))
+    y = y - 22
+
+    -- Features title
+    local featTitle = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    featTitle:SetPoint("TOPLEFT", 80, y)
+    featTitle:SetText(hexc(T.gold) .. "Features|r")
+    y = y - 22
+
+    -- Feature lines
+    local lines = {
+        PH.L["WELCOME_LINE1"],
+        PH.L["WELCOME_LINE2"],
+        PH.L["WELCOME_LINE3"],
+        PH.L["WELCOME_LINE4"],
+    }
+    for _, line in ipairs(lines) do
+        local ft = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        ft:SetPoint("TOPLEFT", 80, y)
+        ft:SetText(hexc(T.accent) .. "»  |r" .. hexc(T.textPrimary) .. line .. "|r")
+        y = y - 19
+    end
+
+    y = y - 16
+
+    -- Bottom separator
+    local sep3 = parent:CreateTexture(nil, "ARTWORK")
+    sep3:SetHeight(1)
+    sep3:SetPoint("TOPLEFT", 80, y)
+    sep3:SetPoint("TOPRIGHT", -80, y)
+    sep3:SetColorTexture(rgba(T.border))
+    y = y - 16
+
+    -- GitHub
+    local ghText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    ghText:SetPoint("TOP", 0, y)
+    ghText:SetText(hexc(T.textMuted) .. "GitHub: |r" .. hexc(T.accent) .. PH.github .. "|r")
+    y = y - 18
+
+    -- WoW badge
+    local tbcText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    tbcText:SetPoint("TOP", 0, y)
+    tbcText:SetText(hexc(T.textMuted) .. "World of Warcraft: The Burning Crusade Classic|r")
+end
+
+-------------------------------------------------------------------------------
 -- Create the main window
 -------------------------------------------------------------------------------
 function PH:CreateMainWindow()
@@ -265,19 +353,13 @@ function PH:CreateMainWindow()
     frame.contentChild  = scrollChild
     frame.contentArea   = contentArea
 
-    -- Welcome text
-    local wt = scrollChild:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    wt:SetPoint("TOP", 0, -40)
-    wt:SetWidth(380)
-    wt:SetJustifyH("CENTER")
-    wt:SetSpacing(4)
-    wt:SetText(hexc(T.gold) .. PH.L["ADDON_NAME"] .. "|r\n\n" ..
-        hexc(T.textSecondary) .. PH.L["SELECT_PROFESSION"] .. "\n\n" ..
-        hexc(T.accent) .. "•  |r" .. hexc(T.textPrimary) .. PH.L["WELCOME_LINE1"] .. "\n" ..
-        hexc(T.accent) .. "•  |r" .. hexc(T.textPrimary) .. PH.L["WELCOME_LINE2"] .. "\n" ..
-        hexc(T.accent) .. "•  |r" .. hexc(T.textPrimary) .. PH.L["WELCOME_LINE3"] .. "\n" ..
-        hexc(T.accent) .. "•  |r" .. hexc(T.textPrimary) .. PH.L["WELCOME_LINE4"] .. "|r")
-    frame.welcomeText = wt
+    -- Home panel (banner + credits)
+    local homePanel = CreateFrame("Frame", nil, contentArea, "BackdropTemplate")
+    homePanel:SetPoint("TOPLEFT", 1, -1)
+    homePanel:SetPoint("BOTTOMRIGHT", -1, 1)
+    MakeFlat(homePanel, T.bgContent)
+    frame.homePanel = homePanel
+    PH:BuildHomePanel(homePanel)
 
     -- Sidebar scroll (mousewheel only, no scrollbar)
     local sideScroll = CreateFrame("ScrollFrame", nil, sidebar)
@@ -301,6 +383,52 @@ function PH:CreateMainWindow()
     local iconSize = 32
     local iconPad = 2
     local yOff = -8
+
+    -- Home button (top of sidebar)
+    local homeBtn = CreateFrame("Button", nil, sideChild)
+    homeBtn:SetSize(iconSize + 4, iconSize + 4)
+    homeBtn:SetPoint("TOP", 0, yOff)
+
+    local homeIco = homeBtn:CreateTexture(nil, "ARTWORK")
+    homeIco:SetSize(iconSize, iconSize)
+    homeIco:SetPoint("CENTER")
+    homeIco:SetTexture("Interface\\Icons\\INV_Misc_Book_09")
+    homeIco:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+    local homeHL = homeBtn:CreateTexture(nil, "HIGHLIGHT")
+    homeHL:SetAllPoints()
+    homeHL:SetColorTexture(T.gold[1], T.gold[2], T.gold[3], 0.20)
+
+    local homeSel = homeBtn:CreateTexture(nil, "OVERLAY")
+    homeSel:SetSize(3, iconSize)
+    homeSel:SetPoint("LEFT", homeBtn, "LEFT", -2, 0)
+    homeSel:SetColorTexture(T.gold[1], T.gold[2], T.gold[3])
+    homeSel:Show()  -- starts selected (no profession on first open)
+    frame.homeSel = homeSel
+
+    homeBtn:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(hexc(T.gold) .. "Profession Helper|r")
+        GameTooltip:AddLine("Home / Credits", T.textSecondary[1], T.textSecondary[2], T.textSecondary[3])
+        GameTooltip:Show()
+    end)
+    homeBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    homeBtn:SetScript("OnClick", function()
+        for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
+        homeSel:Show()
+        PH.selectedProfession = nil
+        PH.viewedStepIndex = nil
+        PH.gatherViewStep = nil
+        PH:UpdateContentPanel()
+    end)
+
+    yOff = yOff - (iconSize + iconPad + 8)
+
+    local homeSepLine = sideChild:CreateTexture(nil, "ARTWORK")
+    homeSepLine:SetSize(iconSize, 1)
+    homeSepLine:SetPoint("TOP", 0, yOff)
+    homeSepLine:SetColorTexture(rgba(T.border))
+    yOff = yOff - 8
 
     local categories = {
         { profs = {"Alchemy","Blacksmithing","Enchanting","Engineering","Jewelcrafting","Leatherworking","Tailoring"} },
@@ -416,6 +544,7 @@ function PH:CreateMainWindow()
 
             btn:SetScript("OnClick", function(self)
                 for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
+                frame.homeSel:Hide()
                 self.selectedBar:Show()
                 PH.selectedProfession = self.professionName
                 PH.viewedStepIndex = nil
@@ -468,12 +597,13 @@ function PH:UpdateContentPanel()
     for _, region in pairs({ scrollChild:GetRegions() }) do region:Hide() end
 
     if not self.selectedProfession then
-        frame.welcomeText:Show()
+        frame.homePanel:Show()
+        frame.contentScroll:Hide()
         frame.tabBar:Hide()
-        frame.contentScroll:SetPoint("TOPLEFT", 8, -8)
         return
     end
-    frame.welcomeText:Hide()
+    frame.homePanel:Hide()
+    frame.contentScroll:Show()
 
     local profData = self:GetProfessionData(self.selectedProfession)
     if not profData then

@@ -455,8 +455,9 @@ function PH:CreateMinimapButton()
     -- Button textures
     local icon = button:CreateTexture(nil, "BACKGROUND")
     icon:SetTexture("Interface\\Icons\\INV_Misc_Book_09")
-    icon:SetSize(20, 20)
+    icon:SetSize(28, 28)
     icon:SetPoint("CENTER")
+    icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
     
     local border = button:CreateTexture(nil, "OVERLAY")
     border:SetTexture("Interface\\Minimap\\MiniMap-TrackingBorder")

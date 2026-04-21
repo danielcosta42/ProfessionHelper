@@ -1,7 +1,10 @@
-name: Semantic Release
+name: CI/CD
 
 on:
   push:
+    branches:
+      - main
+  pull_request:
     branches:
       - main
 
@@ -11,77 +14,101 @@ permissions:
   pull-requests: write
 
 jobs:
-  release:
-    name: Semantic Release
+  # ── 1. Validate ───────────────────────────────────────────────────────────────
+  validate:
+    name: Validate
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v10
         with:
-          fetch-depth: 0  # Full history for semantic-release
+          luaVersion: "5.1"
+
+      - name: Check Lua syntax
+        run: |
+          echo "🔍 Checking Lua syntax..."
+          ERRORS=0
+          for file in $(find . -type f -name "*.lua" ! -path "./.lua/*" ! -path "./.luarocks/*"); do
+            if ! luac -p "$file" > /dev/null 2>&1; then
+              echo "❌ Syntax error in: $file"
+              luac -p "$file"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+          [ $ERRORS -eq 0 ] && echo "✅ All Lua files OK" || exit 1
+
+      - name: Check TOC fields
+        run: |
+          for field in "## Interface:" "## Title:" "## Version:" "## Author:"; do
+            grep -q "^$field" ProfessionHelper.toc || { echo "❌ Missing: $field"; exit 1; }
+          done
+          echo "✅ TOC validated"
+
+      - name: Check required files
+        run: |
+          for f in ProfessionHelper.toc Core.lua UI.lua LICENSE README.md CHANGELOG.md; do
+            [ -f "$f" ] || { echo "❌ Missing: $f"; exit 1; }
+          done
+          echo "✅ All required files present"
+
+  # ── 2. Release (only on push to main, not PRs) ───────────────────────────────
+  release:
+    name: Release & Publish
+    runs-on: ubuntu-latest
+    needs: validate
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
 
-      - name: Install Dependencies
+      - name: Install semantic-release
         run: |
           npm install -g \
             semantic-release \
             @semantic-release/git \
             @semantic-release/changelog \
             @semantic-release/exec \
+            @semantic-release/github \
             conventional-changelog-conventionalcommits
 
-      - name: Get Current Version
-        id: current_version
+      - name: Get current version
+        id: before
         run: |
-          VERSION=$(grep "^## Version:" ProfessionHelper.toc | sed 's/## Version: //')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Current version: $VERSION"
+          echo "version=$(grep '^## Version:' ProfessionHelper.toc | sed 's/## Version: //')" >> $GITHUB_OUTPUT
 
-      - name: Run Semantic Release
+      - name: Run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
           WOWI_API_TOKEN: ${{ secrets.WOWI_API_TOKEN }}
         run: npx semantic-release
 
-      - name: Get New Version
-        id: new_version
+      - name: Get new version
+        id: after
         run: |
-          VERSION=$(grep "^## Version:" ProfessionHelper.toc | sed 's/## Version: //')
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "New version: $VERSION"
+          echo "version=$(grep '^## Version:' ProfessionHelper.toc | sed 's/## Version: //')" >> $GITHUB_OUTPUT
 
       - name: Summary
-        if: steps.new_version.outputs.version != steps.current_version.outputs.version
         run: |
-          echo "## 🎉 New Release Created!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Previous Version:** ${{ steps.current_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "**New Version:** ${{ steps.new_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📦 Published to:" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ GitHub Releases" >> $GITHUB_STEP_SUMMARY
-          echo "- ⚙️ CurseForge (if token configured)" >> $GITHUB_STEP_SUMMARY
-          echo "- ⚙️ WoWInterface (if token configured)" >> $GITHUB_STEP_SUMMARY
-
-      - name: No Release
-        if: steps.new_version.outputs.version == steps.current_version.outputs.version
-        run: |
-          echo "## ℹ️ No Release Created" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "No breaking changes, features, or fixes found in commits." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Current Version:** ${{ steps.current_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Commit Format Examples:" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "feat: add new gathering guide" >> $GITHUB_STEP_SUMMARY
-          echo "fix: correct TSM price calculation" >> $GITHUB_STEP_SUMMARY
-          echo "feat!: redesign UI (breaking change)" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          BEFORE="${{ steps.before.outputs.version }}"
+          AFTER="${{ steps.after.outputs.version }}"
+          if [ "$BEFORE" != "$AFTER" ]; then
+            echo "## ✅ Released v$AFTER" >> $GITHUB_STEP_SUMMARY
+            echo "**Previous:** v$BEFORE → **New:** v$AFTER" >> $GITHUB_STEP_SUMMARY
+            echo "### 📦 Published to:" >> $GITHUB_STEP_SUMMARY
+            echo "- ✅ GitHub Releases" >> $GITHUB_STEP_SUMMARY
+            echo "- ⚙️ CurseForge (if token configured)" >> $GITHUB_STEP_SUMMARY
+            echo "- ⚙️ WoWInterface (if token configured)" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "## ℹ️ No release — no releasable commits." >> $GITHUB_STEP_SUMMARY
+            echo "Use \`feat:\` or \`fix:\` prefixes to trigger a release." >> $GITHUB_STEP_SUMMARY
+          fi
