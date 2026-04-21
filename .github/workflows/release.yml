@@ -93,7 +93,6 @@ jobs:
 
       - name: Upload to CurseForge
         continue-on-error: true
-        if: ${{ secrets.CURSEFORGE_PROJECT_ID != '' && secrets.CURSEFORGE_TOKEN != '' }}
         uses: itsmeow/curseforge-upload@v3
         with:
           token: ${{ secrets.CURSEFORGE_TOKEN }}
