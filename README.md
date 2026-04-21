@@ -7,6 +7,9 @@
 ![License](https://img.shields.io/badge/license-Free%20for%20Personal%20Use-green.svg)
 ![Languages](https://img.shields.io/badge/languages-PT%20%7C%20EN%20%7C%20ES-brightgreen.svg)
 
+[![Release](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/release.yml/badge.svg)](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/release.yml)
+[![Validate](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/validate.yml/badge.svg)](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/validate.yml)
+
 **The ultimate profession leveling guide for World of Warcraft: The Burning Crusade Classic**
 
 [Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Support](#-support) • [Credits](#-credits)
@@ -196,7 +199,70 @@ This addon is provided free of charge for personal, non-commercial use. The sour
 
 ---
 
-## 🔮 Roadmap
+## �‍💻 For Developers
+
+### Automated CI/CD
+This project uses **GitHub Actions** for automated building, testing, and publishing:
+
+- ✅ **Automatic releases** when you push version tags
+- ✅ **Code validation** on every commit
+- ✅ **Package testing** on pull requests
+- ✅ **Multi-platform publishing** (GitHub, CurseForge, WoWInterface)
+
+**Quick Release:**
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+# Watch automation in the Actions tab!
+```
+
+See [.github/CICD-SETUP.md](.github/CICD-SETUP.md) for complete setup guide.
+
+### Contributing
+Contributions are welcome! Here's how:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes using **Conventional Commits** format:
+   ```bash
+   git commit -m "feat: add amazing feature"
+   git commit -m "fix: resolve bug in X"
+   git commit -m "docs: update README"
+   ```
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+The validation workflow will automatically check your code!
+
+**Commit Format Guide:** Use conventional commits for automatic versioning:
+- `feat:` - New features (bumps MINOR version)
+- `fix:` - Bug fixes (bumps PATCH version)
+- `docs:` - Documentation only (no version bump)
+- `feat!:` - Breaking changes (bumps MAJOR version)
+
+See [Conventional Commits Guide](.github/CONVENTIONAL-COMMITS.md) for details.
+
+### Development Setup
+```bash
+# Clone repository
+git clone https://github.com/danielcosta42/ProfessionHelper.git
+
+# Navigate to directory
+cd ProfessionHelper
+
+# Make changes and test in WoW
+# Commit with conventional format
+git commit -m "feat: your new feature"
+
+# Push - version will be automatically bumped!
+git push origin main
+```
+
+**Automatic Releases:** This project uses semantic versioning. When you push commits to `main` with conventional format, a new version is automatically released. No manual version updates needed!
+
+---
+
+## �🔮 Roadmap
 
 ### Planned Features
 - [ ] In-game configuration panel

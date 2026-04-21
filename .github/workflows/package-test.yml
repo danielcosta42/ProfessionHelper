@@ -1,0 +1,118 @@
+name: Test Package
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  test-package:
+    name: Test Release Package Creation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Create Test Package
+        run: |
+          echo "📦 Creating test package..."
+          
+          # Create package directory
+          mkdir -p package/ProfessionHelper
+          
+          # Copy files (same as release workflow)
+          cp *.lua package/ProfessionHelper/ 2>/dev/null || true
+          cp *.toc package/ProfessionHelper/
+          cp LICENSE package/ProfessionHelper/
+          cp README.md package/ProfessionHelper/
+          cp CHANGELOG.md package/ProfessionHelper/
+          cp -r Locales package/ProfessionHelper/
+          cp -r Data package/ProfessionHelper/
+
+      - name: Create ZIP
+        run: |
+          cd package
+          zip -r ../ProfessionHelper-test.zip ProfessionHelper/
+          cd ..
+          echo "✅ Test ZIP created"
+
+      - name: Validate Package Structure
+        run: |
+          echo "🔍 Validating package structure..."
+          
+          # Extract to temp directory
+          mkdir -p temp_extract
+          unzip -q ProfessionHelper-test.zip -d temp_extract
+          
+          # Check that files are in ProfessionHelper directory
+          if [ ! -d "temp_extract/ProfessionHelper" ]; then
+            echo "❌ Package structure incorrect: missing ProfessionHelper directory"
+            exit 1
+          fi
+          
+          # Check required files
+          REQUIRED_FILES=(
+            "temp_extract/ProfessionHelper/ProfessionHelper.toc"
+            "temp_extract/ProfessionHelper/Core.lua"
+            "temp_extract/ProfessionHelper/UI.lua"
+            "temp_extract/ProfessionHelper/LICENSE"
+          )
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing file in package: $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ Package structure validated"
+
+      - name: Check Package Size
+        run: |
+          SIZE=$(stat -f%z ProfessionHelper-test.zip 2>/dev/null || stat -c%s ProfessionHelper-test.zip)
+          SIZE_KB=$((SIZE / 1024))
+          
+          echo "📊 Package size: ${SIZE_KB} KB"
+          
+          if [ $SIZE_KB -gt 2048 ]; then
+            echo "⚠️ Warning: Package is larger than 2MB (${SIZE_KB} KB)"
+            echo "This might indicate unnecessary files are included."
+          fi
+          
+          if [ $SIZE_KB -lt 50 ]; then
+            echo "❌ Error: Package is too small (${SIZE_KB} KB)"
+            echo "Some files might be missing."
+            exit 1
+          fi
+          
+          echo "✅ Package size is reasonable"
+
+      - name: List Package Contents
+        run: |
+          echo "📋 Package contents:"
+          unzip -l ProfessionHelper-test.zip
+
+      - name: Package Test Summary
+        run: |
+          echo "## 📦 Package Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Package created successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          SIZE=$(stat -f%z ProfessionHelper-test.zip 2>/dev/null || stat -c%s ProfessionHelper-test.zip)
+          SIZE_KB=$((SIZE / 1024))
+          echo "**Package Size:** ${SIZE_KB} KB" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          echo "### Package Contents:" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          unzip -l ProfessionHelper-test.zip >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Test Package as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-package
+          path: ProfessionHelper-test.zip
+          retention-days: 7

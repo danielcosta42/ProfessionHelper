@@ -1,0 +1,220 @@
+name: Validate Code
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    name: Validate Lua Files
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Lua
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"
+
+      - name: Install luacheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacheck
+
+      - name: Run luacheck
+        run: |
+          # Create .luacheckrc if it doesn't exist
+          if [ ! -f .luacheckrc ]; then
+            cat > .luacheckrc << 'EOF'
+          -- Luacheck configuration for WoW TBC Classic addons
+          
+          std = "lua51"
+          
+          -- WoW API globals
+          globals = {
+              -- Frames
+              "CreateFrame",
+              "UIParent",
+              
+              -- Game functions
+              "GetLocale",
+              "GetNumSkillLines",
+              "GetSkillLineInfo",
+              "ExpandSkillHeader",
+              "CollapseSkillHeader",
+              "GetTradeSkillLine",
+              "GetItemInfo",
+              "IsShiftKeyDown",
+              "IsControlKeyDown",
+              "IsAltKeyDown",
+              
+              -- Print functions
+              "DEFAULT_CHAT_FRAME",
+              
+              -- Tables
+              "SlashCmdList",
+              "SLASH_PROFESSIONHELPER1",
+              "SLASH_PROFESSIONHELPER2",
+              
+              -- Math
+              "math",
+              "string",
+              "table",
+              "pairs",
+              "ipairs",
+              "tonumber",
+              "tostring",
+              "type",
+              "select",
+              "unpack",
+              "next",
+              
+              -- Custom addon globals
+              "PH",
+              "ProfessionHelperDB",
+          }
+          
+          -- Ignore some warnings
+          ignore = {
+              "212",  -- Unused argument
+              "213",  -- Unused loop variable
+              "631",  -- Line too long
+          }
+          
+          -- Exclude test files and generated code
+          exclude_files = {
+              ".git/**",
+              ".github/**",
+              "releases/**",
+          }
+          EOF
+          fi
+          
+          echo "🔍 Running luacheck..."
+          luacheck . --no-color || true
+          echo "✅ Luacheck completed"
+
+      - name: Check File Structure
+        run: |
+          echo "📂 Validating file structure..."
+          
+          # Check required files exist
+          REQUIRED_FILES=(
+            "ProfessionHelper.toc"
+            "Core.lua"
+            "UI.lua"
+            "LICENSE"
+            "README.md"
+            "CHANGELOG.md"
+          )
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "❌ Missing required file: $file"
+              exit 1
+            fi
+          done
+          
+          # Check required directories exist
+          REQUIRED_DIRS=(
+            "Data"
+            "Locales"
+          )
+          
+          for dir in "${REQUIRED_DIRS[@]}"; do
+            if [ ! -d "$dir" ]; then
+              echo "❌ Missing required directory: $dir"
+              exit 1
+            fi
+          done
+          
+          echo "✅ File structure validated"
+
+      - name: Validate TOC File
+        run: |
+          echo "📋 Validating TOC file..."
+          
+          # Check TOC has required fields
+          if ! grep -q "^## Interface:" ProfessionHelper.toc; then
+            echo "❌ Missing Interface field in TOC"
+            exit 1
+          fi
+          
+          if ! grep -q "^## Title:" ProfessionHelper.toc; then
+            echo "❌ Missing Title field in TOC"
+            exit 1
+          fi
+          
+          if ! grep -q "^## Version:" ProfessionHelper.toc; then
+            echo "❌ Missing Version field in TOC"
+            exit 1
+          fi
+          
+          if ! grep -q "^## Author:" ProfessionHelper.toc; then
+            echo "❌ Missing Author field in TOC"
+            exit 1
+          fi
+          
+          echo "✅ TOC file validated"
+
+      - name: Check for Syntax Errors
+        run: |
+          echo "🔍 Checking Lua syntax..."
+          
+          ERRORS=0
+          for file in $(find . -name "*.lua"); do
+            if ! luac -p "$file" > /dev/null 2>&1; then
+              echo "❌ Syntax error in: $file"
+              luac -p "$file"
+              ERRORS=$((ERRORS + 1))
+            fi
+          done
+          
+          if [ $ERRORS -gt 0 ]; then
+            echo "❌ Found $ERRORS file(s) with syntax errors"
+            exit 1
+          fi
+          
+          echo "✅ No syntax errors found"
+
+      - name: Validate Localization
+        run: |
+          echo "🌍 Validating localization files..."
+          
+          if [ ! -f "Locales/Locales.lua" ]; then
+            echo "❌ Missing Locales/Locales.lua"
+            exit 1
+          fi
+          
+          # Check for required locale tables
+          if ! grep -q "Locales.ptBR" Locales/Locales.lua; then
+            echo "❌ Missing Portuguese (ptBR) locale"
+            exit 1
+          fi
+          
+          if ! grep -q "Locales.enUS" Locales/Locales.lua; then
+            echo "❌ Missing English (enUS) locale"
+            exit 1
+          fi
+          
+          if ! grep -q "Locales.esES" Locales/Locales.lua; then
+            echo "❌ Missing Spanish (esES) locale"
+            exit 1
+          fi
+          
+          echo "✅ Localization validated"
+
+      - name: Validation Summary
+        run: |
+          echo "## ✅ Validation Passed!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All checks completed successfully:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Lua syntax check" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ File structure validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ TOC file validation" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Localization validation" >> $GITHUB_STEP_SUMMARY

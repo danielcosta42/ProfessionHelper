@@ -32,6 +32,15 @@ MARKETING.md
 PACKAGE-STATUS.md
 CREATE-PACKAGE.md
 
+# GitHub Actions setup docs (keep workflows, but hide detailed setup)
+.github/CICD-SETUP.md
+.github/RELEASE-GUIDE.md
+.github/SEMVER-QUICKSTART.md
+.github/SEMVER-VISUAL-GUIDE.md
+
 # Test files
 test/
 temp/
+
+# Luacheck cache
+.luacheckcache
