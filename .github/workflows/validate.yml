@@ -167,7 +167,7 @@ jobs:
           echo "🔍 Checking Lua syntax..."
           
           ERRORS=0
-          for file in $(find . -name "*.lua"); do
+          for file in $(find . -type f -name "*.lua" ! -path "./.lua/*" ! -path "./.luarocks/*"); do
             if ! luac -p "$file" > /dev/null 2>&1; then
               echo "❌ Syntax error in: $file"
               luac -p "$file"
