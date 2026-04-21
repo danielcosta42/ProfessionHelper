@@ -334,13 +334,6 @@ function PH:OnEvent(event, ...)
                 self.version
             )
             self:Print(welcomeMsg)
-            self:Print("|cff808080Created by " .. self.author .. "|r
-            -- Welcome message
-            local welcomeMsg = string.format(
-                "|cff30a5ffProfession Helper|r |cff808080v%s|r loaded! Type |cff00ff00/ph|r to open.",
-                self.version
-            )
-            self:Print(welcomeMsg)
             self:Print("|cff808080Created by " .. self.author .. "|r")
         end
     elseif event == "SKILL_LINES_CHANGED" or event == "CHAT_MSG_SKILL" or event == "TRADE_SKILL_UPDATE" then
