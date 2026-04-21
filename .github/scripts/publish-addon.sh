@@ -45,20 +45,46 @@ CURSEFORGE_PROJECT_ID="1520857"
 # Upload to CurseForge (if token configured)
 if [ -n "$CURSEFORGE_TOKEN" ]; then
     echo "📤 Uploading to CurseForge (project: $CURSEFORGE_PROJECT_ID)..."
-    
-    RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
-        "https://wow.curseforge.com/api/projects/${CURSEFORGE_PROJECT_ID}/upload-file" \
-        -H "X-Api-Token: $CURSEFORGE_TOKEN" \
-        -F "metadata={\"changelog\":\"See CHANGELOG.md\",\"changelogType\":\"markdown\",\"displayName\":\"Profession Helper v${VERSION}\",\"gameVersions\":[11302,11303],\"releaseType\":\"release\"}" \
-        -F "file=@ProfessionHelper-v${VERSION}.zip")
-    
-    HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
-    
-    if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
-        echo "✅ Uploaded to CurseForge"
+
+    # Fetch valid game version IDs from CurseForge API and filter for Classic/TBC (1.x and 2.x)
+    echo "🔍 Fetching CurseForge game versions..."
+    VERSIONS_JSON=$(curl -s "https://wow.curseforge.com/api/game/versions" \
+        -H "X-Api-Token: $CURSEFORGE_TOKEN")
+
+    GAME_VERSION_IDS=$(echo "$VERSIONS_JSON" | node -e "
+let d='';
+process.stdin.on('data',c=>d+=c).on('end',()=>{
+  try {
+    const data = JSON.parse(d);
+    const ids = data
+      .filter(v => v.name && (v.name.match(/^2\./) || v.name.match(/^1\./)))
+      .map(v => v.id);
+    console.log(ids.join(','));
+  } catch(e) { console.log(''); }
+});
+")
+
+    if [ -z "$GAME_VERSION_IDS" ]; then
+        echo "⚠️ Could not resolve CurseForge game version IDs. Raw response:"
+        echo "$VERSIONS_JSON" | head -c 500
+        echo "⚠️ Skipping CurseForge upload"
     else
-        echo "⚠️ CurseForge upload failed (HTTP $HTTP_CODE) — non-fatal"
-        echo "$RESPONSE" | head -n-1
+        echo "🔍 Using game version IDs: [$GAME_VERSION_IDS]"
+
+        RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://wow.curseforge.com/api/projects/${CURSEFORGE_PROJECT_ID}/upload-file" \
+            -H "X-Api-Token: $CURSEFORGE_TOKEN" \
+            -F "metadata={\"changelog\":\"See CHANGELOG.md\",\"changelogType\":\"markdown\",\"displayName\":\"Profession Helper v${VERSION}\",\"gameVersions\":[${GAME_VERSION_IDS}],\"releaseType\":\"release\"}" \
+            -F "file=@ProfessionHelper-v${VERSION}.zip")
+
+        HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+
+        if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "201" ]; then
+            echo "✅ Uploaded to CurseForge"
+        else
+            echo "⚠️ CurseForge upload failed (HTTP $HTTP_CODE) — non-fatal"
+            echo "$RESPONSE" | head -n-1
+        fi
     fi
 else
     echo "⏭️ Skipping CurseForge (CURSEFORGE_TOKEN secret not configured)"
