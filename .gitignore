@@ -1,0 +1,29 @@
+# Profession Helper - .gitignore
+
+# WoW SavedVariables
+*.bak
+*.old
+*.tmp
+
+# Development
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Package/Release
+*.zip
+releases/
+
+# Test files
+test/
+temp/

@@ -1,0 +1,235 @@
+-- Profession Helper - Fishing & Cooking Combined Guide (TBC Classic)
+-- Based on wow-professions.com combined leveling guide
+-- Tracks both Fishing and Cooking skills simultaneously
+ProfessionHelper = ProfessionHelper or {}
+ProfessionHelper.FishingCooking = {
+    name = "Fishing & Cooking",
+    type = "combo",
+    skills = { "Fishing", "Cooking" },
+    icon = "Trade_Fishing",
+    icon2 = "INV_Misc_Food_15",
+
+    trainer = {
+        ["Alliance"] = {
+            "Fishing: Arnold Leland (Stormwind), Grimnur Stonebrand (Ironforge)",
+            "Cooking: Stephen Ryback (Stormwind), Daryl Riknussun (Ironforge)",
+        },
+        ["Horde"] = {
+            "Fishing: Lumak (Orgrimmar), Uthan Stillwater (Mulgore)",
+            "Cooking: Zamja (Orgrimmar), Pyall Silentstride (Mulgore)",
+        },
+    },
+
+    levelingGuide = {
+        -- ==================== PHASE 1: Fish 1-75 ====================
+        {
+            range = {1, 75},
+            skill = "Fishing",
+            recipe = "Fish in Starting Zone",
+            count = 75,
+            materials = {},
+            source = "Any starting zone or capital city",
+            tip = "Compre Fishing Pole + Shiny Bauble de vendor de pesca. Pesque até 75 em qualquer lago de zona inicial. Você vai pegar ~60 Raw Brilliant Smallfish e alguns Raw Longjaw Mud Snapper. GUARDE TODOS!",
+        },
+        -- ==================== PHASE 2: Fish 75-130, Cook 1-100 ====================
+        {
+            range = {75, 130},
+            skill = "Fishing",
+            recipe = "Fish in Capital City",
+            count = 110,
+            materials = {},
+            source = "Capital city (Thunder Bluff, Stormwind, etc.)",
+            tip = "Aprenda Journeyman Fishing. Pesque na cidade capital até 130. Vai pegar ~20 Brilliant Smallfish, ~60 Longjaw Mud Snapper, ~30 Bristle Whisker Catfish.",
+        },
+        {
+            range = {1, 50},
+            skill = "Cooking",
+            recipe = "Brilliant Smallfish",
+            count = 60,
+            materials = { { name = "Raw Brilliant Smallfish", count = 60 } },
+            source = "Vendor: recipe from fishing supply vendor",
+            tip = "Cozinhe todos os Raw Brilliant Smallfish que pescou. Aprenda a receita no vendor de pesca.",
+        },
+        {
+            range = {50, 100},
+            skill = "Cooking",
+            recipe = "Longjaw Mud Snapper",
+            count = 60,
+            materials = { { name = "Raw Longjaw Mud Snapper", count = 60 } },
+            source = "Vendor: recipe from fishing supply vendor",
+            tip = "Aprenda Journeyman Cooking no treinador. Cozinhe todos os Longjaw Mud Snapper. Se não chegou a 100, vai pescar mais depois.",
+        },
+        -- ==================== PHASE 3: Fish 130-205, Cook 100-175 ====================
+        {
+            range = {130, 205},
+            skill = "Fishing",
+            recipe = "Fish in Stonetalon/Dustwallow",
+            count = 240,
+            materials = {},
+            source = "Stonetalon Mountains / Dustwallow Marsh",
+            tip = "Horde: Pesque em Stonetalon Mountains. Alliance: Pesque em Darkshore/Wetlands. Vai pegar ~95 Longjaw Mud Snapper e ~145 Bristle Whisker Catfish. Compre Expert Fishing de Old Man Heming em Booty Bay!",
+        },
+        {
+            range = {100, 175},
+            skill = "Cooking",
+            recipe = "Bristle Whisker Catfish",
+            count = 145,
+            materials = { { name = "Raw Bristle Whisker Catfish", count = 145 } },
+            source = "Vendor: recipe from fishing supply vendor",
+            tip = "Compre Expert Cookbook! Horde: Wulan (Desolace). Alliance: Shandrina (Ashenvale). Use na skill 125! Cozinhe todos os Bristle Whisker Catfish pescados.",
+        },
+        -- ==================== PHASE 4: Artisan Fishing Quest + Fish 205-255 ====================
+        {
+            range = {205, 255},
+            skill = "Fishing",
+            recipe = "Fish in Dustwallow Marsh",
+            count = 130,
+            materials = {},
+            source = "Dustwallow Marsh (inland water)",
+            tip = "Pesque em Dustwallow Marsh até 225, complete quest Nat Pagle Angler Extreme (requer lvl 35 + Fishing 225), depois continue pescando até 255. Vai pegar Raw Mithril Head Trout.",
+        },
+        {
+            range = {175, 225},
+            skill = "Cooking",
+            recipe = "Mithril Head Trout",
+            count = 50,
+            materials = { { name = "Raw Mithril Head Trout", count = 50 } },
+            source = "Vendor: Kelsey Yance (Booty Bay)",
+            tip = "Compre Recipe: Mithril Head Trout de Kelsey Yance em Booty Bay (visite ao passar). Cozinhe até 225 e PARE — precisa da quest de Artisan Cooking.",
+        },
+        -- ==================== PHASE 5: Artisan Cooking Quest ====================
+        {
+            range = {225, 226},
+            skill = "Cooking",
+            recipe = "Clamlette Surprise Quest",
+            count = 1,
+            materials = { { name = "Giant Egg", count = 12 }, { name = "Zesty Clam Meat", count = 10 }, { name = "Alterac Swiss", count = 20 } },
+            source = "Quest: Clamlette Surprise (Gadgetzan, Tanaris)",
+            tip = "Vá para Gadgetzan e complete a quest Clamlette Surprise com Dirge Quikcleave. Requer lvl 35 + Cooking 225. Compre receitas de Gikkix em Tanaris!",
+        },
+        -- ==================== PHASE 6: Fish 255-300, Cook 226-285 ====================
+        {
+            range = {255, 300},
+            skill = "Fishing",
+            recipe = "Fish in Feralas",
+            count = 130,
+            materials = {},
+            source = "Feralas (inland lakes, avoid Jademir Lake)",
+            tip = "Pesque em Feralas (lagos internos). Use Bright Baubles! Vai pegar Raw Redgill, Raw Nightfin Snapper, Raw Sunscale Salmon. Compre Recipe: Baked Salmon de Sheendra Tallgrass/Vivianna em Feralas.",
+        },
+        {
+            range = {226, 260},
+            skill = "Cooking",
+            recipe = "Filet of Redgill",
+            count = 40,
+            materials = { { name = "Raw Redgill", count = 40 } },
+            source = "Vendor: Kelsey Yance (Booty Bay)",
+            tip = "Cozinhe primeiro os Raw Mithril Head Trout restantes, depois os Filet of Redgill.",
+        },
+        {
+            range = {260, 285},
+            skill = "Cooking",
+            recipe = "Nightfin Soup / Poached Sunscale Salmon",
+            count = 40,
+            materials = { { name = "Raw Nightfin Snapper", count = 20 }, { name = "Raw Sunscale Salmon", count = 20 } },
+            source = "Vendor: Gikkix (Tanaris)",
+            tip = "Cozinhe Nightfin Soup (pesca noturna) e Poached Sunscale Salmon (pesca diurna). Pare ao chegar em 285.",
+        },
+        -- ==================== PHASE 7: Cook 285-300 in EPL ====================
+        {
+            range = {285, 300},
+            skill = "Cooking",
+            recipe = "Baked Salmon",
+            count = 20,
+            materials = { { name = "Raw Whitescale Salmon", count = 20 } },
+            source = "Vendor: Sheendra Tallgrass (Feralas, Horde) / Vivianna (Feralas, Alliance)",
+            tip = "Vá para Eastern Plaguelands e pesque Raw Whitescale Salmon (40% dos catches). Cozinhe Baked Salmon até 300. Cada craft garante 1 skill point!",
+        },
+        -- ==================== PHASE 8: TBC - Fish 300-330 in Zangarmarsh ====================
+        {
+            range = {300, 330},
+            skill = "Fishing",
+            recipe = "Fish in Zangarmarsh",
+            count = 100,
+            materials = {},
+            source = "Zangarmarsh (lakes near Cenarion Refuge)",
+            tip = "Compre Master Fishing de Juno Dufrain + Master Cookbook de Naka (inn). Compre Recipe: Blackened Sporefish de Juno. Precisa ~400 effective fishing (pole+lure)! Guarde Zangarian Sporefish e Spotted Feltail.",
+        },
+        -- ==================== PHASE 9: Cook 300-340 + Fish 330-350 ====================
+        {
+            range = {300, 310},
+            skill = "Cooking",
+            recipe = "Feltail Delight",
+            count = 10,
+            materials = { { name = "Spotted Feltail", count = 10 } },
+            source = "Vendor: Zurai (Horde) / Doba (Alliance) in Zangarmarsh",
+            tip = "Use Master Cookbook. Compre Recipe: Feltail Delight. Alliance: pode precisar fazer 3 quests em Orebor Harborage para rep Kurenai (Neutral) primeiro!",
+        },
+        {
+            range = {310, 340},
+            skill = "Cooking",
+            recipe = "Blackened Sporefish",
+            count = 40,
+            materials = { { name = "Zangarian Sporefish", count = 40 } },
+            source = "Vendor: Juno Dufrain (Zangarmarsh)",
+            tip = "Cozinhe todos os Zangarian Sporefish até chegar em 340.",
+        },
+        {
+            range = {330, 350},
+            skill = "Fishing",
+            recipe = "Fish in Zangarmarsh (cont.)",
+            count = 60,
+            materials = {},
+            source = "Zangarmarsh (same lakes)",
+            tip = "Continue pescando nos mesmos lagos de Zangarmarsh até 350.",
+        },
+        -- ==================== PHASE 10: Fish 350-370 + Cook 340-360 in Terokkar ====================
+        {
+            range = {350, 370},
+            skill = "Fishing",
+            recipe = "Fish in Terokkar Forest",
+            count = 80,
+            materials = {},
+            source = "Terokkar Forest (avoid Shattrath lake and flying restricted areas)",
+            tip = "Pesque em Terokkar Forest. Evite o lago perto de Shattrath e áreas de voo restrito (requerem skill muito alto). Vai pegar Golden Darter.",
+        },
+        {
+            range = {340, 360},
+            skill = "Cooking",
+            recipe = "Golden Fish Sticks",
+            count = 30,
+            materials = { { name = "Golden Darter", count = 30 } },
+            source = "Vendor: Innkeeper Biribi (Alliance) / Rungor (Horde) in Terokkar",
+            tip = "Compre Recipe: Golden Fish Sticks e Recipe: Spicy Crawdad. Cozinhe todos os Golden Darter.",
+        },
+        -- ==================== PHASE 11: Highland Mixed School - Fish 370-375 + Cook 360-375 ====================
+        {
+            range = {370, 375},
+            skill = "Fishing",
+            recipe = "Fish Highland Mixed Schools",
+            count = 30,
+            materials = {},
+            source = "Terokkar Forest - Highland Mixed Schools (Blackwind Lake, Lake Ere'Noru, Lake Jorune)",
+            tip = "Voe entre os 3 lagos elevados procurando Highland Mixed Schools. Pesque APENAS nos schools (não na água normal). Vai pegar Furious Crawdad!",
+        },
+        {
+            range = {360, 375},
+            skill = "Cooking",
+            recipe = "Spicy Crawdad",
+            count = 25,
+            materials = { { name = "Furious Crawdad", count = 25 } },
+            source = "Vendor: Innkeeper Biribi (Alliance) / Rungor (Horde) in Terokkar",
+            tip = "Cozinhe Spicy Crawdad (+30 Stamina) com os Furious Crawdad dos Highland Mixed Schools. Se chegou a 375 Cooking antes de 375 Fishing, volte para o Terokkar baixo para pescar sem perder peixes.",
+        },
+    },
+
+    tips = {
+        "Este guia combina Fishing e Cooking juntos — mais eficiente que upar separadamente!",
+        "Pesque primeiro, cozinhe depois: acumule peixes enquanto sobe Fishing, cozinhe em lotes.",
+        "Compre Expert Fishing de Old Man Heming em Booty Bay (150+). Compre receitas de Kelsey Yance ali também.",
+        "Artisan Fishing: quest Nat Pagle, Angler Extreme em Dustwallow (lvl 35 + Fishing 225).",
+        "Artisan Cooking: quest Clamlette Surprise em Gadgetzan (lvl 35 + Cooking 225). Precisa de 12 Giant Egg + 10 Zesty Clam Meat + 20 Alterac Swiss.",
+        "Para TBC: compre Master Fishing + Master Cookbook + Recipe: Blackened Sporefish, tudo em Zangarmarsh.",
+        "Highland Mixed Schools (Terokkar): Furious Crawdad para Spicy Crawdad (+30 Stam). Mr. Pinchy pode dropar pet épico!",
+    },
+}

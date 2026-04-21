@@ -1,0 +1,42 @@
+## Interface: 20504
+## Title: |cff30a5ffProfession Helper|r |cff808080TBC|r
+## Notes: Complete profession leveling guide with smart routes, shopping lists & TSM integration (PT/EN/ES)
+## Notes-ptBR: Guia completo de profissões com rotas inteligentes, listas de compras e integração TSM
+## Notes-enUS: Complete profession leveling guide with smart routes, shopping lists & TSM integration
+## Notes-esES: Guía completa de profesiones con rutas inteligentes, listas de compras e integración TSM
+## Author: Chehul @ DreamScyther-US
+## Version: 1.0.0
+## X-Website: https://github.com/danielcosta42
+## X-Category: Professions
+## X-License: Free for personal use
+## X-Localizations: ptBR, enUS, esES
+## X-Curse-Project-ID: profession-helper-tbc
+## SavedVariables: ProfessionHelperDB
+## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, GatherMate2
+
+Locales\Locales.lua
+Data\Materials.lua
+Data\Alchemy.lua
+Data\Blacksmithing.lua
+Data\Enchanting.lua
+Data\Engineering.lua
+Data\Jewelcrafting.lua
+Data\Leatherworking.lua
+Data\Tailoring.lua
+Data\Cooking.lua
+Data\FirstAid.lua
+Data\Mining.lua
+Data\Herbalism.lua
+Data\Skinning.lua
+Data\Fishing.lua
+Data\GoldFarming.lua
+Data\FishingCooking.lua
+Data\HerbalismAlchemy.lua
+Data\SkinningLeatherworking.lua
+TSMIntegration.lua
+PathCalculator.lua
+FarmTracker.lua
+GatheringGuide.lua
+Core.lua
+UI.lua
+FarmTrackerUI.lua

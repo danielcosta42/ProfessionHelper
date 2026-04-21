@@ -1,0 +1,157 @@
+# Changelog
+
+All notable changes to Profession Helper will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2026-04-21
+
+### 🎉 Initial Release
+
+#### Added
+- **Complete Profession Guides**
+  - All primary crafting professions: Alchemy, Blacksmithing, Enchanting, Engineering, Jewelcrafting, Leatherworking, Tailoring
+  - All gathering professions: Mining, Herbalism, Skinning
+  - Secondary professions: Cooking, First Aid, Fishing
+  - Combo profession guides: Herbalism+Alchemy, Skinning+Leatherworking, Fishing+Cooking
+  - Full 1-375 leveling paths for TBC Classic
+
+- **Smart Leveling System**
+  - Step-by-step optimized routes
+  - Automatic skill progression tracking
+  - Visual progress indicators
+  - Color-coded difficulty (Orange/Yellow/Green/Grey)
+  - Material efficiency calculations
+  - Cost-optimized paths
+
+- **Shopping List Features**
+  - Automatic material calculation based on current skill
+  - TSM price integration
+  - Total cost estimates
+  - Vendor vs. farmable categorization
+  - One-click TSM import strings
+  - Material source indicators
+
+- **Farming & Gathering**
+  - Zone-specific farming locations
+  - Level-appropriate spots with coordinates
+  - Efficiency ratings for each route
+  - GatherMate2 integration support
+  - Multiple locations per skill range
+
+- **Modern UI/UX**
+  - Premium minimalist design
+  - Dark theme optimized for long sessions
+  - Icon-driven navigation
+  - Responsive layout
+  - Smooth scrolling and animations
+  - Clean typography and spacing
+  - Professional color scheme
+
+- **Multi-Language Support**
+  - Portuguese (ptBR) - Complete translation
+  - English (enUS) - Native support
+  - Spanish (esES/esMX) - Complete translation
+  - Auto-detection based on WoW client language
+  - 90+ translated strings across all features
+
+- **TSM Integration**
+  - Automatic price detection (TSM 3 & 4)
+  - Market value calculations
+  - Fallback pricing sources
+  - Shopping import string generator
+  - Cost breakdown per recipe
+
+- **Quality of Life**
+  - Slash commands: `/ph` and `/profhelper`
+  - Persistent saved variables
+  - No configuration required (works out-of-the-box)
+  - Lightweight and optimized
+  - No external dependencies (TSM optional)
+
+#### Technical
+- Built for WoW TBC Classic (Interface 20504)
+- Modular code architecture
+- Comprehensive localization system
+- Path calculator algorithm
+- Material database with 200+ items
+- Profession data for 16 professions
+- Recipe database with 1000+ recipes
+- Farming location database
+
+#### Documentation
+- Complete README.md with features and installation
+- LOCALIZATION.md with translation guide
+- Inline code documentation
+- Professional GitHub presentation
+- License and credits
+
+---
+
+## [Unreleased]
+
+### Planned Features
+- In-game configuration panel
+- Custom route editor
+- Bank & bag integration
+- Recipe tracker (missing recipes)
+- Profit calculator for crafted items
+- Alt character tracking
+- Export/import custom guides
+- Achievement integration
+- Additional language support (FR, DE, RU)
+- Minimap button customization
+- UI scale settings
+- Material price source selection
+
+### Under Consideration
+- Discord integration for sharing routes
+- Web companion app
+- Mobile notifications for material prices
+- Guild profession coordination
+- Realm-specific price data
+- Profession specialization guides
+- Endgame goldmaking strategies
+- Cross-character material tracking
+
+---
+
+## Version History
+
+### Release Notes Format
+Each version includes:
+- **Added** - New features
+- **Changed** - Changes to existing functionality
+- **Deprecated** - Soon-to-be removed features
+- **Removed** - Removed features
+- **Fixed** - Bug fixes
+- **Security** - Security improvements
+
+---
+
+## Support & Contributions
+
+### Reporting Issues
+Found a bug? Please report it:
+- GitHub Issues: https://github.com/danielcosta42/profession-helper-tbc/issues
+
+### Contributing
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Open a Pull Request
+
+---
+
+## Credits
+
+**Developer:** Chehul @ DreamScyther-US  
+**GitHub:** https://github.com/danielcosta42  
+**License:** Free for personal use
+
+---
+
+[1.0.0]: https://github.com/danielcosta42/profession-helper-tbc/releases/tag/v1.0.0
