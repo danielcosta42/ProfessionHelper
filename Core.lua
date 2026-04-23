@@ -33,6 +33,12 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    if not ProfessionHelperDB.ahPriceCache then
+        ProfessionHelperDB.ahPriceCache = {}
+    end
+    if not ProfessionHelperDB.inventory then
+        ProfessionHelperDB.inventory = {}
+    end
 end
 
 -- All profession data references
@@ -326,6 +332,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.BagScanner then self.BagScanner:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message
