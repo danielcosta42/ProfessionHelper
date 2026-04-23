@@ -33,6 +33,12 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    if not ProfessionHelperDB.ahPriceCache then
+        ProfessionHelperDB.ahPriceCache = {}
+    end
+    if not ProfessionHelperDB.knownRecipes then
+        ProfessionHelperDB.knownRecipes = {}
+    end
 end
 
 -- All profession data references
@@ -266,6 +272,12 @@ function PH:HandleSlashCommand(msg)
         else
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
+    elseif cmd == "recipes" or cmd:sub(1, 8) == "recipes " then
+        local profArg = cmd:len() > 8 and cmd:sub(9) or nil
+        if profArg then
+            profArg = profArg:sub(1,1):upper() .. profArg:sub(2):lower()
+        end
+        self:ShowRecipeTrackerUI(profArg)
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])
@@ -326,6 +338,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.RecipeTracker then self.RecipeTracker:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message
