@@ -12,7 +12,7 @@
 ## X-Localizations: ptBR, enUS, esES
 ## X-Curse-Project-ID: profession-helper-tbc
 ## SavedVariables: ProfessionHelperDB
-## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, GatherMate2
+## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 
 Locales\Locales.lua
 Data\Materials.lua
@@ -38,5 +38,7 @@ PathCalculator.lua
 FarmTracker.lua
 GatheringGuide.lua
 Core.lua
+CooldownTracker.lua
 UI.lua
 FarmTrackerUI.lua
+CooldownTrackerUI.lua

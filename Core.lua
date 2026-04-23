@@ -33,6 +33,13 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    -- Sub-tables that cannot be initialised via defaults loop
+    if not ProfessionHelperDB.ahPriceCache then
+        ProfessionHelperDB.ahPriceCache = {}
+    end
+    if not ProfessionHelperDB.cooldowns then
+        ProfessionHelperDB.cooldowns = {}
+    end
 end
 
 -- All profession data references
@@ -266,6 +273,8 @@ function PH:HandleSlashCommand(msg)
         else
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
+    elseif cmd == "cd" or cmd == "cooldowns" then
+        self:ShowCooldownUI()
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])
@@ -326,6 +335,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.CooldownTracker then self.CooldownTracker:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message
