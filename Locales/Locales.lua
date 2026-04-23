@@ -127,10 +127,113 @@ Locales.ptBR = {
     ["FEATURE_6"] = "Interface moderna e limpa",
     ["LICENSE"] = "Licença",
     ["LICENSE_TEXT"] = "Livre para uso pessoal. Código aberto no GitHub.",
-}
 
--------------------------------------------------------------------------------
--- ENGLISH (enUS)
+    -- Slash Commands
+    ["CMD_HELP_HEADER"] = "Comandos disponíveis:",
+    ["CMD_HELP_MAIN"] = "/ph ou /professionhelper - Abre a janela principal",
+    ["CMD_HELP_SHOW"] = "/ph show - Mostra a janela",
+    ["CMD_HELP_HIDE"] = "/ph hide - Esconde a janela",
+    ["CMD_HELP_FARM"] = "/ph farm - Inicia sessão de farm",
+    ["CMD_HELP_FARM_STOP"] = "/ph farm stop - Para sessão de farm",
+    ["CMD_HELP_FARM_TOGGLE"] = "/ph farm toggle - Alterna sessão de farm",
+    ["CMD_HELP_FARM_RESET"] = "/ph farm reset - Reseta sessão de farm",
+    ["CMD_HELP_FARM_SHOWHIDE"] = "/ph farm show/hide - Mostra/esconde tracker",
+    ["CMD_HELP_GUIDE"] = "/ph guide <profissão> - Inicia guia de coleta",
+    ["CMD_HELP_HELP"] = "/ph help - Mostra esta ajuda",
+    ["CMD_UNKNOWN"] = "Comando desconhecido. Use /ph help para ajuda.",
+
+    -- Minimap Tooltip
+    ["MINIMAP_LEFT_CLICK"] = "Click Esquerdo: Abrir janela principal",
+    ["MINIMAP_RIGHT_CLICK"] = "Click Direito: Iniciar/Parar Farm Tracker",
+    ["MINIMAP_FARM_ACTIVE"] = "Farm ativo:",
+    ["MINIMAP_GOLD_PER_HOUR"] = "Gold/hora:",
+
+    -- Farm Tracker Messages
+    ["FARM_ALREADY_ACTIVE"] = "Sessão de farm já está ativa! Use |cff00ccff/ph farm stop|r para parar.",
+    ["FARM_STARTED_MSG"] = "Sessão de farm iniciada!|r Gold inicial: ",
+    ["FARM_NOT_ACTIVE"] = "Nenhuma sessão de farm ativa.",
+    ["FARM_ENDED"] = "Sessão de farm encerrada.",
+    ["FARM_STAT_DURATION"] = "Duração: %s",
+    ["FARM_STAT_GOLD_EARNED"] = "Gold ganho: %s",
+    ["FARM_STAT_GOLD_PER_HOUR"] = "Gold/hora: %s",
+    ["FARM_TOP_ITEMS"] = "Top itens farmados:",
+    ["FARM_RESET_MSG"] = "Sessão de farm resetada.",
+
+    -- Farm Tracker UI
+    ["FARM_BTN_STOP"] = "Parar",
+    ["FARM_BTN_START"] = "Iniciar",
+    ["FARM_GPH_LABEL"] = "Gold / Hora",
+    ["FARM_DURATION_LABEL"] = "Duração",
+    ["FARM_TOTAL_GOLD_LABEL"] = "Gold Total",
+    ["FARM_MOB_GOLD_LABEL"] = "Gold de Mobs",
+    ["FARM_EST_VALUE_LABEL"] = "Valor Estimado (TSM)",
+    ["FARM_ITEMS_FARMED_LABEL"] = "Itens Farmados",
+    ["FARM_STATUS_ACTIVE"] = "Ativo",
+    ["FARM_STATUS_STOPPED"] = "Parado",
+
+    -- Gathering Guide
+    ["GATHERING_HERE"] = "(aqui)",
+    ["GATHERING_GO_TO"] = "Vá para:",
+    ["GATHERING_ALTERNATIVES"] = "Alternativas:",
+    ["GATHERING_NO_LOCATIONS"] = "Sem locais disponíveis",
+    ["GATHERING_STATUS_ACTIVE"] = "Coletando",
+    ["GATHERING_STATUS_TRAVELING"] = "Viajando",
+    ["GATHERING_ROUTE_LABEL"] = "Rota:",
+    ["GATHERING_ROUTE_INFO"] = "WP %d/%d — siga a seta no minimap",
+    ["NEXT_STEP_MSG"] = "|cff00ff00Próximo passo!|r Agora faça: |cffffffff%s|r (%d-%d)",
+
+    -- Step Card Badges
+    ["BADGE_DONE"] = "CONCLUÍDO",
+    ["BADGE_CURRENT"] = ">> FAZENDO AGORA",
+    ["BADGE_NEXT"] = "PRÓXIMO",
+
+    -- Step Card Craft Labels
+    ["CRAFT_X"] = "Craftar x%d",
+    ["CRAFT_X_DONE"] = "Craftar x%d (concluído)",
+    ["CRAFTS_REMAINING_LABEL"] = "Faltam:",
+    ["CRAFTS_DONE_COUNT"] = "%d feitos",
+    ["KEEP_TAG"] = "Guarde!",
+    ["INTERMEDIATE_TAG"] = "[Intermediário]",
+    ["STEPS_REMAINING"] = "%d passos restantes",
+    ["STEP_INLINE_COST"] = "| Custo:",
+
+    -- Material Quantities
+    ["MAT_REMAINING"] = "restantes",
+    ["MAT_IN_BAG"] = "(%d na bag)",
+    ["MAT_USED"] = "(%d/%d usados)",
+    ["MAT_IN_STOCK"] = "estoque",
+    ["MAT_BUY"] = "comprar",
+    ["MAT_EACH"] = "cada",
+
+    -- Step / Next Preview
+    ["NEXT_PREVIEW_LABEL"] = "A seguir:",
+    ["DONT_SELL"] = "Não venda!",
+    ["USED_FOR"] = "Usado para:",
+    ["STEP_COST_LABEL"] = "Custo:",
+
+    -- Shopping List
+    ["COL_ITEM"] = "Item",
+    ["COL_QTY"] = "Qtd",
+    ["COL_PRICE"] = "Preço",
+    ["INSTALL_TSM"] = "(instale TSM para preços)",
+    ["TSM_BTN_TOOLTIP"] = "Gera string de busca para colar na AH.",
+    ["TSM_NO_ITEMS"] = "Nenhum item para buscar na AH.",
+    ["TSM_PASTE_MSG"] = "Cole no campo de busca do TSM Shopping na Auction House.",
+
+    -- Gold Farming Guide
+    ["GOLD_FARM_GUIDE_TITLE"] = "Guia de Farm de Gold",
+    ["GOLD_DATA_UNAVAILABLE"] = "Dados de gold farming não disponíveis.",
+
+    -- Gathering Guide Buttons/UI
+    ["GUIDE_STOP_BTN"] = "Parar Guia ■",
+    ["GUIDE_START_BTN"] = "▶ Iniciar Guia",
+    ["GUIDE_TOOLTIP_TITLE"] = "Guia de Coleta",
+    ["GUIDE_TOOLTIP_STOP"] = "Clique para parar o guia e esconder o widget.",
+    ["GUIDE_TOOLTIP_START"] = "Abre widget flutuante com passo atual,\nindicador no minimapa e navegação de rota.",
+    ["PROGRESS_LABEL"] = "PROGRESSO  %d / %d  (%.0f%%)",
+    ["NO_FARM_DATA"] = "Nenhum dado de farm disponível.",
+    ["GUIDE_NOT_AVAILABLE"] = "Guia não disponível.",
+}
 -------------------------------------------------------------------------------
 Locales.enUS = {
     -- UI General
@@ -228,8 +331,114 @@ Locales.enUS = {
     ["MAX_LEVEL_REACHED"] = "Maximum Level Reached! (375)",
     ["NO_MATERIALS_NEEDED"] = "Maximum level or no materials needed.",
     ["LOCATIONS"] = "Locations",
-    
-    -- Farming
+
+    -- Slash Commands
+    ["CMD_HELP_HEADER"] = "Available commands:",
+    ["CMD_HELP_MAIN"] = "/ph or /professionhelper - Open main window",
+    ["CMD_HELP_SHOW"] = "/ph show - Show window",
+    ["CMD_HELP_HIDE"] = "/ph hide - Hide window",
+    ["CMD_HELP_FARM"] = "/ph farm - Start farm session",
+    ["CMD_HELP_FARM_STOP"] = "/ph farm stop - Stop farm session",
+    ["CMD_HELP_FARM_TOGGLE"] = "/ph farm toggle - Toggle farm session",
+    ["CMD_HELP_FARM_RESET"] = "/ph farm reset - Reset farm session",
+    ["CMD_HELP_FARM_SHOWHIDE"] = "/ph farm show/hide - Show/hide tracker",
+    ["CMD_HELP_GUIDE"] = "/ph guide <profession> - Start gathering guide",
+    ["CMD_HELP_HELP"] = "/ph help - Show this help",
+    ["CMD_UNKNOWN"] = "Unknown command. Use /ph help for help.",
+
+    -- Minimap Tooltip
+    ["MINIMAP_LEFT_CLICK"] = "Left Click: Open main window",
+    ["MINIMAP_RIGHT_CLICK"] = "Right Click: Start/Stop Farm Tracker",
+    ["MINIMAP_FARM_ACTIVE"] = "Farm active:",
+    ["MINIMAP_GOLD_PER_HOUR"] = "Gold/hour:",
+
+    -- Farm Tracker Messages
+    ["FARM_ALREADY_ACTIVE"] = "Farm session already active! Use |cff00ccff/ph farm stop|r to stop.",
+    ["FARM_STARTED_MSG"] = "Farm session started!|r Starting gold: ",
+    ["FARM_NOT_ACTIVE"] = "No active farm session.",
+    ["FARM_ENDED"] = "Farm session ended.",
+    ["FARM_STAT_DURATION"] = "Duration: %s",
+    ["FARM_STAT_GOLD_EARNED"] = "Gold earned: %s",
+    ["FARM_STAT_GOLD_PER_HOUR"] = "Gold/hour: %s",
+    ["FARM_TOP_ITEMS"] = "Top farmed items:",
+    ["FARM_RESET_MSG"] = "Farm session reset.",
+
+    -- Farm Tracker UI
+    ["FARM_BTN_STOP"] = "Stop",
+    ["FARM_BTN_START"] = "Start",
+    ["FARM_GPH_LABEL"] = "Gold / Hour",
+    ["FARM_DURATION_LABEL"] = "Duration",
+    ["FARM_TOTAL_GOLD_LABEL"] = "Total Gold",
+    ["FARM_MOB_GOLD_LABEL"] = "Mob Gold",
+    ["FARM_EST_VALUE_LABEL"] = "Estimated Value (TSM)",
+    ["FARM_ITEMS_FARMED_LABEL"] = "Items Farmed",
+    ["FARM_STATUS_ACTIVE"] = "Active",
+    ["FARM_STATUS_STOPPED"] = "Stopped",
+
+    -- Gathering Guide
+    ["GATHERING_HERE"] = "(here)",
+    ["GATHERING_GO_TO"] = "Go to:",
+    ["GATHERING_ALTERNATIVES"] = "Alternatives:",
+    ["GATHERING_NO_LOCATIONS"] = "No locations available",
+    ["GATHERING_STATUS_ACTIVE"] = "Gathering",
+    ["GATHERING_STATUS_TRAVELING"] = "Traveling",
+    ["GATHERING_ROUTE_LABEL"] = "Route:",
+    ["GATHERING_ROUTE_INFO"] = "WP %d/%d — follow the arrow on minimap",
+    ["NEXT_STEP_MSG"] = "|cff00ff00Next step!|r Now craft: |cffffffff%s|r (%d-%d)",
+
+    -- Step Card Badges
+    ["BADGE_DONE"] = "DONE",
+    ["BADGE_CURRENT"] = ">> CRAFTING NOW",
+    ["BADGE_NEXT"] = "NEXT",
+
+    -- Step Card Craft Labels
+    ["CRAFT_X"] = "Craft x%d",
+    ["CRAFT_X_DONE"] = "Craft x%d (done)",
+    ["CRAFTS_REMAINING_LABEL"] = "Remaining:",
+    ["CRAFTS_DONE_COUNT"] = "%d done",
+    ["KEEP_TAG"] = "Keep!",
+    ["INTERMEDIATE_TAG"] = "[Intermediate]",
+    ["STEPS_REMAINING"] = "%d steps remaining",
+    ["STEP_INLINE_COST"] = "| Cost:",
+
+    -- Material Quantities
+    ["MAT_REMAINING"] = "remaining",
+    ["MAT_IN_BAG"] = "(%d in bag)",
+    ["MAT_USED"] = "(%d/%d used)",
+    ["MAT_IN_STOCK"] = "stock",
+    ["MAT_BUY"] = "buy",
+    ["MAT_EACH"] = "each",
+
+    -- Step / Next Preview
+    ["NEXT_PREVIEW_LABEL"] = "Next up:",
+    ["DONT_SELL"] = "Don't sell!",
+    ["USED_FOR"] = "Used for:",
+    ["STEP_COST_LABEL"] = "Cost:",
+
+    -- Shopping List
+    ["COL_ITEM"] = "Item",
+    ["COL_QTY"] = "Qty",
+    ["COL_PRICE"] = "Price",
+    ["INSTALL_TSM"] = "(install TSM for prices)",
+    ["TSM_BTN_TOOLTIP"] = "Generates search string to paste in the AH.",
+    ["TSM_NO_ITEMS"] = "No items to search in the AH.",
+    ["TSM_PASTE_MSG"] = "Paste in the TSM Shopping search field at the Auction House.",
+
+    -- Gold Farming Guide
+    ["GOLD_FARM_GUIDE_TITLE"] = "Gold Farming Guide",
+    ["GOLD_DATA_UNAVAILABLE"] = "Gold farming data not available.",
+
+    -- Gathering Guide Buttons/UI
+    ["GUIDE_STOP_BTN"] = "Stop Guide ■",
+    ["GUIDE_START_BTN"] = "▶ Start Guide",
+    ["GUIDE_TOOLTIP_TITLE"] = "Gathering Guide",
+    ["GUIDE_TOOLTIP_STOP"] = "Click to stop the guide and hide the widget.",
+    ["GUIDE_TOOLTIP_START"] = "Opens floating widget with current step,\nminimap indicator and route navigation.",
+    ["PROGRESS_LABEL"] = "PROGRESS  %d / %d  (%.0f%%)",
+    ["NO_FARM_DATA"] = "No farming data available.",
+    ["GUIDE_NOT_AVAILABLE"] = "Guide not available.",
+
+    -- Farming Locations
     ["FARM_LOCATIONS"] = "Farming Locations",
     ["ZONE"] = "Zone",
     ["LOCATION"] = "Location",
@@ -373,6 +582,112 @@ Locales.esES = {
     ["MEDIUM"] = "Medio",
     ["HARD"] = "Difícil",
     ["VERY_HARD"] = "Muy Difícil",
+
+    -- Slash Commands
+    ["CMD_HELP_HEADER"] = "Comandos disponibles:",
+    ["CMD_HELP_MAIN"] = "/ph o /professionhelper - Abrir ventana principal",
+    ["CMD_HELP_SHOW"] = "/ph show - Mostrar ventana",
+    ["CMD_HELP_HIDE"] = "/ph hide - Ocultar ventana",
+    ["CMD_HELP_FARM"] = "/ph farm - Iniciar sesión de farmeo",
+    ["CMD_HELP_FARM_STOP"] = "/ph farm stop - Detener sesión de farmeo",
+    ["CMD_HELP_FARM_TOGGLE"] = "/ph farm toggle - Alternar sesión de farmeo",
+    ["CMD_HELP_FARM_RESET"] = "/ph farm reset - Reiniciar sesión de farmeo",
+    ["CMD_HELP_FARM_SHOWHIDE"] = "/ph farm show/hide - Mostrar/ocultar tracker",
+    ["CMD_HELP_GUIDE"] = "/ph guide <profesión> - Iniciar guía de recolección",
+    ["CMD_HELP_HELP"] = "/ph help - Mostrar esta ayuda",
+    ["CMD_UNKNOWN"] = "Comando desconocido. Usa /ph help para ayuda.",
+
+    -- Minimap Tooltip
+    ["MINIMAP_LEFT_CLICK"] = "Click Izquierdo: Abrir ventana principal",
+    ["MINIMAP_RIGHT_CLICK"] = "Click Derecho: Iniciar/Detener Farm Tracker",
+    ["MINIMAP_FARM_ACTIVE"] = "Farm activo:",
+    ["MINIMAP_GOLD_PER_HOUR"] = "Oro/hora:",
+
+    -- Farm Tracker Messages
+    ["FARM_ALREADY_ACTIVE"] = "¡Sesión de farmeo ya activa! Usa |cff00ccff/ph farm stop|r para detener.",
+    ["FARM_STARTED_MSG"] = "¡Sesión de farmeo iniciada!|r Oro inicial: ",
+    ["FARM_NOT_ACTIVE"] = "No hay sesión de farmeo activa.",
+    ["FARM_ENDED"] = "Sesión de farmeo terminada.",
+    ["FARM_STAT_DURATION"] = "Duración: %s",
+    ["FARM_STAT_GOLD_EARNED"] = "Oro ganado: %s",
+    ["FARM_STAT_GOLD_PER_HOUR"] = "Oro/hora: %s",
+    ["FARM_TOP_ITEMS"] = "Top objetos farmeados:",
+    ["FARM_RESET_MSG"] = "Sesión de farmeo reiniciada.",
+
+    -- Farm Tracker UI
+    ["FARM_BTN_STOP"] = "Detener",
+    ["FARM_BTN_START"] = "Iniciar",
+    ["FARM_GPH_LABEL"] = "Oro / Hora",
+    ["FARM_DURATION_LABEL"] = "Duración",
+    ["FARM_TOTAL_GOLD_LABEL"] = "Oro Total",
+    ["FARM_MOB_GOLD_LABEL"] = "Oro de Mobs",
+    ["FARM_EST_VALUE_LABEL"] = "Valor Estimado (TSM)",
+    ["FARM_ITEMS_FARMED_LABEL"] = "Objetos Farmeados",
+    ["FARM_STATUS_ACTIVE"] = "Activo",
+    ["FARM_STATUS_STOPPED"] = "Detenido",
+
+    -- Gathering Guide
+    ["GATHERING_HERE"] = "(aquí)",
+    ["GATHERING_GO_TO"] = "Ve a:",
+    ["GATHERING_ALTERNATIVES"] = "Alternativas:",
+    ["GATHERING_NO_LOCATIONS"] = "No hay ubicaciones disponibles",
+    ["GATHERING_STATUS_ACTIVE"] = "Recolectando",
+    ["GATHERING_STATUS_TRAVELING"] = "Viajando",
+    ["GATHERING_ROUTE_LABEL"] = "Ruta:",
+    ["GATHERING_ROUTE_INFO"] = "WP %d/%d — sigue la flecha en el minimapa",
+    ["NEXT_STEP_MSG"] = "|cff00ff00¡Siguiente paso!|r Ahora crea: |cffffffff%s|r (%d-%d)",
+
+    -- Step Card Badges
+    ["BADGE_DONE"] = "COMPLETADO",
+    ["BADGE_CURRENT"] = ">> HACIENDO AHORA",
+    ["BADGE_NEXT"] = "PRÓXIMO",
+
+    -- Step Card Craft Labels
+    ["CRAFT_X"] = "Crear x%d",
+    ["CRAFT_X_DONE"] = "Crear x%d (completado)",
+    ["CRAFTS_REMAINING_LABEL"] = "Faltan:",
+    ["CRAFTS_DONE_COUNT"] = "%d hechos",
+    ["KEEP_TAG"] = "¡Guarda!",
+    ["INTERMEDIATE_TAG"] = "[Intermedio]",
+    ["STEPS_REMAINING"] = "%d pasos restantes",
+    ["STEP_INLINE_COST"] = "| Costo:",
+
+    -- Material Quantities
+    ["MAT_REMAINING"] = "restantes",
+    ["MAT_IN_BAG"] = "(%d en bolsa)",
+    ["MAT_USED"] = "(%d/%d usados)",
+    ["MAT_IN_STOCK"] = "existencias",
+    ["MAT_BUY"] = "comprar",
+    ["MAT_EACH"] = "c/u",
+
+    -- Step / Next Preview
+    ["NEXT_PREVIEW_LABEL"] = "A continuación:",
+    ["DONT_SELL"] = "¡No vendas!",
+    ["USED_FOR"] = "Usado para:",
+    ["STEP_COST_LABEL"] = "Costo:",
+
+    -- Shopping List
+    ["COL_ITEM"] = "Objeto",
+    ["COL_QTY"] = "Cant",
+    ["COL_PRICE"] = "Precio",
+    ["INSTALL_TSM"] = "(instala TSM para precios)",
+    ["TSM_BTN_TOOLTIP"] = "Genera cadena de búsqueda para pegar en la CA.",
+    ["TSM_NO_ITEMS"] = "No hay objetos para buscar en la CA.",
+    ["TSM_PASTE_MSG"] = "Pega en el campo de búsqueda de TSM Shopping en la Casa de Subastas.",
+
+    -- Gold Farming Guide
+    ["GOLD_FARM_GUIDE_TITLE"] = "Guía de Farmeo de Oro",
+    ["GOLD_DATA_UNAVAILABLE"] = "Datos de farmeo de oro no disponibles.",
+
+    -- Gathering Guide Buttons/UI
+    ["GUIDE_STOP_BTN"] = "Detener Guía ■",
+    ["GUIDE_START_BTN"] = "▶ Iniciar Guía",
+    ["GUIDE_TOOLTIP_TITLE"] = "Guía de Recolección",
+    ["GUIDE_TOOLTIP_STOP"] = "Clic para detener la guía y ocultar el widget.",
+    ["GUIDE_TOOLTIP_START"] = "Abre widget flotante con el paso actual,\nindicador en el minimapa y navegación de ruta.",
+    ["PROGRESS_LABEL"] = "PROGRESO  %d / %d  (%.0f%%)",
+    ["NO_FARM_DATA"] = "No hay datos de farmeo disponibles.",
+    ["GUIDE_NOT_AVAILABLE"] = "Guía no disponible.",
 }
 
 -- Copy esES to esMX

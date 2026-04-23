@@ -27,7 +27,7 @@ local FT = PH.FarmTracker
 
 function FT:Start()
     if self.active then
-        PH:Print("Sessão de farm já está ativa! Use |cff00ccff/ph farm stop|r para parar.")
+        PH:Print(PH.L["FARM_ALREADY_ACTIVE"])
         return
     end
 
@@ -44,7 +44,7 @@ function FT:Start()
     -- Initial snapshot
     table.insert(self.goldSnapshots, { time = 0, gold = 0 })
 
-    PH:Print("|cff00ff00Sessão de farm iniciada!|r Gold inicial: " .. PH.TSM:FormatMoney(self.startGold))
+    PH:Print("|cff00ff00" .. PH.L["FARM_STARTED_MSG"] .. PH.TSM:FormatMoney(self.startGold))
 
     -- Show tracker UI
     PH:ShowFarmTrackerUI()
@@ -55,7 +55,7 @@ end
 
 function FT:Stop()
     if not self.active then
-        PH:Print("Nenhuma sessão de farm ativa.")
+        PH:Print(PH.L["FARM_NOT_ACTIVE"])
         return
     end
 
@@ -64,15 +64,15 @@ function FT:Stop()
     local earned = GetMoney() - self.startGold
     local gph = self:CalculateGoldPerHour()
 
-    PH:Print("|cffff0000Sessão de farm encerrada.|r")
-    PH:Print(string.format("Duração: %s", self:FormatDuration(elapsed)))
-    PH:Print(string.format("Gold ganho: %s", PH.TSM:FormatMoney(earned)))
-    PH:Print(string.format("Gold/hora: %s", PH.TSM:FormatMoney(gph)))
+    PH:Print("|cffff0000" .. PH.L["FARM_ENDED"] .. "|r")
+    PH:Print(string.format(PH.L["FARM_STAT_DURATION"], self:FormatDuration(elapsed)))
+    PH:Print(string.format(PH.L["FARM_STAT_GOLD_EARNED"], PH.TSM:FormatMoney(earned)))
+    PH:Print(string.format(PH.L["FARM_STAT_GOLD_PER_HOUR"], PH.TSM:FormatMoney(gph)))
 
     -- Print top items
     local topItems = self:GetTopItems(5)
     if #topItems > 0 then
-        PH:Print("Top itens farmados:")
+        PH:Print(PH.L["FARM_TOP_ITEMS"])
         for _, item in ipairs(topItems) do
             PH:Print(string.format("  %s x%d", item.name, item.count))
         end
@@ -94,7 +94,7 @@ function FT:Reset()
     self.goldSnapshots = {}
     self.lastSnapshot = 0
 
-    PH:Print("Sessão de farm resetada.")
+    PH:Print(PH.L["FARM_RESET_MSG"])
 
     if PH.FarmTrackerFrame then
         PH:UpdateFarmTrackerUI()

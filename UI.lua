@@ -168,7 +168,7 @@ function PH:BuildHomePanel(parent)
     -- Features title
     local featTitle = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     featTitle:SetPoint("TOPLEFT", 80, y)
-    featTitle:SetText(hexc(T.gold) .. "Features|r")
+    featTitle:SetText(hexc(T.gold) .. PH.L["FEATURES"] .. "|r")
     y = y - 22
 
     -- Feature lines
@@ -829,7 +829,7 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
             local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
             msg:SetPoint("TOP", 0, yOffset - 20)
             msg:SetJustifyH("CENTER")
-            msg:SetText(hexc(T.textMuted) .. "Guia não disponível.|r")
+            msg:SetText(hexc(T.textMuted) .. PH.L["GUIDE_NOT_AVAILABLE"] .. "|r")
             return yOffset - 60
         end
     end
@@ -1005,9 +1005,9 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
     ft:SetPoint("LEFT", 8, 0)
     local costStr = ""
     if pathData.hasTSMPricing and pathData.totalCost > 0 then
-        costStr = "   " .. hexc(T.textMuted) .. "|  Custo:|r " .. PH.TSM:FormatMoney(pathData.totalCost)
+        costStr = "   " .. hexc(T.textMuted) .. PH.L["STEP_INLINE_COST"] .. "|r " .. PH.TSM:FormatMoney(pathData.totalCost)
     end
-    ft:SetText(hexc(T.textSecondary) .. remaining .. " passos restantes|r" .. costStr)
+    ft:SetText(hexc(T.textSecondary) .. string.format(PH.L["STEPS_REMAINING"], remaining) .. "|r" .. costStr)
     y = y - 30
 
     y = self:RenderTrainers(parent, y, profData)
@@ -1052,11 +1052,11 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
     local badge = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     badge:SetPoint("TOPLEFT", 12, iy)
     if isComplete then
-        badge:SetText(hexc(T.green) .. "CONCLUIDO|r")
+        badge:SetText(hexc(T.green) .. PH.L["BADGE_DONE"] .. "|r")
     elseif isCurrent then
-        badge:SetText(hexc(T.green) .. ">> FAZENDO AGORA|r")
+        badge:SetText(hexc(T.green) .. PH.L["BADGE_CURRENT"] .. "|r")
     else
-        badge:SetText(hexc(T.accent) .. "PROXIMO|r")
+        badge:SetText(hexc(T.accent) .. PH.L["BADGE_NEXT"] .. "|r")
     end
 
     local cnt = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -1131,15 +1131,15 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
     -- Craft count with remaining
     local cl = card:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     cl:SetPoint("TOPLEFT", 12, iy)
-    local interTag = step.isIntermediate and ("  " .. hexc(T.orange) .. "Guarde!|r") or ""
+    local interTag = step.isIntermediate and ("  " .. hexc(T.orange) .. PH.L["KEEP_TAG"] .. "|r") or ""
     if isComplete then
-        cl:SetText(hexc(T.textMuted) .. "Craftar x" .. total .. " (concluido)|r")
+        cl:SetText(hexc(T.textMuted) .. string.format(PH.L["CRAFT_X_DONE"], total) .. "|r")
     elseif isCurrent then
-        cl:SetText(hexc(T.gold) .. "Faltam:|r " .. hexc(T.white) .. remaining .. "|r" ..
+        cl:SetText(hexc(T.gold) .. PH.L["CRAFTS_REMAINING_LABEL"] .. "|r " .. hexc(T.white) .. remaining .. "|r" ..
             hexc(T.textMuted) .. " / " .. total .. "|r" ..
-            "  " .. hexc(T.green) .. "(" .. craftsDone .. " feitos)|r" .. interTag)
+            "  " .. hexc(T.green) .. string.format(PH.L["CRAFTS_DONE_COUNT"], craftsDone) .. "|r" .. interTag)
     else
-        cl:SetText(hexc(T.gold) .. "Craftar x" .. total .. "|r" .. interTag)
+        cl:SetText(hexc(T.gold) .. string.format(PH.L["CRAFT_X"], total) .. "|r" .. interTag)
     end
     iy = iy - 22
 
@@ -1224,18 +1224,18 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
                 if inBag > 0 then
                     local bagColor = (inBag >= matRemaining) and T.green or T.gold
                     qtyStr = hexc(T.white) .. matRemaining .. "|r" ..
-                        hexc(T.textMuted) .. " restantes " ..
-                        hexc(bagColor) .. "(" .. inBag .. " na bag)|r"
+                        hexc(T.textMuted) .. " " .. PH.L["MAT_REMAINING"] .. " " ..
+                        hexc(bagColor) .. string.format(PH.L["MAT_IN_BAG"], inBag) .. "|r"
                 else
                     qtyStr = hexc(T.white) .. matRemaining .. "|r" ..
-                        hexc(T.textMuted) .. " restantes|r" ..
-                        hexc(T.textMuted) .. " (" .. matUsed .. "/" .. origCount .. " usados)|r"
+                        hexc(T.textMuted) .. " " .. PH.L["MAT_REMAINING"] .. "|r" ..
+                        hexc(T.textMuted) .. " " .. string.format(PH.L["MAT_USED"], matUsed, origCount) .. "|r"
                 end
             elseif mat.fromBank and mat.fromBank > 0 then
                 if mat.toBuy and mat.toBuy > 0 then
-                    qtyStr = hexc(T.white) .. mat.totalNeeded .. "|r " .. hexc(T.textMuted) .. "(" .. mat.fromBank .. " estoque + " .. hexc(T.gold) .. "comprar " .. mat.toBuy .. "|r" .. hexc(T.textMuted) .. ")|r"
+                    qtyStr = hexc(T.white) .. mat.totalNeeded .. "|r " .. hexc(T.textMuted) .. "(" .. mat.fromBank .. " " .. PH.L["MAT_IN_STOCK"] .. " + " .. hexc(T.gold) .. PH.L["MAT_BUY"] .. " " .. mat.toBuy .. "|r" .. hexc(T.textMuted) .. ")|r"
                 else
-                    qtyStr = hexc(T.green) .. mat.totalNeeded .. " (estoque)|r"
+                    qtyStr = hexc(T.green) .. mat.totalNeeded .. " (" .. PH.L["MAT_IN_STOCK"] .. ")|r"
                 end
             else
                 qtyStr = hexc(T.white) .. "x" .. mat.totalNeeded .. "|r"
@@ -1258,7 +1258,7 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
         ut:SetJustifyH("LEFT")
         local names = {}
         for _, u in ipairs(step.laterUsage) do table.insert(names, u.recipe or "?") end
-        ut:SetText(hexc(T.orange) .. "Não venda!|r " .. hexc(T.textSecondary) .. "Usado para: " .. table.concat(names, ", ") .. "|r")
+        ut:SetText(hexc(T.orange) .. PH.L["DONT_SELL"] .. "|r " .. hexc(T.textSecondary) .. PH.L["USED_FOR"] .. " " .. table.concat(names, ", ") .. "|r")
         iy = iy - 16
     end
 
@@ -1267,7 +1267,7 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
         iy = iy - 2
         local ct = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         ct:SetPoint("TOPLEFT", 12, iy)
-        ct:SetText(hexc(T.textMuted) .. "Custo:|r " .. PH.TSM:FormatMoney(step.cost))
+        ct:SetText(hexc(T.textMuted) .. PH.L["STEP_COST_LABEL"] .. "|r " .. PH.TSM:FormatMoney(step.cost))
         iy = iy - 14
     end
 
@@ -1288,13 +1288,13 @@ function PH:CreateNextPreview(parent, y, step)
 
     local lbl = pv:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     lbl:SetPoint("TOPLEFT", 10, -5)
-    lbl:SetText(hexc(T.textMuted) .. "A seguir:|r")
+    lbl:SetText(hexc(T.textMuted) .. PH.L["NEXT_PREVIEW_LABEL"] .. "|r")
 
     local info = pv:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     info:SetPoint("TOPLEFT", 10, -18)
     info:SetPoint("RIGHT", pv, "RIGHT", -10, 0)
     info:SetJustifyH("LEFT")
-    local tag = step.isIntermediate and (" " .. hexc(T.orange) .. "[Intermediário]|r") or ""
+    local tag = step.isIntermediate and (" " .. hexc(T.orange) .. PH.L["INTERMEDIATE_TAG"] .. "|r") or ""
     info:SetText(hexc(T.textPrimary) .. step.recipe .. "|r x" .. step.crafts ..
         "  " .. hexc(T.textMuted) .. "[" .. step.skillRange[1] .. "-" .. step.skillRange[2] .. "]|r" .. tag)
 
@@ -1357,9 +1357,9 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
     local costText = costCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     costText:SetPoint("LEFT", 10, 0)
     if pathData.hasTSMPricing and pathData.totalCost > 0 then
-        costText:SetText(hexc(T.gold) .. "Custo Total:|r " .. PH.TSM:FormatMoney(pathData.totalCost))
+        costText:SetText(hexc(T.gold) .. PH.L["TOTAL_COST"] .. ":|r " .. PH.TSM:FormatMoney(pathData.totalCost))
     else
-        costText:SetText(hexc(T.gold) .. "Lista de Compras|r  " .. hexc(T.textMuted) .. "(instale TSM para preços)|r")
+        costText:SetText(hexc(T.gold) .. PH.L["SHOPPING_LIST"] .. "|r  " .. hexc(T.textMuted) .. PH.L["INSTALL_TSM"] .. "|r")
     end
     y = y - 38
 
@@ -1379,11 +1379,11 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
         colFrame:SetPoint("TOPLEFT", 0, y)
         colFrame:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
         local c1 = colFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        c1:SetPoint("LEFT", 8, 0); c1:SetText(hexc(T.textMuted) .. "Item|r")
+        c1:SetPoint("LEFT", 8, 0); c1:SetText(hexc(T.textMuted) .. PH.L["COL_ITEM"] .. "|r")
         local c2 = colFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        c2:SetPoint("LEFT", colFrame, "RIGHT", -170, 0); c2:SetText(hexc(T.textMuted) .. "Qtd|r")
+        c2:SetPoint("LEFT", colFrame, "RIGHT", -170, 0); c2:SetText(hexc(T.textMuted) .. PH.L["COL_QTY"] .. "|r")
         local c3 = colFrame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        c3:SetPoint("LEFT", colFrame, "RIGHT", -80, 0); c3:SetText(hexc(T.textMuted) .. "Preço|r")
+        c3:SetPoint("LEFT", colFrame, "RIGHT", -80, 0); c3:SetText(hexc(T.textMuted) .. PH.L["COL_PRICE"] .. "|r")
         y = y - 15
 
         local sep = parent:CreateTexture(nil, "ARTWORK")
@@ -1447,7 +1447,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
         tsmBtn:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
             GameTooltip:AddLine("TSM Shopping")
-            GameTooltip:AddLine("Gera string de busca para colar na AH.", 1,1,1,true)
+            GameTooltip:AddLine(PH.L["TSM_BTN_TOOLTIP"], 1,1,1,true)
             GameTooltip:Show()
         end)
         tsmBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
@@ -1463,7 +1463,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
             it:SetPoint("TOPLEFT", 8, y)
             it:SetPoint("RIGHT", parent, "RIGHT", -8, 0)
             it:SetJustifyH("LEFT")
-            local pr = (item.unitPrice and item.unitPrice > 0) and ("  " .. PH.TSM:FormatMoney(item.unitPrice) .. " cada") or ""
+            local pr = (item.unitPrice and item.unitPrice > 0) and ("  " .. PH.TSM:FormatMoney(item.unitPrice) .. " " .. PH.L["MAT_EACH"]) or ""
             local invNote = (item.inInventory and item.inInventory > 0) and (hexc(T.textMuted) .. " (" .. item.inInventory .. " inv)|r") or ""
             it:SetText(hexc(T.green) .. "[V]|r " .. hexc(T.textPrimary) .. item.name .. "|r x" .. item.count .. invNote .. pr)
             y = y - 16
@@ -1512,7 +1512,7 @@ function PH:RenderGoldFarmingGuide(parent, yOffset, profName, comboSkills)
 
     local headerSub = headerCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     headerSub:SetPoint("LEFT", 30, -8)
-    headerSub:SetText(hexc(T.gold) .. "Guia de Farm de Gold|r")
+    headerSub:SetText(hexc(T.gold) .. PH.L["GOLD_FARM_GUIDE_TITLE"] .. "|r")
 
     y = y - 58
 
@@ -1521,7 +1521,7 @@ function PH:RenderGoldFarmingGuide(parent, yOffset, profName, comboSkills)
     if not goldData then
         local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         msg:SetPoint("TOPLEFT", 0, y)
-        msg:SetText(hexc(T.textMuted) .. "Dados de gold farming não disponíveis.|r")
+        msg:SetText(hexc(T.textMuted) .. PH.L["GOLD_DATA_UNAVAILABLE"] .. "|r")
         return y - 20
     end
 
@@ -1648,7 +1648,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
         local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
         msg:SetPoint("TOP", 0, y - 20)
         msg:SetJustifyH("CENTER")
-        msg:SetText(hexc(T.textMuted) .. "Nenhum dado de farm disponível.|r")
+        msg:SetText(hexc(T.textMuted) .. PH.L["NO_FARM_DATA"] .. "|r")
         return y - 60
     end
 
@@ -1663,7 +1663,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     local vs = steps[viewIdx]
 
     -- "Start Guide" button
-    local guideBtn = PillButton(parent, 160, 24, GG.active and "Parar Guia ■" or "▶ Iniciar Guia", GG.active and T.red or T.green)
+    local guideBtn = PillButton(parent, 160, 24, GG.active and PH.L["GUIDE_STOP_BTN"] or PH.L["GUIDE_START_BTN"], GG.active and T.red or T.green)
     guideBtn:SetPoint("TOPLEFT", 0, y)
     guideBtn:SetScript("OnClick", function()
         PH:ToggleGatheringGuide(profData.name)
@@ -1671,11 +1671,11 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     end)
     guideBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:AddLine("Guia de Coleta")
+        GameTooltip:AddLine(PH.L["GUIDE_TOOLTIP_TITLE"])
         if GG.active then
-            GameTooltip:AddLine("Clique para parar o guia e esconder o widget.", 1,1,1,true)
+            GameTooltip:AddLine(PH.L["GUIDE_TOOLTIP_STOP"], 1,1,1,true)
         else
-            GameTooltip:AddLine("Abre widget flutuante com passo atual,\nindicador no minimapa e navegação de rota.", 1,1,1,true)
+            GameTooltip:AddLine(PH.L["GUIDE_TOOLTIP_START"], 1,1,1,true)
         end
         GameTooltip:Show()
     end)
@@ -1683,7 +1683,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     y = y - 32
 
     -- Progress bar
-    local _, progY = SectionLabel(parent, y, string.format("PROGRESSO  %d / %d  (%.0f%%)", currentSkill, targetSkill, pct * 100))
+    local _, progY = SectionLabel(parent, y, string.format(PH.L["PROGRESS_LABEL"], currentSkill, targetSkill, pct * 100))
     FlatBar(parent, progY, pct, 8, pct < 0.5 and T.orange or T.green)
     y = progY - 18
 

@@ -267,19 +267,19 @@ function PH:HandleSlashCommand(msg)
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
     elseif cmd == "help" then
-        self:Print("Comandos disponíveis:")
-        self:Print("/ph ou /professionhelper - Abre a janela principal")
-        self:Print("/ph show - Mostra a janela")
-        self:Print("/ph hide - Esconde a janela")
-        self:Print("/ph farm - Inicia sessão de farm")
-        self:Print("/ph farm stop - Para sessão de farm")
-        self:Print("/ph farm toggle - Alterna sessão de farm")
-        self:Print("/ph farm reset - Reseta sessão de farm")
-        self:Print("/ph farm show/hide - Mostra/esconde tracker")
-        self:Print("/ph guide <profissão> - Inicia guia de coleta")
-        self:Print("/ph help - Mostra esta ajuda")
+        self:Print(self.L["CMD_HELP_HEADER"])
+        self:Print(self.L["CMD_HELP_MAIN"])
+        self:Print(self.L["CMD_HELP_SHOW"])
+        self:Print(self.L["CMD_HELP_HIDE"])
+        self:Print(self.L["CMD_HELP_FARM"])
+        self:Print(self.L["CMD_HELP_FARM_STOP"])
+        self:Print(self.L["CMD_HELP_FARM_TOGGLE"])
+        self:Print(self.L["CMD_HELP_FARM_RESET"])
+        self:Print(self.L["CMD_HELP_FARM_SHOWHIDE"])
+        self:Print(self.L["CMD_HELP_GUIDE"])
+        self:Print(self.L["CMD_HELP_HELP"])
     else
-        self:Print("Comando desconhecido. Use /ph help para ajuda.")
+        self:Print(self.L["CMD_UNKNOWN"])
     end
 end
 
@@ -400,7 +400,7 @@ function PH:OnSkillChanged()
                     -- Notify step change
                     local newStep = pathData.steps[newStepIdx]
                     if newStep then
-                        self:Print("|cff00ff00Proximo passo!|r Agora faca: |cffffffff" .. newStep.recipe .. "|r (" .. newStep.skillRange[1] .. "-" .. newStep.skillRange[2] .. ")")
+                        self:Print(string.format(self.L["NEXT_STEP_MSG"], newStep.recipe, newStep.skillRange[1], newStep.skillRange[2]))
                         PlaySound(SOUNDKIT.UI_PROFESSION_TRACK_SKILL_RANK_UP or 73277)
                     end
                 end
@@ -483,14 +483,14 @@ function PH:CreateMinimapButton()
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_LEFT")
         GameTooltip:AddLine("Profession Helper")
-        GameTooltip:AddLine("|cffffffffClick Esquerdo:|r Abrir janela principal", 1, 1, 1)
-        GameTooltip:AddLine("|cffffffffClick Direito:|r Iniciar/Parar Farm Tracker", 1, 1, 1)
+        GameTooltip:AddLine("|cffffffff" .. PH.L["MINIMAP_LEFT_CLICK"] .. "|r", 1, 1, 1)
+        GameTooltip:AddLine("|cffffffff" .. PH.L["MINIMAP_RIGHT_CLICK"] .. "|r", 1, 1, 1)
         if PH.FarmTracker.active then
             local gph = PH.FarmTracker:CalculateGoldPerHour()
             local elapsed = PH.FarmTracker:GetElapsedTime()
             GameTooltip:AddLine(" ")
-            GameTooltip:AddLine("|cff00ff00Farm ativo:|r " .. PH.FarmTracker:FormatDuration(elapsed), 1, 1, 1)
-            GameTooltip:AddLine("Gold/hora: " .. PH.TSM:FormatMoney(gph), 1, 1, 1)
+            GameTooltip:AddLine("|cff00ff00" .. PH.L["MINIMAP_FARM_ACTIVE"] .. "|r " .. PH.FarmTracker:FormatDuration(elapsed), 1, 1, 1)
+            GameTooltip:AddLine(PH.L["MINIMAP_GOLD_PER_HOUR"] .. " " .. PH.TSM:FormatMoney(gph), 1, 1, 1)
         end
         GameTooltip:Show()
     end)

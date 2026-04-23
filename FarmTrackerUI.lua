@@ -86,7 +86,7 @@ function PH:ShowFarmTrackerUI()
     toggleBtn:SetBackdropBorderColor(0.9, 0.25, 0.25, 0.4)
     local toggleLabel = toggleBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     toggleLabel:SetPoint("CENTER")
-    toggleLabel:SetText("|cffffffffParar|r")
+    toggleLabel:SetText("|cffffffff" .. PH.L["FARM_BTN_STOP"] .. "|r")
     local toggleHL = toggleBtn:CreateTexture(nil, "HIGHLIGHT")
     toggleHL:SetAllPoints()
     toggleHL:SetColorTexture(0.9, 0.25, 0.25, 0.12)
@@ -128,7 +128,7 @@ function PH:ShowFarmTrackerUI()
     -- Gold Per Hour (hero stat)
     local gphLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     gphLabel:SetPoint("TOPLEFT", 0, 0)
-    gphLabel:SetText("|cff8e8e93Gold / Hora|r")
+    gphLabel:SetText("|cff8e8e93" .. PH.L["FARM_GPH_LABEL"] .. "|r")
 
     local gphValue = content:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
     gphValue:SetPoint("TOPLEFT", 0, -12)
@@ -148,7 +148,7 @@ function PH:ShowFarmTrackerUI()
     -- Duration
     local durLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     durLabel:SetPoint("TOPLEFT", 0, statsY)
-    durLabel:SetText("|cff8e8e93Duração|r")
+    durLabel:SetText("|cff8e8e93" .. PH.L["FARM_DURATION_LABEL"] .. "|r")
 
     local durValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     durValue:SetPoint("TOPRIGHT", 0, statsY)
@@ -159,7 +159,7 @@ function PH:ShowFarmTrackerUI()
     -- Total Gold (wallet)
     local totalLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     totalLabel:SetPoint("TOPLEFT", 0, statsY - 15)
-    totalLabel:SetText("|cffffd700Gold Total|r")
+    totalLabel:SetText("|cffffd700" .. PH.L["FARM_TOTAL_GOLD_LABEL"] .. "|r")
 
     local totalValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     totalValue:SetPoint("TOPRIGHT", 0, statsY - 15)
@@ -170,7 +170,7 @@ function PH:ShowFarmTrackerUI()
     -- Raw Gold (from mob drops)
     local rawLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     rawLabel:SetPoint("TOPLEFT", 0, statsY - 30)
-    rawLabel:SetText("|cff8e8e93Gold de Mobs|r")
+    rawLabel:SetText("|cff8e8e93" .. PH.L["FARM_MOB_GOLD_LABEL"] .. "|r")
 
     local rawValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     rawValue:SetPoint("TOPRIGHT", 0, statsY - 30)
@@ -181,7 +181,7 @@ function PH:ShowFarmTrackerUI()
     -- Estimated Loot Value (TSM)
     local estLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     estLabel:SetPoint("TOPLEFT", 0, statsY - 45)
-    estLabel:SetText("|cff4dda5dValor Estimado (TSM)|r")
+    estLabel:SetText("|cff4dda5d" .. PH.L["FARM_EST_VALUE_LABEL"] .. "|r")
 
     local estValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     estValue:SetPoint("TOPRIGHT", 0, statsY - 45)
@@ -199,7 +199,7 @@ function PH:ShowFarmTrackerUI()
     -- Items header
     local itemsLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     itemsLabel:SetPoint("TOPLEFT", 0, statsY - 65)
-    itemsLabel:SetText("|cff4da6ffItens Farmados|r")
+    itemsLabel:SetText("|cff4da6ff" .. PH.L["FARM_ITEMS_FARMED_LABEL"] .. "|r")
     frame.itemsLabel = itemsLabel
 
     -- Item rows (pool of 8)
@@ -248,7 +248,7 @@ function PH:ShowFarmTrackerUI()
 
     local statusText = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     statusText:SetPoint("RIGHT", statusDot, "LEFT", -4, 0)
-    statusText:SetText("|cff4dda5dAtivo|r")
+    statusText:SetText("|cff4dda5d" .. PH.L["FARM_STATUS_ACTIVE"] .. "|r")
     frame.statusText = statusText
 
     self.FarmTrackerFrame = frame
@@ -274,15 +274,15 @@ function PH:UpdateFarmTrackerUI()
     if isActive then
         frame.toggleBtn:SetBackdropColor(0.9, 0.25, 0.25, 0.15)
         frame.toggleBtn:SetBackdropBorderColor(0.9, 0.25, 0.25, 0.4)
-        frame.toggleLabel:SetText("|cffffffffParar|r")
+        frame.toggleLabel:SetText("|cffffffff" .. PH.L["FARM_BTN_STOP"] .. "|r")
         frame.statusDot:SetColorTexture(0.3, 0.85, 0.45, 1)
-        frame.statusText:SetText("|cff4dda5dAtivo|r")
+        frame.statusText:SetText("|cff4dda5d" .. PH.L["FARM_STATUS_ACTIVE"] .. "|r")
     else
         frame.toggleBtn:SetBackdropColor(0.3, 0.85, 0.45, 0.12)
         frame.toggleBtn:SetBackdropBorderColor(0.3, 0.85, 0.45, 0.3)
-        frame.toggleLabel:SetText("|cffffffffIniciar|r")
+        frame.toggleLabel:SetText("|cffffffff" .. PH.L["FARM_BTN_START"] .. "|r")
         frame.statusDot:SetColorTexture(0.55, 0.55, 0.60, 1)
-        frame.statusText:SetText("|cff8e8e93Parado|r")
+        frame.statusText:SetText("|cff8e8e93" .. PH.L["FARM_STATUS_STOPPED"] .. "|r")
     end
 
     -- Gold per hour

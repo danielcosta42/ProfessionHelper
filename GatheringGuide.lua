@@ -1007,12 +1007,12 @@ function PH:UpdateGatheringWidget()
 
     if inZone and matchLoc then
         local playerZone = GG:GetPlayerZone()
-        w.zoneLabel:SetText("|cff4dda5d\226\150\184 " .. playerZone .. "|r  |cff888888(aqui)|r")
+        w.zoneLabel:SetText("|cff4dda5d\226\150\184 " .. playerZone .. "|r  |cff888888" .. PH.L["GATHERING_HERE"] .. "|r")
 
         -- Show route info
         local routeInfo = ""
         if GG.currentRoute then
-            routeInfo = "|cff4dda5dRota:|r WP " .. GG.currentWP .. "/" .. #GG.currentRoute .. " — siga a seta no minimap"
+            routeInfo = "|cff4dda5d" .. PH.L["GATHERING_ROUTE_LABEL"] .. "|r " .. string.format(PH.L["GATHERING_ROUTE_INFO"], GG.currentWP, #GG.currentRoute)
         end
         w.routeText:SetText(routeInfo)
 
@@ -1022,7 +1022,7 @@ function PH:UpdateGatheringWidget()
             w.tipText:SetText("")
         end
     elseif bestLoc then
-        w.zoneLabel:SetText("|cffffd700V\195\161 para:|r |cffffffff" .. bestLoc.zone .. "|r")
+        w.zoneLabel:SetText("|cffffd700" .. PH.L["GATHERING_GO_TO"] .. "|r |cffffffff" .. bestLoc.zone .. "|r")
         local altZones = {}
         for _, loc in ipairs(step.locations) do
             if loc.zone ~= bestLoc.zone then
@@ -1030,19 +1030,19 @@ function PH:UpdateGatheringWidget()
             end
         end
         if #altZones > 0 then
-            w.routeText:SetText("|cff8e8e93Alternativas: " .. table.concat(altZones, ", ") .. "|r")
+            w.routeText:SetText("|cff8e8e93" .. PH.L["GATHERING_ALTERNATIVES"] .. " " .. table.concat(altZones, ", ") .. "|r")
         else
             w.routeText:SetText("")
         end
         w.tipText:SetText("")
     else
-        w.zoneLabel:SetText("|cff888888Sem locais dispon\195\173veis|r")
+        w.zoneLabel:SetText("|cff888888" .. PH.L["GATHERING_NO_LOCATIONS"] .. "|r")
         w.routeText:SetText("")
         w.tipText:SetText("")
     end
 
     w.statusDot:SetColorTexture(inZone and 0.3 or 1.0, inZone and 0.85 or 0.6, inZone and 0.45 or 0.2, 1)
-    w.statusText:SetText(inZone and "|cff4dda5dColetando|r" or "|cffffa033Viajando|r")
+    w.statusText:SetText(inZone and ("|cff4dda5d" .. PH.L["GATHERING_STATUS_ACTIVE"] .. "|r") or ("|cffffa033" .. PH.L["GATHERING_STATUS_TRAVELING"] .. "|r"))
 
     w.prevBtn:SetAlpha(GG.currentStep > 1 and 1 or 0.3)
     w.nextBtn:SetAlpha(GG.currentStep < #GG.steps and 1 or 0.3)

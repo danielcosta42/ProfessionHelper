@@ -206,12 +206,12 @@ end
 -- Open TSM shopping scan with a search string
 function PH.TSM:OpenShoppingScan(searchString)
     if not searchString or searchString == "" then
-        PH:Print("Nenhum item para buscar na AH.")
+        PH:Print(PH.L["TSM_NO_ITEMS"])
         return false
     end
 
     ShowCopyPopup(searchString)
-    PH:Print("Cole no campo de busca do TSM Shopping na Auction House.")
+    PH:Print(PH.L["TSM_PASTE_MSG"])
     return true
 end
 
