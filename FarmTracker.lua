@@ -250,13 +250,12 @@ function FT:OnEvent(event, ...)
             local itemName, _, itemQuality, _, _, _, _, _, _, itemIcon = GetItemInfo(itemLink)
             if itemName then
                 if not self.itemsLooted[itemName] then
-                    -- Look up TSM price for this item
+                    -- Look up price: AH addon → 24h cache → Materials.vendorPrice → native vendor sell
                     local unitPrice = 0
                     local itemID = tonumber(string.match(itemLink, "item:(%d+)"))
-                    if PH.TSM and PH.TSM.IsAvailable and PH.TSM:IsAvailable() then
-                        -- Try by name first (uses Materials table), then by ID
+                    if PH.TSM then
                         unitPrice = PH.TSM:GetItemPrice(itemName) or 0
-                        if unitPrice == 0 and itemID and PH.TSM.GetItemPriceByID then
+                        if unitPrice == 0 and itemID then
                             unitPrice = PH.TSM:GetItemPriceByID(itemID) or 0
                         end
                     end

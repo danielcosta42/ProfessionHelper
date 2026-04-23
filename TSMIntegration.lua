@@ -132,6 +132,11 @@ function PH.TSM:GetItemPriceByID(itemID, priceSource)
             if price and price > 0 then return price end
         end
     end
+
+    -- Final fallback: native WoW vendor sell price (available even with no AH addon)
+    local vendorSell = select(11, GetItemInfo(itemID))
+    if vendorSell and vendorSell > 0 then return vendorSell end
+
     return nil
 end
 
