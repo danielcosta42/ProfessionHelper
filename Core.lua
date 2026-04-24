@@ -33,9 +33,12 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
-    -- Price cache is a sub-table, not a scalar default
+    -- Sub-tables that cannot be initialised via defaults loop
     if not ProfessionHelperDB.ahPriceCache then
         ProfessionHelperDB.ahPriceCache = {}
+    end
+    if not ProfessionHelperDB.cooldowns then
+        ProfessionHelperDB.cooldowns = {}
     end
     if not ProfessionHelperDB.knownRecipes then
         ProfessionHelperDB.knownRecipes = {}
@@ -276,6 +279,8 @@ function PH:HandleSlashCommand(msg)
         else
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
+    elseif cmd == "cd" or cmd == "cooldowns" then
+        self:ShowCooldownUI()
     elseif cmd == "recipes" or cmd:sub(1, 8) == "recipes " then
         local profArg = cmd:len() > 8 and cmd:sub(9) or nil
         if profArg then
@@ -346,6 +351,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.CooldownTracker then self.CooldownTracker:Initialize() end
             if self.RecipeTracker then self.RecipeTracker:Initialize() end
             if self.AltManager then self.AltManager:Initialize() end
             self:CreateMinimapButton()

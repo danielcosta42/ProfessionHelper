@@ -41,8 +41,10 @@ PathCalculator.lua
 FarmTracker.lua
 GatheringGuide.lua
 Core.lua
+CooldownTracker.lua
 UI.lua
 FarmTrackerUI.lua
+CooldownTrackerUI.lua
 RecipeTrackerUI.lua
 AltManagerUI.lua
 DECalcUI.lua
