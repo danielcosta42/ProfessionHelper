@@ -1,30 +1,53 @@
--- Profession Helper - TSM (TradeSkillMaster) Integration
--- Provides pricing data and AH shopping list support
+-- Profession Helper - AH Price Integration
+-- Supports TSM (3/4/5), Auctionator, and a 24h local price cache
 
 ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
 PH.TSM = {}
 
--- Check if TSM is loaded and available
-function PH.TSM:IsAvailable()
-    -- Modern TSM (4.10+/5.x) uses TSM_API as the global
-    if TSM_API then
-        return "modern"
-    end
-    -- Legacy TSM4 uses TSMAPI_FOUR
-    if TSMAPI_FOUR then
-        return "tsm4"
-    end
-    -- Legacy TSM3 uses TSMAPI
-    if TSMAPI then
-        return "tsm3"
+-- Cache TTL: 24 hours in seconds
+local CACHE_TTL = 86400
+
+-- Write a price to the local SavedVariables cache
+local function WriteToCache(itemName, price, source)
+    if not ProfessionHelperDB or not ProfessionHelperDB.ahPriceCache then return end
+    ProfessionHelperDB.ahPriceCache[itemName] = { price = price, source = source, ts = time() }
+end
+
+-- Read a cached price. Returns price (copper) or nil if absent / expired.
+local function ReadFromCache(itemName)
+    if not ProfessionHelperDB or not ProfessionHelperDB.ahPriceCache then return nil end
+    local entry = ProfessionHelperDB.ahPriceCache[itemName]
+    if entry and entry.price and entry.ts and (time() - entry.ts) < CACHE_TTL then
+        return entry.price
     end
     return nil
 end
 
--- Get market price for an item via TSM
--- Returns price in copper, or nil if unavailable
+-- Detect which AH addon (if any) is currently loaded.
+-- Priority: TSM modern > TSM4 > TSM3 > Auctionator
+function PH.TSM:IsAvailable()
+    if TSM_API then return "modern" end
+    if TSMAPI_FOUR then return "tsm4" end
+    if TSMAPI then return "tsm3" end
+    -- Auctionator: check for both the global namespace and at least one price source
+    if Auctionator and (AUCTIONATOR_ITEM_BUY_PRICE or (Auctionator.API and Auctionator.API.v1)) then
+        return "auctionator"
+    end
+    return nil
+end
+
+-- Return a human-readable display name for the active addon (used in UI badges).
+function PH.TSM:GetDisplayName()
+    local v = self:IsAvailable()
+    if v == "modern" or v == "tsm4" or v == "tsm3" then return "TSM" end
+    if v == "auctionator" then return "Auctionator" end
+    return nil
+end
+
+-- Get market price for an item.
+-- Priority chain: live addon → 24h cache → static vendor price → nil
 function PH.TSM:GetItemPrice(itemName, priceSource)
     local matData = PH.Materials and PH.Materials[itemName]
     local itemID = matData and matData.id
@@ -34,42 +57,55 @@ function PH.TSM:GetItemPrice(itemName, priceSource)
     priceSource = priceSource or "DBMarket"
 
     local version = self:IsAvailable()
+    local price
+
     if version == "modern" then
-        -- Modern TSM_API (4.10+ / 5.x)
-        local price, err = TSM_API.GetCustomPriceValue(priceSource, itemString)
-        if price and price > 0 then
-            return price
-        end
-        -- Try fallback sources if the primary failed
+        price = TSM_API.GetCustomPriceValue(priceSource, itemString)
         if not price or price == 0 then
-            local fallbacks = {"DBMarket", "DBMinBuyout", "DBHistorical", "DBRegionMarketAvg"}
+            local fallbacks = { "DBMarket", "DBMinBuyout", "DBHistorical", "DBRegionMarketAvg" }
             for _, src in ipairs(fallbacks) do
                 if src ~= priceSource then
                     price = TSM_API.GetCustomPriceValue(src, itemString)
-                    if price and price > 0 then return price end
+                    if price and price > 0 then break end
                 end
             end
         end
     elseif version == "tsm4" then
-        -- Legacy TSM4 API
-        local price = TSMAPI_FOUR.CustomPrice.GetValue(priceSource, itemString)
-        return price
+        price = TSMAPI_FOUR.CustomPrice.GetValue(priceSource, itemString)
     elseif version == "tsm3" then
-        -- Legacy TSM3 API
-        local price = TSMAPI:GetItemValue(itemString, priceSource)
+        price = TSMAPI:GetItemValue(itemString, priceSource)
+    elseif version == "auctionator" then
+        -- Newer Auctionator API (v1, post-Shadowlands backports)
+        if Auctionator.API and Auctionator.API.v1 and Auctionator.API.v1.GetAuctionPriceByItemID then
+            price = Auctionator.API.v1.GetAuctionPriceByItemID("ProfessionHelper", itemID)
+        end
+        -- Legacy TBC Auctionator: price table keyed by item name
+        if (not price or price == 0) and AUCTIONATOR_ITEM_BUY_PRICE then
+            price = AUCTIONATOR_ITEM_BUY_PRICE[itemName]
+        end
+    end
+
+    -- Cache write on successful live-addon fetch
+    if price and price > 0 then
+        WriteToCache(itemName, price, version)
         return price
     end
 
-    -- Fallback: vendor price from our data
-    if matData and matData.vendor and matData.price then
-        return matData.price
+    -- Cache read fallback (no addon or addon returned nothing)
+    local cached = ReadFromCache(itemName)
+    if cached then return cached end
+
+    -- Final fallback: static vendor price
+    if matData and matData.vendor and matData.vendorPrice then
+        return matData.vendorPrice
     end
 
     return nil
 end
 
--- Get market price for an item by its itemID directly
--- Used by Farm Tracker for looted items that may not be in Materials table
+-- Get market price for an item by its itemID directly.
+-- Used by Farm Tracker for looted items that may not be in Materials table.
+-- Also tries Auctionator; does NOT fall back to cache (no item-name key available here).
 function PH.TSM:GetItemPriceByID(itemID, priceSource)
     if not itemID then return nil end
     local itemString = "i:" .. itemID
@@ -79,7 +115,7 @@ function PH.TSM:GetItemPriceByID(itemID, priceSource)
     if version == "modern" then
         local price = TSM_API.GetCustomPriceValue(priceSource, itemString)
         if price and price > 0 then return price end
-        local fallbacks = {"DBMarket", "DBMinBuyout", "DBHistorical", "DBRegionMarketAvg"}
+        local fallbacks = { "DBMarket", "DBMinBuyout", "DBHistorical", "DBRegionMarketAvg" }
         for _, src in ipairs(fallbacks) do
             if src ~= priceSource then
                 price = TSM_API.GetCustomPriceValue(src, itemString)
@@ -90,18 +126,26 @@ function PH.TSM:GetItemPriceByID(itemID, priceSource)
         return TSMAPI_FOUR.CustomPrice.GetValue(priceSource, itemString)
     elseif version == "tsm3" then
         return TSMAPI:GetItemValue(itemString, priceSource)
+    elseif version == "auctionator" then
+        if Auctionator.API and Auctionator.API.v1 and Auctionator.API.v1.GetAuctionPriceByItemID then
+            local price = Auctionator.API.v1.GetAuctionPriceByItemID("ProfessionHelper", itemID)
+            if price and price > 0 then return price end
+        end
     end
+
+    -- Final fallback: native WoW vendor sell price (available even with no AH addon)
+    local vendorSell = select(11, GetItemInfo(itemID))
+    if vendorSell and vendorSell > 0 then return vendorSell end
+
     return nil
 end
 
--- Get the best price source string available
+-- Return the internal price-source string used by TSM API calls.
+-- Returns nil for non-TSM addons (Auctionator uses a different lookup path).
 function PH.TSM:GetPriceSourceName()
     local version = self:IsAvailable()
-    if version == "modern" or version == "tsm4" then
-        return "DBMinBuyout"
-    elseif version == "tsm3" then
-        return "DBMarket"
-    end
+    if version == "modern" or version == "tsm4" then return "DBMinBuyout" end
+    if version == "tsm3" then return "DBMarket" end
     return nil
 end
 

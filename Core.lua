@@ -9,7 +9,7 @@ ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
 -- Addon metadata
-PH.version = "1.5.0"
+PH.version = "1.8.0"
 PH.author = "Chehul @ DreamScyther-US"
 PH.github = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
@@ -33,11 +33,15 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    -- Price cache is a sub-table, not a scalar default
     if not ProfessionHelperDB.ahPriceCache then
         ProfessionHelperDB.ahPriceCache = {}
     end
     if not ProfessionHelperDB.knownRecipes then
         ProfessionHelperDB.knownRecipes = {}
+    end
+    if not ProfessionHelperDB.characters then
+        ProfessionHelperDB.characters = {}
     end
 end
 
@@ -209,8 +213,8 @@ function PH:GetMaterialInfo(materialName)
         local source = ""
         if matData.vendor then
             source = "|cff00ff00[Vendor]|r"
-            if matData.price then
-                source = source .. " " .. GetCoinTextureString(matData.price)
+            if matData.vendorPrice then
+                source = source .. " " .. GetCoinTextureString(matData.vendorPrice)
             end
         elseif matData.farmable then
             source = "|cffffcc00[Farm]|r"
@@ -278,6 +282,10 @@ function PH:HandleSlashCommand(msg)
             profArg = profArg:sub(1,1):upper() .. profArg:sub(2):lower()
         end
         self:ShowRecipeTrackerUI(profArg)
+    elseif cmd == "alts" then
+        self:ShowAltManagerUI()
+    elseif cmd == "de" or cmd == "prospect" then
+        self:ShowDECalcUI()
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])
@@ -339,6 +347,7 @@ function PH:OnEvent(event, ...)
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
             if self.RecipeTracker then self.RecipeTracker:Initialize() end
+            if self.AltManager then self.AltManager:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message

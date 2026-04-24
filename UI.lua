@@ -704,11 +704,11 @@ function PH:UpdateContentPanel()
         if isCrafting then
             local tsmBadge = hdrCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
             tsmBadge:SetPoint("RIGHT", -10, 0)
-            local tsmVer = PH.TSM:IsAvailable()
-            if tsmVer then
-                tsmBadge:SetText(hexc(T.green) .. "TSM ●|r")
+            local priceSrc = PH.TSM:GetDisplayName()
+            if priceSrc then
+                tsmBadge:SetText(hexc(T.green) .. priceSrc .. " ●|r")
             else
-                tsmBadge:SetText(hexc(T.textMuted) .. "TSM ○|r")
+                tsmBadge:SetText(hexc(T.textMuted) .. "— ○|r")
             end
         end
 
@@ -1004,7 +1004,7 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
     local ft = footerCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     ft:SetPoint("LEFT", 8, 0)
     local costStr = ""
-    if pathData.hasTSMPricing and pathData.totalCost > 0 then
+    if pathData.hasPricing and pathData.totalCost > 0 then
         costStr = "   " .. hexc(T.textMuted) .. PH.L["STEP_INLINE_COST"] .. "|r " .. PH.TSM:FormatMoney(pathData.totalCost)
     end
     ft:SetText(hexc(T.textSecondary) .. string.format(PH.L["STEPS_REMAINING"], remaining) .. "|r" .. costStr)
@@ -1356,7 +1356,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
     MakePanel(costCard, T.bgCard)
     local costText = costCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     costText:SetPoint("LEFT", 10, 0)
-    if pathData.hasTSMPricing and pathData.totalCost > 0 then
+    if pathData.hasPricing and pathData.totalCost > 0 then
         costText:SetText(hexc(T.gold) .. PH.L["TOTAL_COST"] .. ":|r " .. PH.TSM:FormatMoney(pathData.totalCost))
     else
         costText:SetText(hexc(T.gold) .. PH.L["SHOPPING_LIST"] .. "|r  " .. hexc(T.textMuted) .. PH.L["INSTALL_TSM"] .. "|r")
