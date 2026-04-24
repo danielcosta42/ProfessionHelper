@@ -37,6 +37,9 @@ function PH:InitializeDB()
     if not ProfessionHelperDB.ahPriceCache then
         ProfessionHelperDB.ahPriceCache = {}
     end
+    if not ProfessionHelperDB.inventory then
+        ProfessionHelperDB.inventory = {}
+    end
     if not ProfessionHelperDB.cooldowns then
         ProfessionHelperDB.cooldowns = {}
     end
@@ -351,6 +354,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.BagScanner then self.BagScanner:Initialize() end
             if self.CooldownTracker then self.CooldownTracker:Initialize() end
             if self.RecipeTracker then self.RecipeTracker:Initialize() end
             if self.AltManager then self.AltManager:Initialize() end

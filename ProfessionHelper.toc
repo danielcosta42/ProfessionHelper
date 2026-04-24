@@ -34,6 +34,7 @@ Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 TSMIntegration.lua
+BagScanner.lua
 RecipeTracker.lua
 AltManager.lua
 DECalc.lua

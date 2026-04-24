@@ -218,10 +218,16 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
         -- GetItemPrice handles the full chain: addon → cache → vendorPrice
         local unitPrice = PH.TSM:GetItemPrice(name) or 0
 
-        -- Discount items already in bags/bank
+        -- Discount items already in bags/bank.
+        -- GetItemCount includes bank only when bank frame is open.
+        -- BagScanner supplements with the last-known bank scan (persists across sessions).
         local inInventory = 0
         if matData and matData.id then
             inInventory = GetItemCount(matData.id, true) or 0
+        end
+        if PH.BagScanner then
+            local scanned = PH.BagScanner:GetCount(name)
+            if scanned > inInventory then inInventory = scanned end
         end
         local toBuy = math.max(0, count - inInventory)
 
