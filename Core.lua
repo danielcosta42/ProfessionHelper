@@ -33,6 +33,10 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    -- Price cache is a sub-table, not a scalar default
+    if not ProfessionHelperDB.ahPriceCache then
+        ProfessionHelperDB.ahPriceCache = {}
+    end
 end
 
 -- All profession data references
@@ -203,8 +207,8 @@ function PH:GetMaterialInfo(materialName)
         local source = ""
         if matData.vendor then
             source = "|cff00ff00[Vendor]|r"
-            if matData.price then
-                source = source .. " " .. GetCoinTextureString(matData.price)
+            if matData.vendorPrice then
+                source = source .. " " .. GetCoinTextureString(matData.vendorPrice)
             end
         elseif matData.farmable then
             source = "|cffffcc00[Farm]|r"
