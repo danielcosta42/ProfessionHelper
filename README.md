@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.7.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.8.0-blue.svg)
 ![WoW](https://img.shields.io/badge/WoW-TBC%20Classic-orange.svg)
 ![License](https://img.shields.io/badge/license-Free%20for%20Personal%20Use-green.svg)
 ![Languages](https://img.shields.io/badge/languages-PT%20%7C%20EN%20%7C%20ES-brightgreen.svg)
