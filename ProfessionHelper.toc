@@ -40,6 +40,7 @@ AltManager.lua
 DECalc.lua
 PathCalculator.lua
 FarmTracker.lua
+MapPins.lua
 GatheringGuide.lua
 Core.lua
 CooldownTracker.lua

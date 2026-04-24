@@ -1151,6 +1151,22 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
         sl:SetJustifyH("LEFT")
         sl:SetText(hexc(T.textMuted) .. PH.L["RECIPE"] .. ":|r " .. hexc(T.accent) .. step.source .. "|r")
         iy = iy - math.max(14, sl:GetStringHeight() + 4)
+
+        -- Map pin button (shown when NPC coordinates are known)
+        if PH.MapPins and PH.MapPins:HasPinsForSource(step.source) then
+            local mapBtn = PillButton(card, 110, 18, PH.L["BTN_SHOW_ON_MAP"], T.gold)
+            mapBtn:SetPoint("TOPLEFT", 12, iy)
+            mapBtn:SetScript("OnClick", function()
+                PH.MapPins:ShowSourcePins(step.source)
+            end)
+            mapBtn:SetScript("OnEnter", function(self)
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:AddLine(PH.L["BTN_SHOW_ON_MAP_TT"], 1, 1, 1, true)
+                GameTooltip:Show()
+            end)
+            mapBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+            iy = iy - 24
+        end
     end
 
     -- Tip
@@ -1660,6 +1676,14 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     local viewIdx = self.gatherViewStep
     if not viewIdx or viewIdx < 1 or viewIdx > totalSteps then viewIdx = currentStepIdx end
 
+    -- Auto-advance: if the viewed step is now complete, jump to the current step.
+    -- This handles the case where gatherViewStep was manually set to an earlier step
+    -- during a session and the player's skill has since passed that step's cap.
+    if steps[viewIdx] and steps[viewIdx].skillRange[2] <= currentSkill and viewIdx < currentStepIdx then
+        viewIdx = currentStepIdx
+        self.gatherViewStep = nil  -- follow current step going forward
+    end
+
     local vs = steps[viewIdx]
 
     -- "Start Guide" button
@@ -1763,7 +1787,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     y = y - 36
 
     -- Focused step card
-    y = self:CreateGatheringStepCard(parent, y, vs, totalSteps, currentSkill)
+    y = self:CreateGatheringStepCard(parent, y, vs, totalSteps, currentSkill, profData.name)
 
     -- Next step preview
     if viewIdx < totalSteps then
@@ -1865,7 +1889,7 @@ end
 -------------------------------------------------------------------------------
 -- Gathering focused step card
 -------------------------------------------------------------------------------
-function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill)
+function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill, profName)
     local isCurrent  = step.skillRange[1] <= currentSkill and step.skillRange[2] > currentSkill
     local isComplete = step.skillRange[2] <= currentSkill
 
@@ -2028,6 +2052,22 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill)
                 tp:SetText(hexc(T.green) .. "> " .. loc.tips .. "|r")
                 local tpH = tp:GetStringHeight() or 12
                 rowIy = rowIy - math.max(14, tpH + 2)
+            end
+
+            -- Fishing spot map pin button
+            if profName == "Fishing" and PH.MapPins and PH.MapPins:HasFishingSpot(loc.zone) and not isComplete then
+                local pinBtn = PillButton(row, 100, 16, PH.L["BTN_SHOW_ON_MAP"], T.gold)
+                pinBtn:SetPoint("TOPLEFT", 6, rowIy)
+                pinBtn:SetScript("OnClick", function()
+                    PH.MapPins:ShowFishingSpot(loc.zone)
+                end)
+                pinBtn:SetScript("OnEnter", function(self)
+                    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                    GameTooltip:AddLine(PH.L["BTN_SHOW_ON_MAP_TT"], 1, 1, 1, true)
+                    GameTooltip:Show()
+                end)
+                pinBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+                rowIy = rowIy - 22
             end
 
             row:SetHeight(math.abs(rowIy) + 6)

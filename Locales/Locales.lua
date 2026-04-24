@@ -224,6 +224,10 @@ Locales.ptBR = {
     ["GOLD_FARM_GUIDE_TITLE"] = "Guia de Farm de Gold",
     ["GOLD_DATA_UNAVAILABLE"] = "Dados de gold farming não disponíveis.",
 
+    -- Map Pins
+    ["BTN_SHOW_ON_MAP"]    = "Ver no Mapa",
+    ["BTN_SHOW_ON_MAP_TT"] = "Marca o NPC/local no Mapa Mundi.",
+
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Parar Guia ■",
     ["GUIDE_START_BTN"] = "▶ Iniciar Guia",
@@ -837,6 +841,10 @@ Locales.enUS = {
     -- Gold Farming Guide
     ["GOLD_FARM_GUIDE_TITLE"] = "Gold Farming Guide",
     ["GOLD_DATA_UNAVAILABLE"] = "Gold farming data not available.",
+
+    -- Map Pins
+    ["BTN_SHOW_ON_MAP"]    = "Show on Map",
+    ["BTN_SHOW_ON_MAP_TT"] = "Mark the NPC/location on the World Map.",
 
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Stop Guide ■",
@@ -1495,6 +1503,10 @@ Locales.esES = {
     -- Gold Farming Guide
     ["GOLD_FARM_GUIDE_TITLE"] = "Guía de Farmeo de Oro",
     ["GOLD_DATA_UNAVAILABLE"] = "Datos de farmeo de oro no disponibles.",
+
+    -- Map Pins
+    ["BTN_SHOW_ON_MAP"]    = "Ver en el Mapa",
+    ["BTN_SHOW_ON_MAP_TT"] = "Marca el PNJ/ubicación en el Mapa del Mundo.",
 
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Detener Guía ■",

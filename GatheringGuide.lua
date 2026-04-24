@@ -441,6 +441,12 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
     if not hbd or not pins then return end
     if not route or #route < 2 then return end
 
+    -- Use SHOW_PARENT (1) — defined in all HBD versions — so route appears
+    -- when the world map is on this zone or its continent parent.
+    -- SHOW_CURRENT (-1) only exists in Questie's patched HBD and is not
+    -- handled by GatherMate2's version, making routes invisible.
+    local showFlag = HBD_PINS_WORLDMAP_SHOW_PARENT or 1
+
     -- First: draw trail dots between all waypoints (line effect)
     for i = 1, #route do
         local next_i = (i % #route) + 1
@@ -457,7 +463,7 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
             local my = y1 + dy * frac
 
             local trail = CreateTrailDot()
-            pins:AddWorldMapIconMap(REF_KEY, trail, mapID, mx, my, HBD_PINS_WORLDMAP_SHOW_CURRENT)
+            pins:AddWorldMapIconMap(REF_KEY, trail, mapID, mx, my, showFlag)
             table.insert(routeFrames, trail)
         end
     end
@@ -466,7 +472,7 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
     for i, wp in ipairs(route) do
         local isCurrent = (i == self.currentWP)
         local dot = CreateWPDot(i, isCurrent)
-        pins:AddWorldMapIconMap(REF_KEY, dot, mapID, wp[1], wp[2], HBD_PINS_WORLDMAP_SHOW_CURRENT)
+        pins:AddWorldMapIconMap(REF_KEY, dot, mapID, wp[1], wp[2], showFlag)
         table.insert(routeFrames, dot)
     end
 

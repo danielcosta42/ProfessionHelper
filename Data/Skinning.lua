@@ -93,18 +93,26 @@ ProfessionHelper.Skinning = {
             },
         },
         
-        -- ==================== MEDIUM LEATHER (75-150) ====================
+        -- ==================== MEDIUM LEATHER early (75-110) ====================
         {
-            skillRange = {75, 150},
+            skillRange = {75, 110},
             leather = "Medium Leather, Medium Hide",
             locations = {
                 {
+                    zone = "Stonetalon Mountains",
+                    faction = "Both",
+                    route = "Kill Cougars and Bears in the mountains. Low-level mobs perfect for 75+.",
+                    mobs = "Stonetalon Cougars, Deepmoss Lurkers",
+                    tips = ProfessionHelper.L["SKINNING_LOC_8_TIP"],
+                    levelRange = "15-27",
+                },
+                {
                     zone = "Hillsbrad Foothills",
                     faction = "Both",
-                    route = "Kill Bears and Lions around Hillsbrad Fields and the mountains.",
-                    mobs = "Giant Yetis, Mountain Lions, Bears",
+                    route = "Kill Bears and Lions around Hillsbrad Fields and the southern mountains.",
+                    mobs = "Mountain Lions, Bears, Hillsbrad Bears",
                     tips = ProfessionHelper.L["SKINNING_LOC_6_TIP"],
-                    levelRange = "20-30",
+                    levelRange = "20-26",
                 },
                 {
                     zone = "Wetlands",
@@ -114,18 +122,26 @@ ProfessionHelper.Skinning = {
                     tips = ProfessionHelper.L["SKINNING_LOC_7_TIP"],
                     levelRange = "20-30",
                 },
+            },
+        },
+
+        -- ==================== MEDIUM LEATHER late (110-150) ====================
+        {
+            skillRange = {110, 150},
+            leather = "Medium Leather, Medium Hide",
+            locations = {
                 {
-                    zone = "Stonetalon Mountains",
+                    zone = "Hillsbrad Foothills",
                     faction = "Both",
-                    route = "Kill Cougars and Bears in the mountains.",
-                    mobs = "Stonetalon Cougars, Deepmoss Lurkers",
-                    tips = ProfessionHelper.L["SKINNING_LOC_8_TIP"],
-                    levelRange = "15-27",
+                    route = "Move to the Alterac Mountains area. Kill Yetis and high-level Bears.",
+                    mobs = "Giant Yetis, Mountain Lions, Hillsbrad Bears",
+                    tips = ProfessionHelper.L["SKINNING_LOC_6_TIP"],
+                    levelRange = "25-30",
                 },
                 {
                     zone = "Ashenvale",
                     faction = "Both",
-                    route = "Kill Bears and Wolves in the forest.",
+                    route = "Kill Bears and Wolves throughout the forest. Great density of skinnable mobs.",
                     mobs = "Ashenvale Bears, Ghostpaw Runners",
                     tips = ProfessionHelper.L["SKINNING_LOC_9_TIP"],
                     levelRange = "18-30",
