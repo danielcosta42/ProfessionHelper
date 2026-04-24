@@ -9,7 +9,7 @@ ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
 -- Addon metadata
-PH.version = "1.5.0"
+PH.version = "1.7.0"
 PH.author = "Chehul @ DreamScyther-US"
 PH.github = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
@@ -33,6 +33,7 @@ function PH:InitializeDB()
             ProfessionHelperDB[key] = value
         end
     end
+    -- Price cache is a sub-table, not a scalar default
     if not ProfessionHelperDB.ahPriceCache then
         ProfessionHelperDB.ahPriceCache = {}
     end
@@ -209,8 +210,8 @@ function PH:GetMaterialInfo(materialName)
         local source = ""
         if matData.vendor then
             source = "|cff00ff00[Vendor]|r"
-            if matData.price then
-                source = source .. " " .. GetCoinTextureString(matData.price)
+            if matData.vendorPrice then
+                source = source .. " " .. GetCoinTextureString(matData.vendorPrice)
             end
         elseif matData.farmable then
             source = "|cffffcc00[Farm]|r"
@@ -274,6 +275,8 @@ function PH:HandleSlashCommand(msg)
         end
     elseif cmd == "alts" then
         self:ShowAltManagerUI()
+    elseif cmd == "de" or cmd == "prospect" then
+        self:ShowDECalcUI()
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])
