@@ -37,6 +37,9 @@ function PH:InitializeDB()
     if not ProfessionHelperDB.ahPriceCache then
         ProfessionHelperDB.ahPriceCache = {}
     end
+    if not ProfessionHelperDB.characters then
+        ProfessionHelperDB.characters = {}
+    end
 end
 
 -- All profession data references
@@ -270,6 +273,8 @@ function PH:HandleSlashCommand(msg)
         else
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
+    elseif cmd == "alts" then
+        self:ShowAltManagerUI()
     elseif cmd == "de" or cmd == "prospect" then
         self:ShowDECalcUI()
     elseif cmd == "help" then
@@ -332,6 +337,7 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+            if self.AltManager then self.AltManager:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message
