@@ -9,7 +9,7 @@ ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
 -- Addon metadata
-PH.version = "1.9.0"
+PH.version = "1.10.0"
 PH.author = "Chehul @ DreamScyther-US"
 PH.github = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
