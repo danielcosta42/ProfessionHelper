@@ -5,7 +5,7 @@
 ## Notes-enUS: Complete profession leveling guide with smart routes, shopping lists & TSM integration
 ## Notes-esES: Guía completa de profesiones con rutas inteligentes, listas de compras e integración TSM
 ## Author: Chehul @ DreamScyther-US
-## Version: 1.5.0
+## Version: 1.9.0
 ## X-Website: https://github.com/danielcosta42
 ## X-Category: Professions
 ## X-License: Free for personal use
@@ -34,6 +34,9 @@ Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 TSMIntegration.lua
+RecipeTracker.lua
+AltManager.lua
+DECalc.lua
 PathCalculator.lua
 FarmTracker.lua
 GatheringGuide.lua
@@ -42,3 +45,6 @@ CooldownTracker.lua
 UI.lua
 FarmTrackerUI.lua
 CooldownTrackerUI.lua
+RecipeTrackerUI.lua
+AltManagerUI.lua
+DECalcUI.lua

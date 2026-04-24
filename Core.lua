@@ -9,7 +9,7 @@ ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
 -- Addon metadata
-PH.version = "1.5.0"
+PH.version = "1.9.0"
 PH.author = "Chehul @ DreamScyther-US"
 PH.github = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
@@ -39,6 +39,12 @@ function PH:InitializeDB()
     end
     if not ProfessionHelperDB.cooldowns then
         ProfessionHelperDB.cooldowns = {}
+    end
+    if not ProfessionHelperDB.knownRecipes then
+        ProfessionHelperDB.knownRecipes = {}
+    end
+    if not ProfessionHelperDB.characters then
+        ProfessionHelperDB.characters = {}
     end
 end
 
@@ -210,8 +216,8 @@ function PH:GetMaterialInfo(materialName)
         local source = ""
         if matData.vendor then
             source = "|cff00ff00[Vendor]|r"
-            if matData.price then
-                source = source .. " " .. GetCoinTextureString(matData.price)
+            if matData.vendorPrice then
+                source = source .. " " .. GetCoinTextureString(matData.vendorPrice)
             end
         elseif matData.farmable then
             source = "|cffffcc00[Farm]|r"
@@ -275,6 +281,16 @@ function PH:HandleSlashCommand(msg)
         end
     elseif cmd == "cd" or cmd == "cooldowns" then
         self:ShowCooldownUI()
+    elseif cmd == "recipes" or cmd:sub(1, 8) == "recipes " then
+        local profArg = cmd:len() > 8 and cmd:sub(9) or nil
+        if profArg then
+            profArg = profArg:sub(1,1):upper() .. profArg:sub(2):lower()
+        end
+        self:ShowRecipeTrackerUI(profArg)
+    elseif cmd == "alts" then
+        self:ShowAltManagerUI()
+    elseif cmd == "de" or cmd == "prospect" then
+        self:ShowDECalcUI()
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])
@@ -336,6 +352,8 @@ function PH:OnEvent(event, ...)
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
             if self.CooldownTracker then self.CooldownTracker:Initialize() end
+            if self.RecipeTracker then self.RecipeTracker:Initialize() end
+            if self.AltManager then self.AltManager:Initialize() end
             self:CreateMinimapButton()
             
             -- Welcome message
