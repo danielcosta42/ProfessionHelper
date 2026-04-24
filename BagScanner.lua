@@ -49,15 +49,15 @@ function BS:ScanBags()
     inv._bags = {}  -- temp bucket
 
     for bag = 0, NUM_BAG_SLOTS do
-        local slots = GetContainerNumSlots(bag)
-        if slots then
+        local slots = C_Container.GetContainerNumSlots(bag)
+        if slots and slots > 0 then
             for slot = 1, slots do
-                local itemLink = GetContainerItemLink(bag, slot)
+                local itemLink = C_Container.GetContainerItemLink(bag, slot)
                 if itemLink then
                     local itemName = GetItemInfo(itemLink)
                     if itemName then
-                        local _, count = GetContainerItemInfo(bag, slot)
-                        count = count or 0
+                        local info = C_Container.GetContainerItemInfo(bag, slot)
+                        local count = (info and info.stackCount) or 0
                         inv._bags[itemName] = (inv._bags[itemName] or 0) + count
                     end
                 end
@@ -81,15 +81,15 @@ function BS:ScanBank()
 
     -- Bank slots: bags 5..11 in TBC Classic
     for bag = 5, 11 do
-        local slots = GetContainerNumSlots(bag)
+        local slots = C_Container.GetContainerNumSlots(bag)
         if slots and slots > 0 then
             for slot = 1, slots do
-                local itemLink = GetContainerItemLink(bag, slot)
+                local itemLink = C_Container.GetContainerItemLink(bag, slot)
                 if itemLink then
                     local itemName = GetItemInfo(itemLink)
                     if itemName then
-                        local _, count = GetContainerItemInfo(bag, slot)
-                        count = count or 0
+                        local info = C_Container.GetContainerItemInfo(bag, slot)
+                        local count = (info and info.stackCount) or 0
                         inv._bank[itemName] = (inv._bank[itemName] or 0) + count
                     end
                 end
