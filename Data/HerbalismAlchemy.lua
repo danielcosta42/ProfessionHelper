@@ -29,7 +29,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 70,
             materials = {},
             source = "Elwynn / Tirisfal / Durotar / Mulgore / Teldrassil",
-            tip = "Colete Peacebloom, Silverleaf e Earthroot. GUARDE TUDO! Precisa de ~85 Peacebloom, ~85 Silverleaf para Alchemy. Compre Empty Vial no vendor de Alchemy.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_1_70"],
         },
         {
             range = {1, 75},
@@ -38,7 +38,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 82,
             materials = { { name = "Peacebloom", count = 82 }, { name = "Silverleaf", count = 82 }, { name = "Empty Vial", count = 82 } },
             source = "Trainer",
-            tip = "Aprenda Alchemy no treinador. Craftar tudo de uma vez com as herbs que coletou. Se faltou herb, compre no AH.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_1_75"],
         },
         -- ==================== PHASE 2: Herb 70-115 → Alchemy 75-150 ====================
         {
@@ -48,7 +48,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 45,
             materials = {},
             source = "The Barrens (Horde) / Westfall, Darkshore (Alliance)",
-            tip = "Colete Mageroyal, Briarthorn, Bruiseweed, Stranglekelp. Precisa de ~60 Earthroot (salvas), ~60 Peacebloom (salvas), ~45 Bruiseweed, ~45 Briarthorn. Aprenda Journeyman Herbalism no treinador.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_70_115"],
         },
         {
             range = {75, 110},
@@ -57,7 +57,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 40,
             materials = { { name = "Earthroot", count = 80 }, { name = "Peacebloom", count = 40 }, { name = "Empty Vial", count = 40 } },
             source = "Trainer",
-            tip = "Use os Earthroot e Peacebloom que sobrou da fase anterior. Aprenda Journeyman Alchemy no treinador.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_75_110"],
         },
         {
             range = {110, 150},
@@ -66,7 +66,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 45,
             materials = { { name = "Bruiseweed", count = 45 }, { name = "Briarthorn", count = 45 }, { name = "Leaded Vial", count = 45 } },
             source = "Trainer",
-            tip = "Cozinhe todas as Healing Potions. Se faltou mats, colha mais Bruiseweed em Hillsbrad ou compre no AH.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_110_150"],
         },
         -- ==================== PHASE 3: Herb 115-185 → Alchemy 150-210 ====================
         {
@@ -76,7 +76,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 70,
             materials = {},
             source = "Hillsbrad Foothills / Stranglethorn Vale / Arathi Highlands",
-            tip = "Colete Stranglekelp (costa), Kingsblood, Liferoot, Goldthorn, Khadgar's Whisker. GUARDE TUDO! Precisa de ~35 Stranglekelp, ~35 Kingsblood, ~50 Goldthorn. Aprenda Expert Herbalism no treinador.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_115_185"],
         },
         {
             range = {150, 185},
@@ -85,7 +85,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 38,
             materials = { { name = "Stranglekelp", count = 38 }, { name = "Kingsblood", count = 38 }, { name = "Leaded Vial", count = 38 } },
             source = "Trainer",
-            tip = "Aprenda Expert Alchemy no treinador. Se faltou Stranglekelp, colha na costa de Westfall, Darkshore ou STV.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_150_185"],
         },
         {
             range = {185, 210},
@@ -94,7 +94,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 28,
             materials = { { name = "Stranglekelp", count = 28 }, { name = "Goldthorn", count = 28 }, { name = "Leaded Vial", count = 28 } },
             source = "Trainer",
-            tip = "Goldthorn colhida em STV ou Feralas. Se faltou, compre no AH — costuma ser barata.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_185_210"],
         },
         -- ==================== PHASE 4: Herb 185-260 → Alchemy 210-285 ====================
         {
@@ -104,7 +104,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 75,
             materials = {},
             source = "STV / Feralas / Felwood / Tanaris / Un'Goro Crater",
-            tip = "Colete Fadeleaf, Khadgar's Whisker, Sungrass, Goldthorn. Precisa de ~20 Khadgar's Whisker, ~25 Goldthorn, ~70 Sungrass. Goldthorn foca em STV/Feralas, Sungrass em Felwood/Tanaris.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_185_260"],
         },
         {
             range = {210, 250},
@@ -113,7 +113,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 45,
             materials = { { name = "Khadgar's Whisker", count = 45 }, { name = "Goldthorn", count = 45 }, { name = "Crystal Vial", count = 45 } },
             source = "Trainer",
-            tip = "Aprenda Artisan Alchemy no treinador (requer lvl 35 + skill 225). Ótimo uso para Khadgar's Whisker.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_210_250"],
         },
         {
             range = {250, 285},
@@ -122,7 +122,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 50,
             materials = { { name = "Sungrass", count = 50 }, { name = "Goldthorn", count = 50 }, { name = "Crystal Vial", count = 50 } },
             source = "Trainer",
-            tip = "Se faltou Goldthorn, compre no AH. Sungrass é abundante em Felwood, Un'Goro, Tanaris.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_250_285"],
         },
         -- ==================== PHASE 5: Herb 260-300 → Alchemy 285-300 ====================
         {
@@ -132,7 +132,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 40,
             materials = {},
             source = "Eastern Plaguelands / Winterspring / Silithus",
-            tip = "Colete Dreamfoil, Plaguebloom, Icecap, Mountain Silversage. Precisa de ~10 Icecap, ~10 Plaguebloom. Winterspring é ÚNICA zona para Icecap.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_260_300"],
         },
         {
             range = {285, 300},
@@ -141,7 +141,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 15,
             materials = { { name = "Icecap", count = 30 }, { name = "Plaguebloom", count = 30 }, { name = "Crystal Vial", count = 15 } },
             source = "Trainer",
-            tip = "Cada craft usa 2 Icecap + 2 Plaguebloom. Colha em Winterspring (Icecap) e EPL (Plaguebloom).",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_285_300"],
         },
         -- ==================== PHASE 6: TBC — Herb 300-340 → Alchemy 300-335 ====================
         {
@@ -151,7 +151,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 40,
             materials = {},
             source = "Hellfire Peninsula / Zangarmarsh",
-            tip = "Colete Felweed, Dreaming Glory, Ragveil. Aprenda Master Herbalism de Rorelien (Shattrath). Felweed abundante em Hellfire. Ragveil APENAS em Zangarmarsh.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_300_340"],
         },
         {
             range = {300, 310},
@@ -160,7 +160,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 10,
             materials = { { name = "Golden Sansam", count = 10 }, { name = "Felweed", count = 10 }, { name = "Imbued Vial", count = 10 } },
             source = "Trainer (Outland)",
-            tip = "Aprenda Master Alchemy de Lorokeem (Shattrath). Use Golden Sansam que sobrou da Classic ou compre no AH.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_300_310"],
         },
         {
             range = {310, 325},
@@ -169,7 +169,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 15,
             materials = { { name = "Golden Sansam", count = 15 }, { name = "Dreaming Glory", count = 15 }, { name = "Imbued Vial", count = 15 } },
             source = "Trainer (Outland)",
-            tip = "Dreaming Glory colhida em Zangarmarsh e Hellfire. Muito comum.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_310_325"],
         },
         {
             range = {325, 335},
@@ -178,7 +178,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 10,
             materials = { { name = "Ragveil", count = 20 }, { name = "Crystal Vial", count = 10 } },
             source = "Trainer (Outland)",
-            tip = "Ragveil APENAS em Zangarmarsh! Colha durante o phase de herbing.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_325_335"],
         },
         -- ==================== PHASE 7: TBC — Herb 340-375 → Alchemy 335-375 ====================
         {
@@ -188,7 +188,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 35,
             materials = {},
             source = "Terokkar Forest / Netherstorm / Shadowmoon Valley",
-            tip = "Colete Terocone, Ancient Lichen (dungeons), Netherbloom, Nightmare Vine. Ancient Lichen SÓ dropa em dungeons de Coilfang/Auchindoun. Nightmare Vine em Shadowmoon Valley.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_HERB_340_375"],
         },
         {
             range = {335, 355},
@@ -197,7 +197,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 25,
             materials = { { name = "Ragveil", count = 25 }, { name = "Ancient Lichen", count = 25 }, { name = "Imbued Vial", count = 25 } },
             source = "Vendor: Halaa Research Token (Nagrand)",
-            tip = "Compre a receita com 2 Halaa Research Tokens em Nagrand. Ancient Lichen SÓ dentro de dungeons (Coilfang/Auchindoun).",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_335_355"],
         },
         {
             range = {355, 365},
@@ -206,7 +206,7 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 10,
             materials = { { name = "Ancient Lichen", count = 10 }, { name = "Nightmare Vine", count = 10 }, { name = "Imbued Vial", count = 10 } },
             source = "Vendor: Nakodu (Shattrath) — Lower City Revered",
-            tip = "Receita requer Revered com Lower City. Nightmare Vine colhida em Shadowmoon Valley.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_355_365"],
         },
         {
             range = {365, 375},
@@ -215,17 +215,17 @@ ProfessionHelper.HerbalismAlchemy = {
             count = 10,
             materials = { { name = "Mote of Earth", count = 30 }, { name = "Ancient Lichen", count = 20 }, { name = "Imbued Vial", count = 10 } },
             source = "Drop: Captain Skarloc (Old Hillsbrad Foothills)",
-            tip = "Receita dropa do Captain Skarloc em Old Hillsbrad. Mote of Earth farme em Nagrand (Earth Elementals) ou compre no AH.",
+            tip = ProfessionHelper.L["HERBALCHEMY_TIP_ALCH_365_375"],
         },
     },
 
     tips = {
-        "Este guia combina Herbalism e Alchemy — colha herbs e depois craftar!",
-        "Colha primeiro, craft depois: acumule herbs em cada fase, depois craft em lote.",
-        "Vials: Empty Vial (vendor, skill 1-55), Leaded Vial (vendor, skill 55-215), Crystal Vial (vendor, skill 200+), Imbued Vial (TBC vendor).",
-        "Expert Herbalism: treinador (skill 125+). Expert Alchemy: treinador (skill 125+).",
-        "Artisan Alchemy: treinador (skill 225, lvl 35+). Artisan Herbalism: treinador (skill 225+).",
-        "Master: Rorelien (Herbalism) e Lorokeem (Alchemy) em Shattrath.",
-        "Ancient Lichen SÓ dropa dentro de dungeons (Coilfang Reservoir, Auchindoun). Farme com grupo!",
+        ProfessionHelper.L["HERBALCHEMY_TIPS_1"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_2"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_3"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_4"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_5"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_6"],
+        ProfessionHelper.L["HERBALCHEMY_TIPS_7"],
     },
 }

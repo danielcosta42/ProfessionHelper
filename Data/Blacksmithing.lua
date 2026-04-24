@@ -65,7 +65,7 @@ ProfessionHelper.Blacksmithing = {
             count = 40,
             materials = { { name = "Rough Stone", count = 80 } },
             source = "Trainer",
-            tip = "Guarde 10x para Silver Rod.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_25_65"],
         },
         {
             range = {65, 75},
@@ -81,7 +81,7 @@ ProfessionHelper.Blacksmithing = {
             count = 20,
             materials = { { name = "Coarse Stone", count = 40 } },
             source = "Trainer",
-            tip = "Guarde para Patterned Bronze Bracers e Golden Rod.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_75_87"],
         },
         {
             range = {87, 100},
@@ -96,7 +96,7 @@ ProfessionHelper.Blacksmithing = {
             count = 5,
             materials = { { name = "Silver Bar", count = 5 }, { name = "Rough Grinding Stone", count = 10 } },
             source = "Trainer",
-            tip = "Venda os extras — encantadores precisam de Silver Rod.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_100_105"],
         },
         {
             range = {105, 125},
@@ -112,7 +112,7 @@ ProfessionHelper.Blacksmithing = {
             count = 25,
             materials = { { name = "Heavy Stone", count = 75 } },
             source = "Trainer",
-            tip = "Guarde para Green Iron Leggings e Golden Scale Bracers.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_125_140"],
         },
         {
             range = {140, 150},
@@ -127,7 +127,7 @@ ProfessionHelper.Blacksmithing = {
             count = 5,
             materials = { { name = "Gold Bar", count = 5 }, { name = "Coarse Grinding Stone", count = 10 } },
             source = "Trainer",
-            tip = "Venda os extras — encantadores precisam de Golden Rod.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_150_155"],
         },
         {
             range = {155, 165},
@@ -156,7 +156,7 @@ ProfessionHelper.Blacksmithing = {
             count = 15,
             materials = { { name = "Solid Stone", count = 60 } },
             source = "Trainer",
-            tip = "Guarde para Steel Plate Helm.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_200_210"],
         },
         {
             range = {210, 225},
@@ -193,7 +193,7 @@ ProfessionHelper.Blacksmithing = {
             count = 35,
             materials = { { name = "Thorium Bar", count = 420 } },
             source = "Quest: Derotain Mudsipper (Gadgetzan, Tanaris)",
-            tip = "Precisa completar a quest para aprender os plans. Leve 30 Thorium Bar extras.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_260_295"],
         },
         {
             range = {295, 300},
@@ -237,7 +237,7 @@ ProfessionHelper.Blacksmithing = {
             count = 20,
             materials = { { name = "Adamantite Bar", count = 20 } },
             source = "Trainer (Outland)",
-            tip = "Barato (1 Adamantite Bar cada) mas fica verde cedo. Pode precisar de mais crafts.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_330_340"],
         },
         {
             range = {340, 350},
@@ -245,7 +245,7 @@ ProfessionHelper.Blacksmithing = {
             count = 10,
             materials = { { name = "Adamantite Bar", count = 80 }, { name = "Fel Iron Bar", count = 20 } },
             source = "Trainer (Outland)",
-            tip = "Ou Adamantite Dagger / Adamantite Maul / Adamantite Rapier.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_340_350"],
         },
         {
             range = {350, 360},
@@ -253,7 +253,7 @@ ProfessionHelper.Blacksmithing = {
             count = 10,
             materials = { { name = "Felsteel Bar", count = 60 } },
             source = "Trainer (Outland)",
-            tip = "Felsteel Bar = 3 Fel Iron Bar + 2 Eternium Bar. Ou use Adamantite Plate items.",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_350_360"],
         },
         {
             range = {360, 375},
@@ -261,7 +261,7 @@ ProfessionHelper.Blacksmithing = {
             count = 18,
             materials = { { name = "Felsteel Bar", count = 144 } },
             source = "Trainer (Outland)",
-            tip = "Fica amarelo/verde — pode precisar de mais crafts. Venda os itens no AH!",
+            tip = ProfessionHelper.L["BLACKSMITHING_TIP_360_375"],
         },
     },
 }

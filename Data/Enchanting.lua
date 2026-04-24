@@ -52,7 +52,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Copper Rod", count = 1 }, { name = "Strange Dust", count = 1 }, { name = "Lesser Magic Essence", count = 1 } },
             source = "Trainer",
-            tip = "Rod obrigatório",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_1_2"],
         },
         {
             range = {2, 50},
@@ -60,7 +60,7 @@ ProfessionHelper.Enchanting = {
             count = 48,
             materials = { { name = "Strange Dust", count = 48 } },
             source = "Trainer",
-            tip = "Encante seus proprios bracers ou compre bracers brancas baratas no AH.",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_2_50"],
         },
         {
             range = {50, 75},
@@ -83,7 +83,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Silver Rod", count = 1 }, { name = "Strange Dust", count = 6 }, { name = "Greater Magic Essence", count = 3 }, { name = "Small Glimmering Shard", count = 1 } },
             source = "Trainer",
-            tip = "Rod obrigatório",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_75_100"],
         },
         {
             range = {101, 110},
@@ -113,7 +113,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Golden Rod", count = 1 }, { name = "Iridescent Pearl", count = 1 }, { name = "Greater Astral Essence", count = 2 }, { name = "Soul Dust", count = 2 } },
             source = "Trainer",
-            tip = "Rod obrigatório",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_150_151"],
         },
         {
             range = {151, 160},
@@ -142,7 +142,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Truesilver Rod", count = 1 }, { name = "Vision Dust", count = 2 }, { name = "Greater Mystic Essence", count = 2 }, { name = "Small Glowing Shard", count = 1 } },
             source = "Trainer",
-            tip = "Rod obrigatório",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_200_201"],
         },
         {
             range = {201, 225},
@@ -165,7 +165,7 @@ ProfessionHelper.Enchanting = {
             count = 25,
             materials = { { name = "Dream Dust", count = 125 } },
             source = "Vendor: Dalria (Ashenvale, Alliance) / Daniel Bartlett (Undercity, Horde)",
-            tip = "Receita do vendor — limited supply.",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_245_265"],
         },
         {
             range = {265, 290},
@@ -180,7 +180,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Arcanite Rod", count = 1 }, { name = "Illusion Dust", count = 10 }, { name = "Greater Eternal Essence", count = 4 }, { name = "Large Brilliant Shard", count = 2 } },
             source = "Trainer",
-            tip = "Rod obrigatório",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_290_291"],
         },
         {
             range = {291, 300},
@@ -196,7 +196,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Fel Iron Rod", count = 1 }, { name = "Greater Eternal Essence", count = 4 }, { name = "Large Brilliant Shard", count = 6 } },
             source = "Trainer (Outland)",
-            tip = "Rod obrigatório para enchants TBC",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_300_301"],
         },
         {
             range = {301, 310},
@@ -218,7 +218,7 @@ ProfessionHelper.Enchanting = {
             count = 5,
             materials = { { name = "Arcane Dust", count = 30 }, { name = "Lesser Planar Essence", count = 30 } },
             source = "Trainer (Outland)",
-            tip = "Caro por causa das essences. Pode pular e continuar com Shield - Major Stamina.",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_320_325"],
         },
         {
             range = {325, 340},
@@ -226,7 +226,7 @@ ProfessionHelper.Enchanting = {
             count = 15,
             materials = { { name = "Arcane Dust", count = 225 } },
             source = "Vendor: Madame Ruby (Shattrath, Aldor) / Rina Dulmare (Shattrath, Scryers)",
-            tip = "Receita do vendor. So precisa de Arcane Dust!",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_325_340"],
         },
         {
             range = {340, 350},
@@ -241,7 +241,7 @@ ProfessionHelper.Enchanting = {
             count = 1,
             materials = { { name = "Adamantite Rod", count = 1 }, { name = "Greater Planar Essence", count = 8 }, { name = "Large Prismatic Shard", count = 8 }, { name = "Primal Might", count = 1 } },
             source = "Trainer (Outland)",
-            tip = "Rod obrigatório para enchants high-level. Caro!",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_350_351"],
         },
         {
             range = {351, 360},
@@ -249,7 +249,7 @@ ProfessionHelper.Enchanting = {
             count = 12,
             materials = { { name = "Arcane Dust", count = 144 }, { name = "Greater Planar Essence", count = 12 } },
             source = "Trainer (Outland)",
-            tip = "Fica amarelo/verde. Pode precisar de mais crafts.",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_351_360"],
         },
         {
             range = {360, 375},
@@ -257,7 +257,7 @@ ProfessionHelper.Enchanting = {
             count = 20,
             materials = { { name = "Void Crystal", count = 40 } },
             source = "Trainer (Outland)",
-            tip = "Venda os Void Spheres para recuperar custo. Ou use Enchant Ring - Striking se tiver enchanting ring recipes.",
+            tip = ProfessionHelper.L["ENCHANTING_TIP_360_375"],
         },
     },
 }

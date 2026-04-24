@@ -29,7 +29,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 75,
             materials = {},
             source = "Elwynn / Durotar / Mulgore / Teldrassil / Tirisfal",
-            tip = "Mate e skinne mobs de nível 1-15. Wolves, Boars, Bears. GUARDE TODA Light Leather! Precisa de ~335 Light Leather para LW 1-100. Compre Skinning Knife no vendor.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_1_75"],
         },
         {
             range = {1, 20},
@@ -38,7 +38,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 22,
             materials = { { name = "Light Leather", count = 22 } },
             source = "Trainer",
-            tip = "Aprenda LW no treinador. Comece craftando Light Armor Kit com a Light Leather que coletou.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_1_20"],
         },
         {
             range = {20, 55},
@@ -47,7 +47,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 35,
             materials = { { name = "Light Leather", count = 70 }, { name = "Coarse Thread", count = 35 } },
             source = "Trainer",
-            tip = "Compre Coarse Thread no vendor de trade goods. Continue usando Light Leather.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_20_55"],
         },
         {
             range = {55, 75},
@@ -56,7 +56,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 25,
             materials = { { name = "Light Leather", count = 75 }, { name = "Coarse Thread", count = 50 } },
             source = "Trainer",
-            tip = "Se faltou Light Leather, mate mais mobs de nível baixo ou compre no AH.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_55_75"],
         },
         -- ==================== PHASE 2: Skin 75-150 → LW 75-150 ====================
         {
@@ -66,7 +66,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 75,
             materials = {},
             source = "Hillsbrad Foothills / The Barrens / Wetlands / Ashenvale",
-            tip = "Mate mobs nível 15-30 (Bears, Lions, Crocolisks, Raptors). Aprenda Journeyman Skinning. Colete Light Leather e Medium Leather. Precisa de ~168 Light Leather e ~480 Medium Leather para LW 75-150.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_75_150"],
         },
         {
             range = {75, 100},
@@ -75,7 +75,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 28,
             materials = { { name = "Light Leather", count = 168 }, { name = "Coarse Thread", count = 56 } },
             source = "Trainer",
-            tip = "Aprenda Journeyman LW no treinador. Ainda usa Light Leather — use as sobras ou compre no AH.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_75_100"],
         },
         {
             range = {100, 115},
@@ -84,7 +84,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Medium Leather", count = 80 }, { name = "Fine Thread", count = 40 }, { name = "Gray Dye", count = 20 } },
             source = "Trainer",
-            tip = "Agora usa Medium Leather. Compre Fine Thread e Gray Dye no vendor de trade goods.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_100_115"],
         },
         {
             range = {115, 137},
@@ -93,7 +93,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 25,
             materials = { { name = "Medium Leather", count = 300 }, { name = "Fine Thread", count = 50 }, { name = "Gray Dye", count = 25 } },
             source = "Trainer",
-            tip = "Gasta MUITA Medium Leather (300). Se faltou, farme mais em Hillsbrad/Wetlands ou compre no AH.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_115_137"],
         },
         {
             range = {137, 150},
@@ -102,7 +102,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Medium Leather", count = 100 } },
             source = "Trainer",
-            tip = "Converta Medium Leather → Heavy Leather. GUARDE a Heavy Leather para os próximos steps!",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_137_150"],
         },
         -- ==================== PHASE 3: Skin 150-205 → LW 150-225 ====================
         {
@@ -112,7 +112,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 55,
             materials = {},
             source = "Stranglethorn Vale / Badlands / Dustwallow Marsh / Desolace",
-            tip = "Mate mobs nível 30-45 (Tigers, Panthers, Raptors, Gorillas). STV é a MELHOR zona para Heavy Leather! Aprenda Expert Skinning. Precisa de ~275 Heavy Leather, ~32 Heavy Hide, ~12 Salt.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_150_205"],
         },
         {
             range = {150, 160},
@@ -121,7 +121,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 12,
             materials = { { name = "Heavy Hide", count = 12 }, { name = "Salt", count = 12 } },
             source = "Trainer",
-            tip = "Aprenda Expert LW. Heavy Hide dropa ao skinnar — guarde! Compre Salt no vendor de trade goods. GUARDE para Barbaric Shoulders.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_150_160"],
         },
         {
             range = {160, 175},
@@ -130,7 +130,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 15,
             materials = { { name = "Heavy Leather", count = 75 }, { name = "Fine Thread", count = 15 } },
             source = "Trainer",
-            tip = "Use Heavy Leather do step anterior (conversão) + novas que farmou.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_160_175"],
         },
         {
             range = {175, 195},
@@ -139,7 +139,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Heavy Leather", count = 160 }, { name = "Cured Heavy Hide", count = 20 }, { name = "Fine Thread", count = 40 } },
             source = "Trainer",
-            tip = "Usa muita Heavy Leather (160). Precisa de 20 Cured Heavy Hide — craft mais se necessário (precisa de Heavy Hide).",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_175_195"],
         },
         {
             range = {195, 205},
@@ -148,7 +148,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 10,
             materials = { { name = "Heavy Leather", count = 40 }, { name = "Silken Thread", count = 10 } },
             source = "Trainer",
-            tip = "Compre Silken Thread no vendor de trade goods.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_195_205"],
         },
         -- ==================== PHASE 4: Skin 205-260 → LW 205-250 ====================
         {
@@ -158,7 +158,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 55,
             materials = {},
             source = "Un'Goro Crater / Feralas / The Hinterlands / Tanaris",
-            tip = "Mate mobs nível 40-52 (Dinosaurs, Wolves, Yetis, Bears). Un'Goro é INCRÍVEL para Thick Leather! Precisa de ~450 Thick Leather.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_205_260"],
         },
         {
             range = {205, 225},
@@ -167,7 +167,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Thick Leather", count = 100 }, { name = "Silken Thread", count = 40 } },
             source = "Trainer",
-            tip = "Agora usa Thick Leather. Farme em Feralas/Un'Goro.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_205_225"],
         },
         {
             range = {225, 250},
@@ -176,7 +176,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 25,
             materials = { { name = "Thick Leather", count = 350 }, { name = "Silken Thread", count = 100 } },
             source = "Trainer",
-            tip = "Aprenda Artisan LW no treinador (requer skill 225). Consome MUITA Thick Leather (350). Un'Goro é a melhor zona.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_225_250"],
         },
         -- ==================== PHASE 5: Skin 260-300 → LW 250-300 ====================
         {
@@ -186,7 +186,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 40,
             materials = {},
             source = "Winterspring / Silithus / Burning Steppes / EPL",
-            tip = "Mate mobs nível 52-60 (Bears, Yetis, Chimeras, Worgs). Winterspring é EXCELENTE para Rugged Leather! Precisa de ~460 Rugged Leather.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_260_300"],
         },
         {
             range = {250, 265},
@@ -195,7 +195,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Rugged Leather", count = 100 } },
             source = "Trainer",
-            tip = "Agora usa Rugged Leather. Farme em Winterspring.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_250_265"],
         },
         {
             range = {265, 280},
@@ -204,7 +204,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 15,
             materials = { { name = "Rugged Leather", count = 120 }, { name = "Black Dye", count = 15 }, { name = "Rune Thread", count = 15 } },
             source = "Trainer",
-            tip = "Compre Black Dye e Rune Thread no vendor de trade goods.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_265_280"],
         },
         {
             range = {280, 300},
@@ -213,7 +213,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Rugged Leather", count = 240 }, { name = "Black Dye", count = 20 }, { name = "Rune Thread", count = 20 } },
             source = "Trainer",
-            tip = "Gasta muita Rugged Leather (240). Continue farmando em Winterspring ou compre no AH.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_280_300"],
         },
         -- ==================== PHASE 6: TBC — Skin 300-350 → LW 300-350 ====================
         {
@@ -223,7 +223,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 50,
             materials = {},
             source = "Nagrand / Hellfire Peninsula / Terokkar Forest",
-            tip = "Mate mobs em Outland. Nagrand (Talbuks, Clefthoofs) é a MELHOR zona para Knothide Leather! Aprenda Master Skinning de Seymour (Shattrath). Precisa de ~631 Knothide Leather.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_300_350"],
         },
         {
             range = {300, 310},
@@ -232,7 +232,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 12,
             materials = { { name = "Knothide Leather", count = 48 } },
             source = "Trainer (Outland)",
-            tip = "Aprenda Master LW de Brumman (Honor Hold, Alliance) ou Barim Spilner (Thrallmar, Horde).",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_300_310"],
         },
         {
             range = {310, 325},
@@ -241,7 +241,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 15,
             materials = { { name = "Knothide Leather", count = 120 }, { name = "Rune Thread", count = 30 } },
             source = "Trainer (Outland)",
-            tip = "Continue farmando Knothide Leather em Nagrand. Clefthoofs dão mais leather por kill.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_310_325"],
         },
         {
             range = {325, 335},
@@ -250,7 +250,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 35,
             materials = { { name = "Knothide Leather", count = 175 } },
             source = "Vendor: Cro Threadstrong (Shattrath)",
-            tip = "Compre a receita de Cro Threadstrong em Shattrath. GUARDE a Heavy Knothide Leather para os últimos steps!",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_325_335"],
         },
         {
             range = {335, 350},
@@ -259,7 +259,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 18,
             materials = { { name = "Knothide Leather", count = 288 }, { name = "Rune Thread", count = 36 } },
             source = "Trainer (Outland)",
-            tip = "Gasta MUITA Knothide Leather (288). Continue em Nagrand farmando Clefthoofs!",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_335_350"],
         },
         -- ==================== PHASE 7: TBC — Skin 350-375 → LW 350-375 ====================
         {
@@ -269,7 +269,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 25,
             materials = {},
             source = "Nagrand (Clefthoofs elite) / Shadowmoon Valley / Netherstorm",
-            tip = "Continue em Nagrand ou vá para Shadowmoon Valley para Nether Dragonscales. Cada Knothide vira Heavy com craft. Precisa de ~120 Heavy Knothide Leather.",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_SKIN_350_375"],
         },
         {
             range = {350, 365},
@@ -278,7 +278,7 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 20,
             materials = { { name = "Heavy Knothide Leather", count = 60 } },
             source = "Trainer (Outland)",
-            tip = "Use as Heavy Knothide Leather que guardou. Vende bem no AH!",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_350_365"],
         },
         {
             range = {365, 375},
@@ -287,17 +287,17 @@ ProfessionHelper.SkinningLeatherworking = {
             count = 10,
             materials = { { name = "Heavy Knothide Leather", count = 60 }, { name = "Primal Fire", count = 40 } },
             source = "Vendor: Almaador (Shattrath) — Sha'tar Honored",
-            tip = "Primal Fire farme em Hellfire Peninsula (Fire Elementals) ou compre no AH. Alternativas: Drums of Panic (Keepers of Time Honored) ou Drums of Speed (Kurenai/Mag'har Honored).",
+            tip = ProfessionHelper.L["SKINNINGMW_TIP_LW_365_375"],
         },
     },
 
     tips = {
-        "Este guia combina Skinning e Leatherworking — mate beasts, skinne, e craft!",
-        "Skinning segue a fórmula: Skill necessário = Nível do Mob × 5.",
-        "Threads e Dyes: compre TUDO no vendor de trade goods na cidade. Coarse → Fine → Silken → Rune Thread.",
-        "Expert Skinning/LW: treinador (skill 125+). Artisan: treinador (skill 225+).",
-        "Master: Seymour (Skinning) em Shattrath. LW: Brumman (Alliance, Honor Hold) ou Barim Spilner (Horde, Thrallmar).",
-        "Nagrand é a MELHOR zona para Knothide Leather — Clefthoofs dão muita leather!",
-        "Heavy Knothide Leather = 5× Knothide Leather. Receita de Cro Threadstrong em Shattrath.",
+        ProfessionHelper.L["SKINNINGMW_TIPS_1"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_2"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_3"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_4"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_5"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_6"],
+        ProfessionHelper.L["SKINNINGMW_TIPS_7"],
     },
 }

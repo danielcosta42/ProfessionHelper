@@ -1,286 +1,165 @@
-# Profession Helper - TBC Classic
+# Profession Helper — TBC Classic / Anniversary
 
-<div align="center">
+**The complete profession toolkit for World of Warcraft: The Burning Crusade Classic.**
 
-![Version](https://img.shields.io/badge/version-1.11.1-blue.svg)
-![WoW](https://img.shields.io/badge/WoW-TBC%20Classic-orange.svg)
-![License](https://img.shields.io/badge/license-Free%20for%20Personal%20Use-green.svg)
-![Languages](https://img.shields.io/badge/languages-PT%20%7C%20EN%20%7C%20ES-brightgreen.svg)
-
-[![Release](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/release.yml/badge.svg)](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/release.yml)
-[![Validate](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/validate.yml/badge.svg)](https://github.com/danielcosta42/ProfessionHelper/actions/workflows/validate.yml)
-
-**The ultimate profession leveling guide for World of Warcraft: The Burning Crusade Classic**
-
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Support](#-support) • [Credits](#-credits)
-
-</div>
+Profession Helper gives you optimized step-by-step leveling guides, automatic shopping lists, farming locations, a gold-making guide, and a real-time farm tracker — all in one clean in-game interface.
 
 ---
 
-## 🌟 Features
+## Features
 
-### 📊 **Smart Leveling Guides**
-- **Step-by-step optimized routes** for all professions (1-375)
-- **Automatic skill progression tracking** with visual feedback
-- **Cost-efficient paths** that minimize material waste
-- **Color-coded difficulty** indicators (Orange/Yellow/Green/Grey)
+### Step-by-Step Leveling Guides
+- Optimized routes for all professions from 1 to 375
+- Visual step cards with current / next / done status
+- Color-coded difficulty (Orange → Yellow → Green → Grey)
+- Automatic progression tracking based on your current skill level
 
-### 🛒 **Intelligent Shopping Lists**
-- **Automatic material calculation** based on your current skill
-- **TSM price integration** for accurate cost estimates
-- **Vendor vs. Farmable** material categorization
-- **One-click TSM import** for auction house searches
+### Smart Shopping Lists
+- Exact material quantities calculated for your skill range
+- Bag and bank scanning — items you already carry are deducted automatically
+- TSM and Auctionator price integration for real-time cost estimates
+- Vendor vs. farmable material categorization
+- One-click TSM string copy for quick AH searches
 
-### 🗺️ **Farm & Gathering Locations**
-- **Zone-specific farming spots** for all gathering professions
-- **Level-appropriate locations** with coordinates
-- **Efficiency ratings** for each farming route
-- **GatherMate2 integration** (optional)
+### Farm & Gathering Locations
+- Zone-by-zone farming spots for Herbalism, Mining, and Skinning
+- Floating gathering guide widget with minimap waypoint indicator
+- Step-by-step route navigation with progress tracker
 
-### 💎 **Profession Coverage**
-- ✅ **Crafting:** Alchemy, Blacksmithing, Enchanting, Engineering, Jewelcrafting, Leatherworking, Tailoring
-- ✅ **Gathering:** Mining, Herbalism, Skinning
-- ✅ **Secondary:** Cooking, First Aid, Fishing
-- ✅ **Combo Guides:** Herbalism+Alchemy, Skinning+Leatherworking, Fishing+Cooking
+### Gold Farming Guide
+- Gold-making tips for every profession at max skill (375)
+- Covers transmutes, cooldowns, crafted items, consumables, and more
+- Priority-ranked methods per profession
 
-### 🎨 **Modern Interface**
-- **Premium minimalist design** with clean aesthetics
-- **Dark theme optimized** for long gaming sessions
-- **Responsive layout** that adapts to your workflow
-- **Icon-driven navigation** for quick profession switching
+### Farm Tracker
+- Real-time gold/hour calculation during farming sessions
+- Tracks items looted, mob gold, and TSM estimated value
+- Start / stop / reset via `/ph farm` or minimap right-click
+- Floating HUD with session summary
 
-### 🌍 **Multi-Language Support**
-- 🇧🇷 **Português (ptBR)** - Portuguese (Brazil)
-- 🇺🇸 **English (enUS)** - Full English support
-- 🇪🇸 **Español (esES/esMX)** - Spanish (EU/Latin America)
-- **Auto-detection** based on your WoW client language
+### Cooldown Tracker
+- Tracks profession cooldowns (Transmutation 24h, cloth cooldowns 84h, etc.)
+- Shows time remaining until each cooldown is available again
+
+### Recipe Tracker
+- Shows which recipes you have and which ones are still missing
+- Displays source info (vendor, trainer, drop, reputation) for missing recipes
+
+### Alt Manager
+- Tracks profession skill levels across all characters on the realm
+- Quick overview of which alt has which profession maxed
+
+### Disenchant & Prospecting Calculator
+- Expected output calculator for Disenchanting and Prospecting
+- Helps you decide if a DE or prospect is worth it at current AH prices
+
+### Profession Coverage
+- **Crafting:** Alchemy, Blacksmithing, Enchanting, Engineering, Jewelcrafting, Leatherworking, Tailoring
+- **Gathering:** Mining, Herbalism, Skinning
+- **Secondary:** Cooking, First Aid, Fishing
+- **Combo guides:** Herbalism + Alchemy, Skinning + Leatherworking, Fishing + Cooking
+
+### Multi-Language Support
+- **Português (ptBR)** — Portuguese (Brazil)
+- **English (enUS)** — Full English support
+- **Español (esES / esMX)** — Spanish (EU / Latin America)
+- Auto-detected from your WoW client language
 
 ---
 
-## 📥 Installation
+## Installation
 
-### Method 1: Manual Installation
-1. Download the latest release from [GitHub](https://github.com/danielcosta42/profession-helper-tbc)
+1. Download the latest release
 2. Extract the `ProfessionHelper` folder
-3. Place it in your `World of Warcraft\_classic_\Interface\AddOns\` directory
-4. Restart World of Warcraft or reload UI (`/reload`)
-
-### Method 2: Git Clone (for developers)
-```bash
-cd "World of Warcraft\_classic_\Interface\AddOns\"
-git clone https://github.com/danielcosta42/profession-helper-tbc.git ProfessionHelper
-```
+3. Place it in `World of Warcraft\_classic_\Interface\AddOns\`
+4. Restart World of Warcraft or type `/reload` in-game
 
 ---
 
-## 🎮 Usage
+## Usage
 
-### Opening the Addon
-- **Slash command:** `/ph` or `/profhelper`
-- **Minimap button:** Click the Profession Helper icon (if enabled)
+| Command | Action |
+|---|---|
+| `/ph` | Open the main window |
+| `/ph show` / `/ph hide` | Show or hide the window |
+| `/ph farm` | Start a farm session |
+| `/ph farm stop` | Stop the current session |
+| `/ph farm reset` | Reset session data |
+| `/ph help` | List all commands |
 
-### Basic Workflow
-1. **Select a profession** from the sidebar (icons on the left)
-2. **View your current step** in the leveling guide
-3. **Check materials needed** for your skill range
-4. **Use the shopping tab** to see what to buy
-5. **Farm locations** are shown for gathering professions
+- **Left-click** the minimap icon to open the main window
+- **Right-click** the minimap icon to start / stop the Farm Tracker
 
-### TSM Integration
-- **Automatic price calculation** when TSM is installed
-- **Click "Copy TSM Import"** to copy shopping list
-- **Paste in TSM** to create import group
-- **One-click AH searches** for all materials
-
-### Tips & Tricks
-- 💡 **Orange recipes** always give skill points
-- 💡 **Yellow recipes** have 75% chance for skill-ups
-- 💡 **Green recipes** only 25% chance (use sparingly)
-- 💡 Look for **vendor-bought materials** to save gold
-- 💡 **Combine gathering + crafting** for maximum profit
+### Tips
+- Orange steps always give a skill point — prioritize these
+- Yellow steps have a ~75% chance — use them to fill gaps
+- Green steps are inefficient — avoid unless materials are free
+- Check the Shopping tab before logging off so you can buy mats in advance
 
 ---
 
-## 🔧 Configuration
+## Compatibility
 
-Currently, Profession Helper works out-of-the-box with sensible defaults. Future versions will include:
-- Minimap button position customization
-- UI scale adjustments
-- Material price source selection
-- Custom guide routes (advanced users)
+- World of Warcraft: The Burning Crusade Classic (2.5.x)
+- WoW Classic Anniversary (Season of Discovery / Anniversary realms)
+- **Optional:** TradeSkillMaster (TSM), Auctionator
 
 ---
 
-## 🤝 Support
+## FAQ
 
-### Bug Reports & Suggestions
-Found a bug or have a feature request? Please report it on:
-- **GitHub Issues:** [https://github.com/danielcosta42/profession-helper-tbc/issues](https://github.com/danielcosta42/profession-helper-tbc/issues)
+**Do I need TSM?**
+No. The addon works standalone. TSM and Auctionator add live price data to the shopping list.
 
-### FAQ
+**Does it work on Anniversary / Season of Discovery realms?**
+Yes.
 
-**Q: Does this work with Retail WoW?**  
-A: No, this addon is specifically designed for TBC Classic (2.5.4).
+**Does it work on Retail WoW?**
+No — it is designed specifically for TBC Classic API.
 
-**Q: Do I need TSM for this to work?**  
-A: No, TSM is optional. The addon works great standalone, but TSM adds price calculations.
-
-**Q: Can I suggest new features?**  
-A: Absolutely! Open an issue on GitHub with your ideas.
-
-**Q: Is this addon free?**  
-A: Yes, completely free for personal use. The code is open source.
-
-**Q: Which professions are supported?**  
-A: All TBC professions including combo guides (e.g., Herbalism + Alchemy).
+**Is it free?**
+Yes, completely free and open source.
 
 ---
 
-## 🏆 Credits
+## Credits
 
-### Developer
 **Chehul @ DreamScyther-US**
-- GitHub: [https://github.com/danielcosta42](https://github.com/danielcosta42)
-- Realm: DreamScyther-US (TBC Classic)
+- GitHub: [https://github.com/danielcosta42/ProfessionHelper](https://github.com/danielcosta42/ProfessionHelper)
 
-### Special Thanks
-- **Blizzard Entertainment** - for World of Warcraft
-- **TSM Team** - for the amazing TradeSkillMaster addon
-- **TBC Classic Community** - for testing and feedback
-- **All contributors** who helped test and improve this addon
-
-### Open Source
-This addon is free and open source. Feel free to:
-- ✅ Use it for your personal gameplay
-- ✅ Share it with friends
-- ✅ Contribute improvements on GitHub
-- ✅ Translate to additional languages
-
-### Data Sources
-Profession data verified using:
-- Official TBC Classic databases
-- Community-tested leveling routes
-- Personal testing across multiple characters
-- Feedback from beta testers
+Special thanks to the TBC Classic community for testing and feedback.
 
 ---
 
-## 📜 License
+## Changelog
 
-**Free for Personal Use**
+### 1.11.0
+- Bag and bank scanner: materials you already own are automatically deducted from the shopping list
 
-This addon is provided free of charge for personal, non-commercial use. The source code is available on GitHub under a permissive license that allows:
-- Personal use
-- Modification for personal use
-- Distribution of the original or modified versions (with credit)
+### 1.10.0
+- Cooldown tracker: tracks Transmutation (24h) and cloth fabric cooldowns (84h)
 
-**Not permitted:**
-- Commercial use without permission
-- Claiming as your own work
-- Removing author credits
+### 1.9.0
+- Recipe tracker: shows learned recipes and missing ones with their source
 
----
+### 1.8.0
+- Alt manager: track profession levels across all characters on the realm
 
-## 📝 Changelog
+### 1.7.0
+- Disenchant & Prospecting calculator: expected output based on current AH prices
 
-### Version 1.0.0 (2026-04-21)
-- 🎉 **Initial Release**
-- ✅ Complete guides for all TBC professions (1-375)
-- ✅ Multi-language support (PT/EN/ES)
-- ✅ TSM integration for pricing
-- ✅ Shopping list generator
-- ✅ Farming location database
-- ✅ Modern UI with dark theme
-- ✅ Icon-driven navigation
-- ✅ Auto-detection of player skill level
-- ✅ Combo profession guides
-- ✅ Material cost calculation
+### 1.6.0
+- Auctionator price support and improved price fallback logic (vendor sell price)
 
----
+### 1.5.0 – 1.5.1
+- Full multilingual support — all UI strings now auto-translate per client locale
+- Fixed Portuguese text hardcoded in the Gold Farming guide and several UI elements
 
-## �‍💻 For Developers
+### 1.4.0
+- Complete localization system: step cards, material labels, shopping list, TSM messages, gathering guide all translated
+- Added 38 new localization keys across ptBR, enUS, and esES
 
-### Automated CI/CD
-This project uses **GitHub Actions** for automated building, testing, and publishing:
+### 1.0.0
+- Initial release: all TBC profession guides (1–375), shopping list, farming locations, TSM integration, Gold Farming guide, Farm Tracker, dark UI, multi-language support
 
-- ✅ **Automatic releases** when you push version tags
-- ✅ **Code validation** on every commit
-- ✅ **Package testing** on pull requests
-- ✅ **Multi-platform publishing** (GitHub, CurseForge, WoWInterface)
 
-**Quick Release:**
-```bash
-git tag v1.0.0
-git push origin v1.0.0
-# Watch automation in the Actions tab!
-```
-
-See [.github/CICD-SETUP.md](.github/CICD-SETUP.md) for complete setup guide.
-
-### Contributing
-Contributions are welcome! Here's how:
-
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes using **Conventional Commits** format:
-   ```bash
-   git commit -m "feat: add amazing feature"
-   git commit -m "fix: resolve bug in X"
-   git commit -m "docs: update README"
-   ```
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
-
-The validation workflow will automatically check your code!
-
-**Commit Format Guide:** Use conventional commits for automatic versioning:
-- `feat:` - New features (bumps MINOR version)
-- `fix:` - Bug fixes (bumps PATCH version)
-- `docs:` - Documentation only (no version bump)
-- `feat!:` - Breaking changes (bumps MAJOR version)
-
-See [Conventional Commits Guide](.github/CONVENTIONAL-COMMITS.md) for details.
-
-### Development Setup
-```bash
-# Clone repository
-git clone https://github.com/danielcosta42/ProfessionHelper.git
-
-# Navigate to directory
-cd ProfessionHelper
-
-# Make changes and test in WoW
-# Commit with conventional format
-git commit -m "feat: your new feature"
-
-# Push - version will be automatically bumped!
-git push origin main
-```
-
-**Automatic Releases:** This project uses semantic versioning. When you push commits to `main` with conventional format, a new version is automatically released. No manual version updates needed!
-
----
-
-## �🔮 Roadmap
-
-### Planned Features
-- [ ] In-game configuration panel
-- [ ] Custom route editor
-- [ ] Bank & bag integration
-- [ ] Recipe tracker with missing recipes
-- [ ] Profit calculator for crafted items
-- [ ] Alt character tracking
-- [ ] Export/import custom guides
-- [ ] Achievement integration
-- [ ] More language support (FR, DE, RU)
-
----
-
-<div align="center">
-
-**Made with ❤️ for the TBC Classic community**
-
-[⬆ Back to Top](#profession-helper---tbc-classic)
-
-</div>

@@ -51,7 +51,7 @@ ProfessionHelper.Tailoring = {
             count = 50,
             materials = { { name = "Linen Cloth", count = 100 } },
             source = "Trainer",
-            tip = "Guarde TODOS os bolts — vai precisar de muitos para Linen Bag e capas.",
+            tip = ProfessionHelper.L["TAILORING_TIP_1_50"],
         },
         {
             range = {50, 70},
@@ -74,7 +74,7 @@ ProfessionHelper.Tailoring = {
             count = 40,
             materials = { { name = "Wool Cloth", count = 120 } },
             source = "Trainer",
-            tip = "Guarde todos os bolts para os proximos steps.",
+            tip = ProfessionHelper.L["TAILORING_TIP_75_105"],
         },
         {
             range = {105, 110},
@@ -96,7 +96,7 @@ ProfessionHelper.Tailoring = {
             count = 65,
             materials = { { name = "Silk Cloth", count = 260 } },
             source = "Trainer",
-            tip = "Guarde Bolts of Silk para os proximos steps.",
+            tip = ProfessionHelper.L["TAILORING_TIP_125_145"],
         },
         {
             range = {145, 160},
@@ -126,7 +126,7 @@ ProfessionHelper.Tailoring = {
             count = 50,
             materials = { { name = "Mageweave Cloth", count = 250 } },
             source = "Trainer",
-            tip = "Guarde Bolts of Mageweave para os proximos steps.",
+            tip = ProfessionHelper.L["TAILORING_TIP_175_185"],
         },
         {
             range = {185, 200},
@@ -163,7 +163,7 @@ ProfessionHelper.Tailoring = {
             count = 40,
             materials = { { name = "Runecloth", count = 200 } },
             source = "Trainer",
-            tip = "Guarde os Bolts of Runecloth para os proximos steps.",
+            tip = ProfessionHelper.L["TAILORING_TIP_250_260"],
         },
         {
             range = {260, 275},
@@ -178,7 +178,7 @@ ProfessionHelper.Tailoring = {
             count = 5,
             materials = { { name = "Bolt of Runecloth", count = 25 }, { name = "Rugged Leather", count = 10 }, { name = "Rune Thread", count = 5 } },
             source = "Trainer",
-            tip = "Venda as bags ou use!",
+            tip = ProfessionHelper.L["TAILORING_TIP_275_280"],
         },
         {
             range = {280, 300},
@@ -194,7 +194,7 @@ ProfessionHelper.Tailoring = {
             count = 60,
             materials = { { name = "Netherweave Cloth", count = 360 } },
             source = "Trainer (Outland)",
-            tip = "Guarde TODOS os bolts — vai precisar de muitos.",
+            tip = ProfessionHelper.L["TAILORING_TIP_300_325"],
         },
         {
             range = {325, 340},
@@ -202,7 +202,7 @@ ProfessionHelper.Tailoring = {
             count = 20,
             materials = { { name = "Bolt of Netherweave", count = 60 }, { name = "Arcane Dust", count = 40 } },
             source = "Vendor: Eiin (Shattrath)",
-            tip = "Guarde para Imbued Netherweave Tunic/Arcanoweave Boots.",
+            tip = ProfessionHelper.L["TAILORING_TIP_325_340"],
         },
         {
             range = {340, 350},
@@ -224,7 +224,7 @@ ProfessionHelper.Tailoring = {
             count = 18,
             materials = { { name = "Bolt of Imbued Netherweave", count = 90 }, { name = "Netherweb Spider Silk", count = 36 }, { name = "Rune Thread", count = 36 } },
             source = "Vendor: Arrond (Shadowmoon Valley)",
-            tip = "Ou use Arcanoweave Boots (4x Bolt of Imbued Netherweave + 2x Knothide Leather) se mais barato.",
+            tip = ProfessionHelper.L["TAILORING_TIP_360_375"],
         },
     },
 }

@@ -48,7 +48,7 @@ ProfessionHelper.Cooking = {
             count = 60,
             materials = { { name = "Simple Flour", count = 60 }, { name = "Mild Spices", count = 60 } },
             source = "Trainer",
-            tip = "Compre Simple Flour e Mild Spices em vendors perto do treinador. Não compre na AH!",
+            tip = ProfessionHelper.L["COOKING_TIP_1_40"],
         },
         {
             range = {40, 65},
@@ -56,7 +56,7 @@ ProfessionHelper.Cooking = {
             count = 35,
             materials = { { name = "Bear Meat", count = 35 } },
             source = "Vendor: Andrew Hilbert (Silverpine) / Drac Roughcut (Loch Modan)",
-            tip = "Alternativas: Roasted Boar Meat, Spiced Wolf Meat, Brilliant Smallfish (pesca), Slitherskin Mackerel (pesca).",
+            tip = ProfessionHelper.L["COOKING_TIP_40_65"],
         },
         -- ==================== JOURNEYMAN (65-130) ====================
         {
@@ -65,7 +65,7 @@ ProfessionHelper.Cooking = {
             count = 65,
             materials = { { name = "Clam Meat", count = 65 }, { name = "Refreshing Spring Water", count = 65 } },
             source = "Trainer",
-            tip = "Alternativas: Coyote Steak (Coyote Meat), Longjaw Mud Snapper (pesca). Refreshing Spring Water compra em vendor.",
+            tip = ProfessionHelper.L["COOKING_TIP_65_110"],
         },
         {
             range = {110, 130},
@@ -73,7 +73,7 @@ ProfessionHelper.Cooking = {
             count = 30,
             materials = { { name = "Crawler Meat", count = 30 }, { name = "Mild Spices", count = 30 } },
             source = "Trainer",
-            tip = "Alternativas: Dry Pork Ribs (Boar Ribs + Mild Spices), Bristle Whisker Catfish (pesca).",
+            tip = ProfessionHelper.L["COOKING_TIP_110_130"],
         },
         -- ==================== EXPERT (130-225) ====================
         {
@@ -82,7 +82,7 @@ ProfessionHelper.Cooking = {
             count = 50,
             materials = { { name = "Raptor Egg", count = 50 } },
             source = "Vendor: Kendor Kabonka (Stormwind) / Keena (Arathi Highlands)",
-            tip = "Compre Expert Cookbook de Wulan (Desolace, Horde) ou Shandrina (Ashenvale, Alliance) para treinar acima de 150.",
+            tip = ProfessionHelper.L["COOKING_TIP_130_175"],
         },
         {
             range = {175, 225},
@@ -90,7 +90,7 @@ ProfessionHelper.Cooking = {
             count = 50,
             materials = { { name = "Raptor Flesh", count = 50 }, { name = "Hot Spices", count = 50 } },
             source = "Vendor: Hammon Karwn (Stranglethorn Vale) / Keena (Arathi Highlands)",
-            tip = "Alternativas: Soothing Turtle Bisque, Mithril Headed Trout (pesca).",
+            tip = ProfessionHelper.L["COOKING_TIP_175_225"],
         },
         -- ==================== ARTISAN (225-300) ====================
         {
@@ -99,7 +99,7 @@ ProfessionHelper.Cooking = {
             count = 25,
             materials = { { name = "Giant Egg", count = 25 }, { name = "Soothing Spices", count = 50 } },
             source = "Vendor: Himmik (Winterspring) / Bale (Felwood) / Malygen (Felwood)",
-            tip = "Complete Clamlette Surprise quest para Artisan. Alternativas: Tender Wolf Steak, Spotted Yellowtail (pesca), Undermine Clam Chowder.",
+            tip = ProfessionHelper.L["COOKING_TIP_225_250"],
         },
         {
             range = {250, 285},
@@ -107,7 +107,7 @@ ProfessionHelper.Cooking = {
             count = 40,
             materials = { { name = "Bear Flank", count = 40 } },
             source = "Vendor: Bale (Felwood) / Malygen (Felwood)",
-            tip = "Bear Flank dropa ~50% dos ursos. Alternativas: Poached Sunscale Salmon, Nightfin Soup (peixes de Felwood/Azshara).",
+            tip = ProfessionHelper.L["COOKING_TIP_250_285"],
         },
         {
             range = {285, 300},
@@ -115,7 +115,7 @@ ProfessionHelper.Cooking = {
             count = 15,
             materials = { { name = "Sandworm Meat", count = 15 }, { name = "Soothing Spices", count = 15 } },
             source = "Quest: Desert Recipe → Sharing the Knowledge (Silithus)",
-            tip = "Mate Dredge Strikers/Crushers em Silithus. Alternativas: Baked Salmon, Lobster Stew (pesca em Feralas).",
+            tip = ProfessionHelper.L["COOKING_TIP_285_300"],
         },
         -- ==================== MASTER / TBC (300-375) ====================
         {
@@ -124,7 +124,7 @@ ProfessionHelper.Cooking = {
             count = 30,
             materials = { { name = "Ravager Flesh", count = 30 } },
             source = "Vendor: Cookie One-Eye (Thrallmar, Horde) / Sid Limbardi (Honor Hold, Alliance)",
-            tip = "Alternativa: Buzzard Bites (quest chain em Hellfire, começa com Legassi).",
+            tip = ProfessionHelper.L["COOKING_TIP_300_325"],
         },
         {
             range = {325, 355},
@@ -132,7 +132,7 @@ ProfessionHelper.Cooking = {
             count = 40,
             materials = { { name = "Talbuk Venison", count = 40 } },
             source = "Vendor: Nula the Butcher (Garadar, Horde) / Uriku (Telaar, Alliance)",
-            tip = "Alternativas: Roasted Clefthoof (Clefthoof Meat, mesmo vendor), Warp Burger (Warped Flesh, Terokkar).",
+            tip = ProfessionHelper.L["COOKING_TIP_325_355"],
         },
         {
             range = {355, 375},
@@ -140,15 +140,15 @@ ProfessionHelper.Cooking = {
             count = 60,
             materials = { { name = "Serpent Flesh", count = 60 } },
             source = "Vendor: Xerintha Ravenoak (Ruuan Weald, Blade's Edge, Horde) / Sassa Weldwell (Toshley's Station, Alliance)",
-            tip = "Alternativa: Mok'Nathal Shortribs (Raptor Ribs, mesmos vendors). Horde: receita limited supply, pode ser mais rápido fazer quest Mok'Nathal Treats.",
+            tip = ProfessionHelper.L["COOKING_TIP_355_375"],
         },
     },
 
     tips = {
-        "Se também quer upar Fishing, use o guia conjunto: peixes pescados servem como materiais de Cooking.",
-        "Compre todas as receitas de Gikkix em Tanaris ao passar por lá (Spotted Yellowtail, Nightfin Soup, Poached Sunscale Salmon).",
-        "Spices e Flour são comprados em vendors gerais/cooking supply, NÃO na AH.",
-        "Artisan Cooking requer completar a quest Clamlette Surprise em Gadgetzan (level 35+, Cooking 225).",
-        "Master Cooking: compre Master Cookbook de Baxter (Thrallmar, Horde) ou Gaston (Honor Hold, Alliance).",
+        ProfessionHelper.L["COOKING_TIPS_1"],
+        ProfessionHelper.L["COOKING_TIPS_2"],
+        ProfessionHelper.L["COOKING_TIPS_3"],
+        ProfessionHelper.L["COOKING_TIPS_4"],
+        ProfessionHelper.L["COOKING_TIPS_5"],
     },
 }

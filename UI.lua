@@ -1806,7 +1806,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
 
     -- Smelting section (Mining)
     if profData.smelting then
-        local _, ny = SectionLabel(parent, y, "FUNDIÇÃO", hexc(T.accent))
+        local _, ny = SectionLabel(parent, y, ProfessionHelper.L["UI_SMELTING"], hexc(T.accent))
         y = ny
         for _, s in ipairs(profData.smelting) do
             if s.skill <= currentSkill + 50 then
@@ -1821,7 +1821,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
 
     -- Equipment (Fishing)
     if profData.equipment then
-        local _, ny = SectionLabel(parent, y, "EQUIPAMENTO", hexc(T.accent))
+        local _, ny = SectionLabel(parent, y, ProfessionHelper.L["UI_EQUIPMENT"], hexc(T.accent))
         y = ny
         for _, eq in ipairs(profData.equipment) do
             local et = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -1840,7 +1840,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
 
     -- Tips
     if profData.tips then
-        local _, ny = SectionLabel(parent, y - 6, "DICAS", hexc(T.gold))
+        local _, ny = SectionLabel(parent, y - 6, ProfessionHelper.L["UI_TIPS"], hexc(T.gold))
         y = ny
         for _, tip in ipairs(profData.tips) do
             local tt = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -1888,11 +1888,11 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill)
     local badge = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     badge:SetPoint("TOPLEFT", 12, iy)
     if isComplete then
-        badge:SetText(hexc(T.green) .. "CONCLUÍDO|r")
+        badge:SetText(hexc(T.green) .. ProfessionHelper.L["UI_STEP_COMPLETED"] .. "|r")
     elseif isCurrent then
-        badge:SetText(hexc(T.green) .. "● PASSO ATUAL|r")
+        badge:SetText(hexc(T.green) .. ProfessionHelper.L["UI_STEP_CURRENT"] .. "|r")
     else
-        badge:SetText(hexc(T.accent) .. "PRÓXIMO|r")
+        badge:SetText(hexc(T.accent) .. ProfessionHelper.L["UI_STEP_NEXT"] .. "|r")
     end
 
     local cnt = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")

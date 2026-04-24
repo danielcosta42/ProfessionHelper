@@ -29,7 +29,7 @@ ProfessionHelper.FishingCooking = {
             count = 75,
             materials = {},
             source = "Any starting zone or capital city",
-            tip = "Compre Fishing Pole + Shiny Bauble de vendor de pesca. Pesque até 75 em qualquer lago de zona inicial. Você vai pegar ~60 Raw Brilliant Smallfish e alguns Raw Longjaw Mud Snapper. GUARDE TODOS!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_1_75"],
         },
         -- ==================== PHASE 2: Fish 75-130, Cook 1-100 ====================
         {
@@ -39,7 +39,7 @@ ProfessionHelper.FishingCooking = {
             count = 110,
             materials = {},
             source = "Capital city (Thunder Bluff, Stormwind, etc.)",
-            tip = "Aprenda Journeyman Fishing. Pesque na cidade capital até 130. Vai pegar ~20 Brilliant Smallfish, ~60 Longjaw Mud Snapper, ~30 Bristle Whisker Catfish.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_75_130"],
         },
         {
             range = {1, 50},
@@ -48,7 +48,7 @@ ProfessionHelper.FishingCooking = {
             count = 60,
             materials = { { name = "Raw Brilliant Smallfish", count = 60 } },
             source = "Vendor: recipe from fishing supply vendor",
-            tip = "Cozinhe todos os Raw Brilliant Smallfish que pescou. Aprenda a receita no vendor de pesca.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_1_50"],
         },
         {
             range = {50, 100},
@@ -57,7 +57,7 @@ ProfessionHelper.FishingCooking = {
             count = 60,
             materials = { { name = "Raw Longjaw Mud Snapper", count = 60 } },
             source = "Vendor: recipe from fishing supply vendor",
-            tip = "Aprenda Journeyman Cooking no treinador. Cozinhe todos os Longjaw Mud Snapper. Se não chegou a 100, vai pescar mais depois.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_50_100"],
         },
         -- ==================== PHASE 3: Fish 130-205, Cook 100-175 ====================
         {
@@ -67,7 +67,7 @@ ProfessionHelper.FishingCooking = {
             count = 240,
             materials = {},
             source = "Stonetalon Mountains / Dustwallow Marsh",
-            tip = "Horde: Pesque em Stonetalon Mountains. Alliance: Pesque em Darkshore/Wetlands. Vai pegar ~95 Longjaw Mud Snapper e ~145 Bristle Whisker Catfish. Compre Expert Fishing de Old Man Heming em Booty Bay!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_130_205"],
         },
         {
             range = {100, 175},
@@ -76,7 +76,7 @@ ProfessionHelper.FishingCooking = {
             count = 145,
             materials = { { name = "Raw Bristle Whisker Catfish", count = 145 } },
             source = "Vendor: recipe from fishing supply vendor",
-            tip = "Compre Expert Cookbook! Horde: Wulan (Desolace). Alliance: Shandrina (Ashenvale). Use na skill 125! Cozinhe todos os Bristle Whisker Catfish pescados.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_100_175"],
         },
         -- ==================== PHASE 4: Artisan Fishing Quest + Fish 205-255 ====================
         {
@@ -86,7 +86,7 @@ ProfessionHelper.FishingCooking = {
             count = 130,
             materials = {},
             source = "Dustwallow Marsh (inland water)",
-            tip = "Pesque em Dustwallow Marsh até 225, complete quest Nat Pagle Angler Extreme (requer lvl 35 + Fishing 225), depois continue pescando até 255. Vai pegar Raw Mithril Head Trout.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_205_255"],
         },
         {
             range = {175, 225},
@@ -95,7 +95,7 @@ ProfessionHelper.FishingCooking = {
             count = 50,
             materials = { { name = "Raw Mithril Head Trout", count = 50 } },
             source = "Vendor: Kelsey Yance (Booty Bay)",
-            tip = "Compre Recipe: Mithril Head Trout de Kelsey Yance em Booty Bay (visite ao passar). Cozinhe até 225 e PARE — precisa da quest de Artisan Cooking.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_175_225"],
         },
         -- ==================== PHASE 5: Artisan Cooking Quest ====================
         {
@@ -105,7 +105,7 @@ ProfessionHelper.FishingCooking = {
             count = 1,
             materials = { { name = "Giant Egg", count = 12 }, { name = "Zesty Clam Meat", count = 10 }, { name = "Alterac Swiss", count = 20 } },
             source = "Quest: Clamlette Surprise (Gadgetzan, Tanaris)",
-            tip = "Vá para Gadgetzan e complete a quest Clamlette Surprise com Dirge Quikcleave. Requer lvl 35 + Cooking 225. Compre receitas de Gikkix em Tanaris!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_225_226"],
         },
         -- ==================== PHASE 6: Fish 255-300, Cook 226-285 ====================
         {
@@ -115,7 +115,7 @@ ProfessionHelper.FishingCooking = {
             count = 130,
             materials = {},
             source = "Feralas (inland lakes, avoid Jademir Lake)",
-            tip = "Pesque em Feralas (lagos internos). Use Bright Baubles! Vai pegar Raw Redgill, Raw Nightfin Snapper, Raw Sunscale Salmon. Compre Recipe: Baked Salmon de Sheendra Tallgrass/Vivianna em Feralas.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_255_300"],
         },
         {
             range = {226, 260},
@@ -124,7 +124,7 @@ ProfessionHelper.FishingCooking = {
             count = 40,
             materials = { { name = "Raw Redgill", count = 40 } },
             source = "Vendor: Kelsey Yance (Booty Bay)",
-            tip = "Cozinhe primeiro os Raw Mithril Head Trout restantes, depois os Filet of Redgill.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_226_260"],
         },
         {
             range = {260, 285},
@@ -133,7 +133,7 @@ ProfessionHelper.FishingCooking = {
             count = 40,
             materials = { { name = "Raw Nightfin Snapper", count = 20 }, { name = "Raw Sunscale Salmon", count = 20 } },
             source = "Vendor: Gikkix (Tanaris)",
-            tip = "Cozinhe Nightfin Soup (pesca noturna) e Poached Sunscale Salmon (pesca diurna). Pare ao chegar em 285.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_260_285"],
         },
         -- ==================== PHASE 7: Cook 285-300 in EPL ====================
         {
@@ -143,7 +143,7 @@ ProfessionHelper.FishingCooking = {
             count = 20,
             materials = { { name = "Raw Whitescale Salmon", count = 20 } },
             source = "Vendor: Sheendra Tallgrass (Feralas, Horde) / Vivianna (Feralas, Alliance)",
-            tip = "Vá para Eastern Plaguelands e pesque Raw Whitescale Salmon (40% dos catches). Cozinhe Baked Salmon até 300. Cada craft garante 1 skill point!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_285_300"],
         },
         -- ==================== PHASE 8: TBC - Fish 300-330 in Zangarmarsh ====================
         {
@@ -153,7 +153,7 @@ ProfessionHelper.FishingCooking = {
             count = 100,
             materials = {},
             source = "Zangarmarsh (lakes near Cenarion Refuge)",
-            tip = "Compre Master Fishing de Juno Dufrain + Master Cookbook de Naka (inn). Compre Recipe: Blackened Sporefish de Juno. Precisa ~400 effective fishing (pole+lure)! Guarde Zangarian Sporefish e Spotted Feltail.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_300_330"],
         },
         -- ==================== PHASE 9: Cook 300-340 + Fish 330-350 ====================
         {
@@ -163,7 +163,7 @@ ProfessionHelper.FishingCooking = {
             count = 10,
             materials = { { name = "Spotted Feltail", count = 10 } },
             source = "Vendor: Zurai (Horde) / Doba (Alliance) in Zangarmarsh",
-            tip = "Use Master Cookbook. Compre Recipe: Feltail Delight. Alliance: pode precisar fazer 3 quests em Orebor Harborage para rep Kurenai (Neutral) primeiro!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_300_310"],
         },
         {
             range = {310, 340},
@@ -172,7 +172,7 @@ ProfessionHelper.FishingCooking = {
             count = 40,
             materials = { { name = "Zangarian Sporefish", count = 40 } },
             source = "Vendor: Juno Dufrain (Zangarmarsh)",
-            tip = "Cozinhe todos os Zangarian Sporefish até chegar em 340.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_310_340"],
         },
         {
             range = {330, 350},
@@ -181,7 +181,7 @@ ProfessionHelper.FishingCooking = {
             count = 60,
             materials = {},
             source = "Zangarmarsh (same lakes)",
-            tip = "Continue pescando nos mesmos lagos de Zangarmarsh até 350.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_330_350"],
         },
         -- ==================== PHASE 10: Fish 350-370 + Cook 340-360 in Terokkar ====================
         {
@@ -191,7 +191,7 @@ ProfessionHelper.FishingCooking = {
             count = 80,
             materials = {},
             source = "Terokkar Forest (avoid Shattrath lake and flying restricted areas)",
-            tip = "Pesque em Terokkar Forest. Evite o lago perto de Shattrath e áreas de voo restrito (requerem skill muito alto). Vai pegar Golden Darter.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_350_370"],
         },
         {
             range = {340, 360},
@@ -200,7 +200,7 @@ ProfessionHelper.FishingCooking = {
             count = 30,
             materials = { { name = "Golden Darter", count = 30 } },
             source = "Vendor: Innkeeper Biribi (Alliance) / Rungor (Horde) in Terokkar",
-            tip = "Compre Recipe: Golden Fish Sticks e Recipe: Spicy Crawdad. Cozinhe todos os Golden Darter.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_340_360"],
         },
         -- ==================== PHASE 11: Highland Mixed School - Fish 370-375 + Cook 360-375 ====================
         {
@@ -210,7 +210,7 @@ ProfessionHelper.FishingCooking = {
             count = 30,
             materials = {},
             source = "Terokkar Forest - Highland Mixed Schools (Blackwind Lake, Lake Ere'Noru, Lake Jorune)",
-            tip = "Voe entre os 3 lagos elevados procurando Highland Mixed Schools. Pesque APENAS nos schools (não na água normal). Vai pegar Furious Crawdad!",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_FISH_370_375"],
         },
         {
             range = {360, 375},
@@ -219,17 +219,17 @@ ProfessionHelper.FishingCooking = {
             count = 25,
             materials = { { name = "Furious Crawdad", count = 25 } },
             source = "Vendor: Innkeeper Biribi (Alliance) / Rungor (Horde) in Terokkar",
-            tip = "Cozinhe Spicy Crawdad (+30 Stamina) com os Furious Crawdad dos Highland Mixed Schools. Se chegou a 375 Cooking antes de 375 Fishing, volte para o Terokkar baixo para pescar sem perder peixes.",
+            tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_360_375"],
         },
     },
 
     tips = {
-        "Este guia combina Fishing e Cooking juntos — mais eficiente que upar separadamente!",
-        "Pesque primeiro, cozinhe depois: acumule peixes enquanto sobe Fishing, cozinhe em lotes.",
-        "Compre Expert Fishing de Old Man Heming em Booty Bay (150+). Compre receitas de Kelsey Yance ali também.",
-        "Artisan Fishing: quest Nat Pagle, Angler Extreme em Dustwallow (lvl 35 + Fishing 225).",
-        "Artisan Cooking: quest Clamlette Surprise em Gadgetzan (lvl 35 + Cooking 225). Precisa de 12 Giant Egg + 10 Zesty Clam Meat + 20 Alterac Swiss.",
-        "Para TBC: compre Master Fishing + Master Cookbook + Recipe: Blackened Sporefish, tudo em Zangarmarsh.",
-        "Highland Mixed Schools (Terokkar): Furious Crawdad para Spicy Crawdad (+30 Stam). Mr. Pinchy pode dropar pet épico!",
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_1"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_2"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_3"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_4"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_5"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_6"],
+        ProfessionHelper.L["FISHINGCOOKING_TIPS_7"],
     },
 }

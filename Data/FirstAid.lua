@@ -47,7 +47,7 @@ ProfessionHelper.FirstAid = {
             count = 65,
             materials = { { name = "Linen Cloth", count = 130 } },
             source = "Trainer",
-            tip = "Aprenda Journeyman First Aid ao chegar em 75.",
+            tip = ProfessionHelper.L["FIRSTAID_TIP_40_80"],
         },
         -- ==================== JOURNEYMAN (80-150) ====================
         {
@@ -71,7 +71,7 @@ ProfessionHelper.FirstAid = {
             count = 50,
             materials = { { name = "Silk Cloth", count = 50 } },
             source = "Trainer",
-            tip = "Compre Expert First Aid - Under Wraps + Manual: Heavy Silk Bandage + Manual: Mageweave Bandage de Deneb Walker (Arathi, Alliance) ou Balai Lok'Wein (Dustwallow, Horde).",
+            tip = ProfessionHelper.L["FIRSTAID_TIP_150_180"],
         },
         {
             range = {180, 210},
@@ -94,7 +94,7 @@ ProfessionHelper.FirstAid = {
             count = 30,
             materials = { { name = "Mageweave Cloth", count = 30 } },
             source = "Manual: Mageweave Bandage",
-            tip = "Complete a quest Triage com Doctor Gustaf VanHowzen (Dustwallow, Alliance) ou Doctor Gregory Victor (Arathi, Horde) para Artisan. Leve os materiais necessários com você!",
+            tip = ProfessionHelper.L["FIRSTAID_TIP_225_240"],
         },
         {
             range = {240, 260},
@@ -108,14 +108,14 @@ ProfessionHelper.FirstAid = {
             recipe = "Runecloth Bandage",
             count = 50,
             materials = { { name = "Runecloth", count = 50 } },
-            source = "Trainer (mesmo Doctor que deu a quest)",
+            source = "Trainer (same Doctor who gave the quest)",
         },
         {
             range = {290, 300},
             recipe = "Heavy Runecloth Bandage",
             count = 15,
             materials = { { name = "Runecloth", count = 30 } },
-            source = "Trainer (mesmo Doctor, aprende ao chegar 290)",
+            source = "Trainer (same Doctor, learned at 290)",
         },
         -- ==================== MASTER / TBC (300-375) ====================
         {
@@ -124,21 +124,21 @@ ProfessionHelper.FirstAid = {
             count = 70,
             materials = { { name = "Runecloth", count = 140 } },
             source = "Trainer",
-            tip = "Compre Master First Aid de Burko (Temple of Telhamat, Alliance) ou Aresella (Falcon Watch, Horde). Compre também os 2 Manuais de Netherweave!",
+            tip = ProfessionHelper.L["FIRSTAID_TIP_300_330"],
         },
         {
             range = {330, 360},
             recipe = "Netherweave Bandage",
             count = 45,
             materials = { { name = "Netherweave Cloth", count = 45 } },
-            source = "Manual: Netherweave Bandage (mesmo vendor do Master book)",
+            source = "Manual: Netherweave Bandage (same vendor as the Master book)",
         },
         {
             range = {360, 375},
             recipe = "Heavy Netherweave Bandage",
             count = 20,
             materials = { { name = "Netherweave Cloth", count = 40 } },
-            source = "Manual: Heavy Netherweave Bandage (mesmo vendor do Master book)",
+            source = "Manual: Heavy Netherweave Bandage (same vendor as the Master book)",
         },
     },
 }

@@ -73,7 +73,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Empty Vial", count = 44 },
             },
             source = "World Drop Recipe",
-            tip = "Se nao tiver a receita, use Healing Potion (Trainer) como alternativa.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_110_150"],
         },
         -- ==================== EXPERT (150-225) ====================
         {
@@ -86,7 +86,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Leaded Vial", count = 31 },
             },
             source = "World Drop Recipe",
-            tip = "Se nao tiver a receita, use Mana Potion (Trainer) como alternativa.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_150_180"],
         },
         {
             range = {180, 210},
@@ -98,7 +98,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Leaded Vial", count = 32 },
             },
             source = "World Drop Recipe",
-            tip = "Se nao tiver a receita, use Elixir of Agility (Trainer) como alternativa.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_180_210"],
         },
         -- ==================== ARTISAN (210-300) ====================
         {
@@ -111,7 +111,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Leaded Vial", count = 44 },
             },
             source = "World Drop Recipe",
-            tip = "Se nao tiver a receita, use Greater Mana Potion (Trainer) como alternativa.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_210_240"],
         },
         {
             range = {240, 250},
@@ -166,7 +166,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Crystal Vial", count = 10 },
             },
             source = "Drop: Cobalt Mageweaver (Winterspring)",
-            tip = "Receita dropa com alta chance dos Cobalt Mageweavers.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_285_290"],
         },
         -- ==================== MASTER / TBC (300-375) ====================
         {
@@ -211,7 +211,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Imbued Vial", count = 31 },
             },
             source = "Vendor: Halaa Research Token (Nagrand)",
-            tip = "Receita comprada com 2 Halaa Research Tokens em Nagrand.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_330_355"],
         },
         {
             range = {355, 365},
@@ -234,7 +234,7 @@ ProfessionHelper.Alchemy = {
                 { name = "Imbued Vial", count = 10 },
             },
             source = "Drop: Captain Skarloc (Old Hillsbrad Foothills)",
-            tip = "Receita dropa do Captain Skarloc na instancia Old Hillsbrad Foothills.",
+            tip = ProfessionHelper.L["ALCHEMY_TIP_365_375"],
         },
     },
 }

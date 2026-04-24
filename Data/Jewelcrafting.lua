@@ -48,7 +48,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 31,
             materials = { { name = "Copper Bar", count = 62 } },
             source = "Trainer",
-            tip = "Guarde 6x Delicate Copper Wire para Inlaid Malachite Ring.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_1_30"],
         },
         {
             range = {30, 45},
@@ -107,7 +107,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 20,
             materials = { { name = "Moss Agate", count = 20 }, { name = "Bronze Setting", count = 20 } },
             source = "Vendor: Jandia (Thousand Needles, Horde) / Neal Allen (Wetlands, Alliance)",
-            tip = "Receita limited supply. Bronze Setting = 2 Bronze Bar crafted.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_130_150"],
         },
         {
             range = {150, 175},
@@ -115,7 +115,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 26,
             materials = { { name = "Mithril Bar", count = 52 } },
             source = "Trainer",
-            tip = "Guarde 37x Mithril Filigree para proximos steps.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_150_175"],
         },
         {
             range = {175, 190},
@@ -123,7 +123,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 17,
             materials = { { name = "Citrine", count = 17 }, { name = "Mithril Filigree", count = 17 } },
             source = "Vendor: Kireena (Desolace, Horde) / Micha Yance (Hillsbrad, Alliance)",
-            tip = "Receita limited supply do vendor.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_175_190"],
         },
         {
             range = {190, 200},
@@ -167,7 +167,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 32,
             materials = { { name = "Aquamarine", count = 32 }, { name = "Thorium Setting", count = 32 } },
             source = "World Drop Recipe",
-            tip = "Compre a receita no AH. Thorium Setting = 1 Thorium Bar crafted.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_285_295"],
         },
         {
             range = {295, 300},
@@ -183,7 +183,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 6,
             materials = { { name = "Azure Moonstone", count = 6 } },
             source = "Trainer (Outland)",
-            tip = "Ou corte qualquer gema uncommon TBC: Blood Garnet, Golden Draenite, etc.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_300_305"],
         },
         {
             range = {305, 315},
@@ -191,7 +191,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 14,
             materials = { { name = "Azure Moonstone", count = 14 } },
             source = "Trainer (Outland)",
-            tip = "Ou corte qualquer gema uncommon disponivel no AH.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_305_315"],
         },
         {
             range = {315, 325},
@@ -199,7 +199,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 12,
             materials = { { name = "Azure Moonstone", count = 12 } },
             source = "World Drop (Outland) / AH",
-            tip = "Ou corte gemas de outra cor se mais barato no AH.",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_315_325"],
         },
         {
             range = {325, 350},
@@ -207,7 +207,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 52,
             materials = { { name = "Azure Moonstone", count = 52 } },
             source = "Vendor: The Consortium - Honored (Karaaz, Netherstorm)",
-            tip = "Ou corte qualquer gema uncommon. Compre a mais barata no AH!",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_325_350"],
         },
         {
             range = {350, 375},
@@ -215,7 +215,7 @@ ProfessionHelper.Jewelcrafting = {
             count = 52,
             materials = { { name = "Talasite", count = 52 } },
             source = "World Drop (Outland) / AH",
-            tip = "Corte gemas raras (Talasite, Nightseye, Noble Topaz, Dawnstone, Star of Elune, Living Ruby). Escolha a mais barata!",
+            tip = ProfessionHelper.L["JEWELCRAFTING_TIP_350_375"],
         },
     },
 }

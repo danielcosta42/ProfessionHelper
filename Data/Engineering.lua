@@ -293,7 +293,7 @@ ProfessionHelper.Engineering = {
                 { name = "Copper Bar", count = 6 },
             },
             source = "Trainer",
-            tip = "Ferramenta obrigatoria - nao venda!",
+            tip = ProfessionHelper.L["ENGINEERING_TIP_50_51"],
         },
         {
             range = {51, 75},
@@ -333,8 +333,8 @@ ProfessionHelper.Engineering = {
                 { name = "Wool Cloth", count = 10 },
                 { name = "Coarse Blasting Powder", count = 40 },
             },
-            source = "Receita: drop no mundo",
-            tip = "Alternativa: Silver Contact (1 Silver Bar cada)",
+            source = "Recipe: World Drop",
+            tip = ProfessionHelper.L["ENGINEERING_TIP_100_110"],
         },
         {
             range = {110, 150},
@@ -356,7 +356,7 @@ ProfessionHelper.Engineering = {
                 { name = "Heavy Blasting Powder", count = 39 },
             },
             source = "Vendor: Crazk Sparks (Stranglethorn Vale)",
-            tip = "Horde: Red Firework / Alliance: Blue Firework",
+            tip = ProfessionHelper.L["ENGINEERING_TIP_150_170"],
         },
         {
             range = {170, 175},
@@ -378,7 +378,7 @@ ProfessionHelper.Engineering = {
                 { name = "Steel Bar", count = 4 },
             },
             source = "Trainer",
-            tip = "Ferramenta obrigatoria - nao venda!",
+            tip = ProfessionHelper.L["ENGINEERING_TIP_175_176"],
         },
         {
             range = {176, 215},

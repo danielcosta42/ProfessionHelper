@@ -95,7 +95,7 @@ ProfessionHelper.Leatherworking = {
             count = 20,
             materials = { { name = "Medium Leather", count = 100 } },
             source = "Trainer",
-            tip = "Guarde a Heavy Leather para os proximos steps.",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_137_150"],
         },
         -- ==================== EXPERT (150-225) ====================
         {
@@ -104,7 +104,7 @@ ProfessionHelper.Leatherworking = {
             count = 12,
             materials = { { name = "Heavy Hide", count = 12 }, { name = "Salt", count = 12 } },
             source = "Trainer",
-            tip = "Guarde para Barbaric Shoulders.",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_150_160"],
         },
         {
             range = {160, 175},
@@ -177,7 +177,7 @@ ProfessionHelper.Leatherworking = {
             count = 15,
             materials = { { name = "Knothide Leather", count = 120 }, { name = "Rune Thread", count = 30 } },
             source = "Trainer (Outland)",
-            tip = "Ou Wild Draenish Vest (10 Knothide Leather cada). Fica amarelo, pode precisar de mais.",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_310_325"],
         },
         {
             range = {325, 335},
@@ -185,7 +185,7 @@ ProfessionHelper.Leatherworking = {
             count = 35,
             materials = { { name = "Knothide Leather", count = 175 } },
             source = "Vendor: Cro Threadstrong (Shattrath)",
-            tip = "Guarde a Heavy Knothide Leather para os ultimos steps!",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_325_335"],
         },
         {
             range = {335, 350},
@@ -200,7 +200,7 @@ ProfessionHelper.Leatherworking = {
             count = 20,
             materials = { { name = "Heavy Knothide Leather", count = 60 } },
             source = "Trainer (Outland)",
-            tip = "Vende bem no AH. Use as Heavy Knothide Leather que guardou.",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_350_365"],
         },
         {
             range = {365, 375},
@@ -208,7 +208,7 @@ ProfessionHelper.Leatherworking = {
             count = 10,
             materials = { { name = "Heavy Knothide Leather", count = 60 }, { name = "Primal Fire", count = 40 } },
             source = "Vendor: Almaador (Shattrath) — Sha'tar Honored",
-            tip = "Alternativas: Drums of Panic (Keepers of Time Honored) ou Drums of Speed (Kurenai/Mag'har Honored).",
+            tip = ProfessionHelper.L["LEATHERWORKING_TIP_365_375"],
         },
     },
 }
