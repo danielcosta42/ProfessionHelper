@@ -270,6 +270,8 @@ function PH:HandleSlashCommand(msg)
         else
             self:Print("Use: /ph guide <Herbalism|Mining|Skinning|Fishing>")
         end
+    elseif cmd == "de" or cmd == "prospect" then
+        self:ShowDECalcUI()
     elseif cmd == "help" then
         self:Print(self.L["CMD_HELP_HEADER"])
         self:Print(self.L["CMD_HELP_MAIN"])

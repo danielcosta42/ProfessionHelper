@@ -34,9 +34,11 @@ Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 TSMIntegration.lua
+DECalc.lua
 PathCalculator.lua
 FarmTracker.lua
 GatheringGuide.lua
 Core.lua
 UI.lua
 FarmTrackerUI.lua
+DECalcUI.lua
