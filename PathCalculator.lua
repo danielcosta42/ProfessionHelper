@@ -165,8 +165,8 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
                         shoppingList[mat.name] = (shoppingList[mat.name] or 0) + toBuy
                     end
 
-                    -- TSM cost
-                    if hasTSM and toBuy > 0 then
+                    -- Cost: GetItemPrice handles addon → cache → vendorPrice chain
+                    if toBuy > 0 then
                         local unitPrice = PH.TSM:GetItemPrice(mat.name) or 0
                         stepCost = stepCost + (unitPrice * toBuy)
                     end
@@ -215,12 +215,8 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
     for name, count in pairs(shoppingList) do
         local matData = PH.Materials and PH.Materials[name]
         local isVendor = matData and matData.vendor or false
-        local unitPrice = 0
-        if hasTSM then
-            unitPrice = PH.TSM:GetItemPrice(name) or 0
-        elseif matData and matData.vendor and matData.vendorPrice then
-            unitPrice = matData.vendorPrice
-        end
+        -- GetItemPrice handles the full chain: addon → cache → vendorPrice
+        local unitPrice = PH.TSM:GetItemPrice(name) or 0
 
         -- Discount items already in bags/bank.
         -- GetItemCount includes bank only when bank frame is open.
@@ -266,7 +262,7 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
         steps = steps,
         shoppingList = sortedShopping,
         totalCost = adjustedCost,
-        hasTSMPricing = hasTSM ~= nil,
+        hasPricing = adjustedCost > 0,
         startSkill = startSkill,
         targetSkill = targetSkill,
         professionName = profData.name,

@@ -5,14 +5,14 @@
 ## Notes-enUS: Complete profession leveling guide with smart routes, shopping lists & TSM integration
 ## Notes-esES: Guía completa de profesiones con rutas inteligentes, listas de compras e integración TSM
 ## Author: Chehul @ DreamScyther-US
-## Version: 1.5.0
+## Version: 1.10.0
 ## X-Website: https://github.com/danielcosta42
 ## X-Category: Professions
 ## X-License: Free for personal use
 ## X-Localizations: ptBR, enUS, esES
 ## X-Curse-Project-ID: profession-helper-tbc
 ## SavedVariables: ProfessionHelperDB
-## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, GatherMate2
+## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 
 Locales\Locales.lua
 Data\Materials.lua
@@ -35,9 +35,17 @@ Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 TSMIntegration.lua
 BagScanner.lua
+RecipeTracker.lua
+AltManager.lua
+DECalc.lua
 PathCalculator.lua
 FarmTracker.lua
 GatheringGuide.lua
 Core.lua
+CooldownTracker.lua
 UI.lua
 FarmTrackerUI.lua
+CooldownTrackerUI.lua
+RecipeTrackerUI.lua
+AltManagerUI.lua
+DECalcUI.lua
