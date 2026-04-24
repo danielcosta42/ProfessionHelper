@@ -144,7 +144,7 @@ ProfessionHelper.Jewelcrafting = {
             range = {210, 225},
             recipe = "Aquamarine Signet",
             count = 15,
-            materials = { { name = "Aquamarine", count = 45 }, { name = "Flask of Mojo", count = 60 } },
+            materials = { { name = "Aquamarine", count = 45 }, { name = "Mithril Filigree", count = 45 } },
             source = "Trainer",
         },
         {

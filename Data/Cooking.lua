@@ -80,7 +80,7 @@ ProfessionHelper.Cooking = {
             range = {130, 175},
             recipe = "Curiously Tasty Omelet",
             count = 50,
-            materials = { { name = "Raptor Egg", count = 50 } },
+            materials = { { name = "Raptor Egg", count = 50 }, { name = "Hot Spices", count = 50 } },
             source = "Vendor: Kendor Kabonka (Stormwind) / Keena (Arathi Highlands)",
             tip = ProfessionHelper.L["COOKING_TIP_130_175"],
         },

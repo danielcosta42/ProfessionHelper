@@ -141,7 +141,7 @@ ProfessionHelper.FishingCooking = {
             skill = "Cooking",
             recipe = "Baked Salmon",
             count = 20,
-            materials = { { name = "Raw Whitescale Salmon", count = 20 } },
+            materials = { { name = "Raw Whitescale Salmon", count = 20 }, { name = "Soothing Spices", count = 20 } },
             source = "Vendor: Sheendra Tallgrass (Feralas, Horde) / Vivianna (Feralas, Alliance)",
             tip = ProfessionHelper.L["FISHINGCOOKING_TIP_COOK_285_300"],
         },
