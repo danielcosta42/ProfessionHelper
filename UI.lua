@@ -961,7 +961,11 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
     local navLabel = navFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
     navLabel:SetPoint("CENTER")
     local tierN = PH:GetSkillTier(vs.skillRange[1])
-    navLabel:SetText(hexc(T.gold) .. string.format(PH.L["STEP"], viewIdx) .. "|r" .. hexc(T.textMuted) .. " / " .. totalSteps .. "  " .. tierN .. "|r")
+    -- Use absolute step position (covers the full 1-375 guide) so the counter
+    -- doesn't reset to 1 when the player is already partway through the journey.
+    local displayIdx   = vs.absoluteIndex or viewIdx
+    local displayTotal = vs.totalAbsolute or totalSteps
+    navLabel:SetText(hexc(T.gold) .. string.format(PH.L["STEP"], displayIdx) .. "|r" .. hexc(T.textMuted) .. " / " .. displayTotal .. "  " .. tierN .. "|r")
 
     if viewIdx ~= currentStepIdx then
         local goBtn = PillButton(navFrame, 60, 20, PH.L["CURRENT"], T.green)

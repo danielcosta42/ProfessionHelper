@@ -99,8 +99,22 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
         end
     end
 
+    -- Pre-count total guide steps (full path, ignoring current skill) for absolute numbering
+    local totalAbsoluteSteps = 0
+    for _, guide in ipairs(profData.levelingGuide) do
+        if guide.range[2] > 0 and guide.range[1] < targetSkill then
+            totalAbsoluteSteps = totalAbsoluteSteps + 1
+        end
+    end
+
+    local absoluteIdx = 0  -- tracks position across ALL guide entries (including skipped)
     for idx, guide in ipairs(profData.levelingGuide) do
         local guideStart, guideEnd = guide.range[1], guide.range[2]
+
+        -- Increment absolute index for every entry in the full path range
+        if guideEnd > 0 and guideStart < targetSkill then
+            absoluteIdx = absoluteIdx + 1
+        end
 
         -- For combo professions, use the skill level matching this step's skill
         local stepStartSkill = startSkill
@@ -189,6 +203,8 @@ function PH.PathCalculator:Calculate(profData, startSkill, targetSkill, comboSki
             -- Build step info
             table.insert(steps, {
                 index = #steps + 1,
+                absoluteIndex = absoluteIdx,         -- position in full guide (including skipped)
+                totalAbsolute = totalAbsoluteSteps,  -- total entries in full guide
                 skillRange = {effectiveStart, effectiveEnd},
                 originalRange = {guideStart, guideEnd},
                 recipe = guide.recipe or guide.tip or "Unknown",
