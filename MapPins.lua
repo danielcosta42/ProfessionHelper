@@ -90,7 +90,7 @@ local NPC_COORDS = {
     ["Doba"]                  = { zone = "Zangarmarsh",             x = 0.800, y = 0.658, type = "vendor" },  -- Swamprat Post (Horde, NE)
     ["Juno Dufrain"]          = { zone = "Zangarmarsh",             x = 0.786, y = 0.638, type = "vendor" },  -- Cenarion Refuge (neutral, E)
     ["Innkeeper Biribi"]      = { zone = "Terokkar Forest",         x = 0.534, y = 0.426, type = "vendor" },  -- Stonebreaker Hold (Horde)
-    ["Rungor"]                = { zone = "Terokkar Forest",         x = 0.532, y = 0.424, type = "vendor" },  -- Stonebreaker Hold (Horde)
+    ["Rungor"]                = { zone = "Terokkar Forest",         x = 0.362, y = 0.418, type = "vendor" },  -- Stonebreaker Hold (Horde)
 
     -- ========== ENGINEERING ==========
     ["Viggz Shinesparked"]    = { zone = "Shattrath City",          x = 0.652, y = 0.699, type = "vendor" },  -- Lower City
@@ -142,6 +142,10 @@ local NPC_COORDS = {
 
     -- ========== SKINNING ==========
     ["Thuwd"]                 = { zone = "The Barrens",             x = 0.474, y = 0.594, type = "trainer" }, -- Camp Taurajo
+
+    -- ========== DAILY QUEST GIVERS ==========
+    ["The Rokk"]              = { zone = "Shattrath City",          x = 0.626, y = 0.681, type = "quest"  },  -- Lower City (Cooking daily)
+    ["Old Man Barlo"]         = { zone = "Terokkar Forest",         x = 0.490, y = 0.692, type = "quest"  },  -- Silmyr Lake (Fishing daily)
 
     -- ========== FISHING / FISHINGCOOKING ==========
     ["Nat Pagle"]             = { zone = "Dustwallow Marsh",        x = 0.628, y = 0.530, type = "quest"  },  -- Nat's Landing (island E of Theramore)
@@ -374,7 +378,7 @@ function MP:ShowPins(pinsList)
         local poi = pd.poi
         local label = poi.name
         if poi.pinType == "fishing" then
-            label = poi.zone .. " - Ponto de Pesca"
+            label = poi.zone .. " - " .. (ProfessionHelper.L["FISHING_SPOT_LABEL"] or "Fishing Spot")
         end
         local f = CreatePOIPin(label, poi.pinType)
         pins:AddWorldMapIconMap(POI_REF_KEY, f, pd.mapID, poi.x, poi.y, showFlag)

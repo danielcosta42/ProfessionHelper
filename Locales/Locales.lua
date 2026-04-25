@@ -23,7 +23,83 @@ Locales.ptBR = {
     ["TAB_LEVELING"] = "Leveling",
     ["TAB_SHOPPING"] = "Compras",
     ["TAB_FARMING"] = "Farm",
-    
+    ["TAB_DAILIES"] = "Diárias",
+
+    -- Daily Quests UI
+    ["DAILIES_TITLE"]        = "Quests Diárias",
+    ["DAILY_NPC_LABEL"]      = "Quest Giver:",
+    ["DAILY_REWARD_LABEL"]   = "Recompensa:",
+    ["DAILY_ITEMS_LABEL"]    = "Itens necessários:",
+    ["DAILY_STEPS_LABEL"]    = "Como fazer:",
+    ["DAILY_WHERE_LABEL"]    = "Onde:",
+    ["DAILY_MAP_BTN"]        = "Ver no Mapa",
+    ["DAILY_ROTATE_TIP"]     = "As quests rodam diariamente — só 1 quest está disponível por dia.",
+
+    -- Daily Quest Content
+    ["DAILY_NO_QUESTS"]             = "Nenhuma daily disponível.",
+    ["DAILY_COOKING_REWARD_TIP"]    = "Contém ingredientes aleatórios de culinária e chance de receitas raras.",
+    ["DAILY_FISHING_REWARD_TIP"]    = "Contém itens úteis, chance de Jewel of the Firelord e outros itens raros.",
+    -- Revenge is Served
+    ["DAILY_RVNG_SUMMARY"]  = "Colete 4 Clefthoof Meat de Dying Clefthooves em Nagrand.",
+    ["DAILY_RVNG_STEP1"]    = "Vá para Nagrand (área de Matar's Grave / sudoeste).",
+    ["DAILY_RVNG_STEP2"]    = "Mate Dying Clefthooves — lootam Clefthoof Meat.",
+    ["DAILY_RVNG_STEP3"]    = "Colete 4x Clefthoof Meat e retorne para The Rokk.",
+    ["DAILY_RVNG_MAP"]      = "Área sudoeste de Nagrand perto de Oshu'gun.",
+    -- Super Hot Stew
+    ["DAILY_SHS_SUMMARY"]   = "Colete 4 Magma Crab Meat dos caranguejos em Scalewing Shelf (Blade's Edge).",
+    ["DAILY_SHS_STEP1"]     = "Vá para Blade's Edge Mountains — Scalewing Shelf (extremo leste).",
+    ["DAILY_SHS_STEP2"]     = "Mate Scalewing Serpents ou Magma Crabs na área rochosa.",
+    ["DAILY_SHS_STEP3"]     = "Colete 4x Magma Crab Meat e retorne para The Rokk.",
+    ["DAILY_SHS_MAP"]       = "Scalewing Shelf — extremo leste de Blade's Edge Mountains.",
+    -- Soup for the Soul
+    ["DAILY_SFTS_SUMMARY"]  = "Leve 4 Mok'Nathal Shortribs + 6 Shimmer Stout para The Rokk.",
+    ["DAILY_SFTS_STEP1"]    = "Mok'Nathal Shortribs: compre com Xerintha Ravenoak (Sylvanaar, Alliance) ou Sassa Weldwell (Thunderlord, Horde).",
+    ["DAILY_SFTS_STEP2"]    = "Shimmer Stout: compre com Keegan Ironbreaker (Wildhammer) ou qualquer inn de Shattrath.",
+    ["DAILY_SFTS_STEP3"]    = "Entregue os dois para The Rokk.",
+    ["DAILY_SFTS_MAP"]      = "Compre os itens em Blade's Edge ou Shattrath antes de entregar.",
+    -- Fishy Feast
+    ["DAILY_FF_SUMMARY"]    = "Pesquê 4 peixes das Highland Mixed Schools em Terokkar Forest.",
+    ["DAILY_FF_STEP1"]      = "Vá para os lagos de Terokkar Forest — procure Highland Mixed Schools.",
+    ["DAILY_FF_STEP2"]      = "Pesque 4x peixes da escola (qualquer peixe conta).",
+    ["DAILY_FF_STEP3"]      = "Retorne para The Rokk em Shattrath.",
+    ["DAILY_FF_ITEM_NAME"]  = "Peixe (Highland Mixed School)",
+    ["DAILY_FF_MAP"]        = "Qualquer lago em Terokkar tem Highland Mixed Schools.",
+    -- Shrimpin' Ain't Easy
+    ["DAILY_SAE_SUMMARY"]   = "Pesque um Bloated Barbed Gill Trout em Terokkar Forest.",
+    ["DAILY_SAE_STEP1"]     = "Old Man Barlo te dá uma isca especial (Shiny Bauble).",
+    ["DAILY_SAE_STEP2"]     = "Pesque em qualquer rio ou lago de Terokkar Forest.",
+    ["DAILY_SAE_STEP3"]     = "Você pode pescar um Bloated Barbed Gill Trout — inspecione-o para obter o item da quest.",
+    ["DAILY_SAE_STEP4"]     = "Retorne para Old Man Barlo.",
+    ["DAILY_SAE_MAP"]       = "Pesque em qualquer água de Terokkar. Abra o peixe para obter o item da quest.",
+    -- Bait Bandits
+    ["DAILY_BB_SUMMARY"]    = "Capture um Enormous Barbed Gill Trout em Terokkar Forest.",
+    ["DAILY_BB_STEP1"]      = "Use a isca dada por Old Man Barlo.",
+    ["DAILY_BB_STEP2"]      = "Pesque nos rios ou lagos de Terokkar Forest.",
+    ["DAILY_BB_STEP3"]      = "Pode pescar um Enormous Barbed Gill Trout — contém o item da quest.",
+    ["DAILY_BB_STEP4"]      = "Retorne para Old Man Barlo.",
+    ["DAILY_BB_MAP"]        = "Pesque em qualquer água de Terokkar. Abra o peixe para obter o item.",
+    -- Rock Lobster
+    ["DAILY_RL_SUMMARY"]    = "Pesque um Crescent-Tail Skullfish em Silmyr Lake.",
+    ["DAILY_RL_STEP1"]      = "Fique em Silmyr Lake (onde está Old Man Barlo).",
+    ["DAILY_RL_STEP2"]      = "Pesque diretamente no lago — procure Mudfish Schools.",
+    ["DAILY_RL_STEP3"]      = "Capture um Crescent-Tail Skullfish.",
+    ["DAILY_RL_STEP4"]      = "Retorne para Old Man Barlo.",
+    ["DAILY_RL_MAP"]        = "Silmyr Lake — onde fica Old Man Barlo.",
+    -- Thunder Away!
+    ["DAILY_TA_SUMMARY"]    = "Pesque um Lightning Eel nos lagos de Nagrand.",
+    ["DAILY_TA_STEP1"]      = "Vá para Nagrand — qualquer lago aberto.",
+    ["DAILY_TA_STEP2"]      = "Sugestão: Skysong Lake (centro-sul) ou Sunspring Lake.",
+    ["DAILY_TA_STEP3"]      = "Pesque até capturar um Lightning Eel.",
+    ["DAILY_TA_STEP4"]      = "Retorne para Old Man Barlo em Terokkar.",
+    ["DAILY_TA_MAP"]        = "Qualquer lago aberto de Nagrand. Skysong Lake é o mais acessível.",
+    -- The One That Got Away
+    ["DAILY_TOTGA_SUMMARY"] = "Pesque um Blackfin Darter nas águas de Skettis (Terokkar).",
+    ["DAILY_TOTGA_STEP1"]   = "Vá para Skettis (sudeste de Terokkar Forest) — zona de arakkoa.",
+    ["DAILY_TOTGA_STEP2"]   = "Pesque nas águas de Skettis.",
+    ["DAILY_TOTGA_STEP3"]   = "Capture um Blackfin Darter.",
+    ["DAILY_TOTGA_STEP4"]   = "Retorne para Old Man Barlo.",
+    ["DAILY_TOTGA_MAP"]     = "Skettis fica no sudeste de Terokkar Forest (zona de arakkoa voadores).",
+
     -- Profession Status
     ["NOT_LEARNED"] = "Não aprendida",
     ["SKILL_LEVEL"] = "%d / %d",
@@ -227,6 +303,7 @@ Locales.ptBR = {
     -- Map Pins
     ["BTN_SHOW_ON_MAP"]    = "Ver no Mapa",
     ["BTN_SHOW_ON_MAP_TT"] = "Marca o NPC/local no Mapa Mundi.",
+    ["FISHING_SPOT_LABEL"]  = "Ponto de Pesca",
 
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Parar Guia ■",
@@ -256,7 +333,7 @@ Locales.ptBR = {
     ["SKINNING_SKILL_FORMULA"] = "Skill necessário = Nível do Mob × 5 (ex: mob nível 60 requer skill 300)",
     -- Skinning Leveling Guide Tips
     ["SKINNING_TIP_1_75"] = "Mate mobs de nível 1-15. Barrens (Horde) ou Westfall/Loch Modan (Alliance) são ideais para Light Leather.",
-    ["SKINNING_TIP_75_150"] = "Mate mobs de nível 15-30. Hillsbrad Foothills é excelente para Medium Leather.",
+    ["SKINNING_TIP_75_150"] = "Mate mobs de nível 15-30. Barrens Sul/Camp Taurajo (Horde) é ótimo para começar — Thuwd é um trainer estratégico. Siga para Thousand Needles. Hillsbrad Foothills e Stonetalon também são excelentes.",
     ["SKINNING_TIP_150_205"] = "Mate mobs de nível 30-40. Stranglethorn Vale é a MELHOR zona para Heavy Leather.",
     ["SKINNING_TIP_205_260"] = "Mate mobs de nível 40-52. Un'Goro Crater (dinosaurs) é incrível para Thick Leather.",
     ["SKINNING_TIP_260_300"] = "Mate mobs de nível 52-60. Winterspring é a melhor zona para Rugged Leather.",
@@ -577,6 +654,8 @@ Locales.ptBR = {
     ["SKINNING_LOC_30_TIP"] = "ÚNICA fonte de Nether Dragonscales! Requer skill 350+.",
     ["SKINNING_LOC_31_TIP"] = "ÚNICA fonte de Cobra Scales! Farme em grupo.",
     ["SKINNING_LOC_32_TIP"] = "Alternativa para farming de alto nível.",
+    ["SKINNING_LOC_33_TIP"] = "Camp Taurajo é estratégico! Thuwd (Horde trainer até 225) fica aqui. Kodos e Zhevras dão Medium Leather. Rota perfeita para a transição Barrens Sul → Thousand Needles.",
+    ["SKINNING_LOC_34_TIP"] = "Excelente transição do Barrens para Medium Leather. Gores e Cougars são fáceis. Continue subindo para Heavy Leather aqui também.",
     -- Fishing Locations
     ["FISHING_LOC_1_SPOT"] = "Qualquer corpo d'água na zona inicial",
     ["FISHING_LOC_1_TIP"] = "Não importa onde você pesca com skill baixa. Foque em ganhar skill o mais rápido possível.",
@@ -663,7 +742,83 @@ Locales.enUS = {
     ["TAB_LEVELING"] = "Leveling",
     ["TAB_SHOPPING"] = "Shopping",
     ["TAB_FARMING"] = "Farming",
-    
+    ["TAB_DAILIES"] = "Dailies",
+
+    -- Daily Quests UI
+    ["DAILIES_TITLE"]        = "Daily Quests",
+    ["DAILY_NPC_LABEL"]      = "Quest Giver:",
+    ["DAILY_REWARD_LABEL"]   = "Reward:",
+    ["DAILY_ITEMS_LABEL"]    = "Items needed:",
+    ["DAILY_STEPS_LABEL"]    = "How to:",
+    ["DAILY_WHERE_LABEL"]    = "Where:",
+    ["DAILY_MAP_BTN"]        = "Show on Map",
+    ["DAILY_ROTATE_TIP"]     = "Quests rotate daily — only 1 quest is available per day.",
+
+    -- Daily Quest Content
+    ["DAILY_NO_QUESTS"]             = "No daily quests available.",
+    ["DAILY_COOKING_REWARD_TIP"]    = "Contains random cooking ingredients and a chance at rare recipes.",
+    ["DAILY_FISHING_REWARD_TIP"]    = "Contains useful items and a chance at Jewel of the Firelord and other rare items.",
+    -- Revenge is Served
+    ["DAILY_RVNG_SUMMARY"]  = "Collect 4 Clefthoof Meat from Dying Clefthooves in Nagrand.",
+    ["DAILY_RVNG_STEP1"]    = "Go to Nagrand (Matar's Grave area / southwest).",
+    ["DAILY_RVNG_STEP2"]    = "Kill Dying Clefthooves — they drop Clefthoof Meat.",
+    ["DAILY_RVNG_STEP3"]    = "Collect 4x Clefthoof Meat and return to The Rokk.",
+    ["DAILY_RVNG_MAP"]      = "Southwest Nagrand near Oshu'gun.",
+    -- Super Hot Stew
+    ["DAILY_SHS_SUMMARY"]   = "Collect 4 Magma Crab Meat from crabs at Scalewing Shelf (Blade's Edge).",
+    ["DAILY_SHS_STEP1"]     = "Go to Blade's Edge Mountains — Scalewing Shelf (far east).",
+    ["DAILY_SHS_STEP2"]     = "Kill Scalewing Serpents or Magma Crabs in the rocky area.",
+    ["DAILY_SHS_STEP3"]     = "Collect 4x Magma Crab Meat and return to The Rokk.",
+    ["DAILY_SHS_MAP"]       = "Scalewing Shelf — far east of Blade's Edge Mountains.",
+    -- Soup for the Soul
+    ["DAILY_SFTS_SUMMARY"]  = "Bring 4 Mok'Nathal Shortribs + 6 Shimmer Stout to The Rokk.",
+    ["DAILY_SFTS_STEP1"]    = "Mok'Nathal Shortribs: buy from Xerintha Ravenoak (Sylvanaar, Alliance) or Sassa Weldwell (Thunderlord, Horde).",
+    ["DAILY_SFTS_STEP2"]    = "Shimmer Stout: buy from Keegan Ironbreaker (Wildhammer) or any Shattrath inn vendor.",
+    ["DAILY_SFTS_STEP3"]    = "Deliver both to The Rokk.",
+    ["DAILY_SFTS_MAP"]      = "Buy the items in Blade's Edge or Shattrath before delivering.",
+    -- Fishy Feast
+    ["DAILY_FF_SUMMARY"]    = "Fish 4 fish from Highland Mixed Schools in Terokkar Forest.",
+    ["DAILY_FF_STEP1"]      = "Go to Terokkar Forest lakes — look for Highland Mixed Schools.",
+    ["DAILY_FF_STEP2"]      = "Fish 4x from the school (any fish counts).",
+    ["DAILY_FF_STEP3"]      = "Return to The Rokk in Shattrath.",
+    ["DAILY_FF_ITEM_NAME"]  = "Fish (Highland Mixed School)",
+    ["DAILY_FF_MAP"]        = "Any Terokkar lake has Highland Mixed Schools.",
+    -- Shrimpin' Ain't Easy
+    ["DAILY_SAE_SUMMARY"]   = "Fish a Bloated Barbed Gill Trout in Terokkar Forest.",
+    ["DAILY_SAE_STEP1"]     = "Old Man Barlo gives you a special bait (Shiny Bauble).",
+    ["DAILY_SAE_STEP2"]     = "Fish in any river or lake in Terokkar Forest.",
+    ["DAILY_SAE_STEP3"]     = "You may fish up a Bloated Barbed Gill Trout — inspect it to get the quest item.",
+    ["DAILY_SAE_STEP4"]     = "Return to Old Man Barlo.",
+    ["DAILY_SAE_MAP"]       = "Fish in any Terokkar water. Open the fish to get the quest item.",
+    -- Bait Bandits
+    ["DAILY_BB_SUMMARY"]    = "Catch an Enormous Barbed Gill Trout in Terokkar Forest.",
+    ["DAILY_BB_STEP1"]      = "Use the bait given by Old Man Barlo.",
+    ["DAILY_BB_STEP2"]      = "Fish in rivers or lakes of Terokkar Forest.",
+    ["DAILY_BB_STEP3"]      = "You may fish up an Enormous Barbed Gill Trout — contains the quest item.",
+    ["DAILY_BB_STEP4"]      = "Return to Old Man Barlo.",
+    ["DAILY_BB_MAP"]        = "Fish in any Terokkar water. Open the fish to get the quest item.",
+    -- Rock Lobster
+    ["DAILY_RL_SUMMARY"]    = "Fish a Crescent-Tail Skullfish at Silmyr Lake.",
+    ["DAILY_RL_STEP1"]      = "Stay at Silmyr Lake (where Old Man Barlo is).",
+    ["DAILY_RL_STEP2"]      = "Fish directly in the lake — look for Mudfish Schools.",
+    ["DAILY_RL_STEP3"]      = "Catch a Crescent-Tail Skullfish.",
+    ["DAILY_RL_STEP4"]      = "Return to Old Man Barlo.",
+    ["DAILY_RL_MAP"]        = "Silmyr Lake — where Old Man Barlo is.",
+    -- Thunder Away!
+    ["DAILY_TA_SUMMARY"]    = "Fish a Lightning Eel in Nagrand lakes.",
+    ["DAILY_TA_STEP1"]      = "Go to Nagrand — any open lake.",
+    ["DAILY_TA_STEP2"]      = "Suggestion: Skysong Lake (south-center) or Sunspring Lake.",
+    ["DAILY_TA_STEP3"]      = "Fish until you catch a Lightning Eel.",
+    ["DAILY_TA_STEP4"]      = "Return to Old Man Barlo in Terokkar.",
+    ["DAILY_TA_MAP"]        = "Any open Nagrand lake. Skysong Lake is the most accessible.",
+    -- The One That Got Away
+    ["DAILY_TOTGA_SUMMARY"] = "Fish a Blackfin Darter in Skettis waters (Terokkar).",
+    ["DAILY_TOTGA_STEP1"]   = "Go to Skettis (southeast Terokkar Forest) — arakkoa zone.",
+    ["DAILY_TOTGA_STEP2"]   = "Fish in Skettis waters.",
+    ["DAILY_TOTGA_STEP3"]   = "Catch a Blackfin Darter.",
+    ["DAILY_TOTGA_STEP4"]   = "Return to Old Man Barlo.",
+    ["DAILY_TOTGA_MAP"]     = "Skettis is in southeast Terokkar Forest (flying arakkoa zone).",
+
     -- Profession Status
     ["NOT_LEARNED"] = "Not learned",
     ["SKILL_LEVEL"] = "%d / %d",
@@ -845,6 +1000,7 @@ Locales.enUS = {
     -- Map Pins
     ["BTN_SHOW_ON_MAP"]    = "Show on Map",
     ["BTN_SHOW_ON_MAP_TT"] = "Mark the NPC/location on the World Map.",
+    ["FISHING_SPOT_LABEL"]  = "Fishing Spot",
 
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Stop Guide ■",
@@ -896,7 +1052,7 @@ Locales.enUS = {
     ["SKINNING_SKILL_FORMULA"] = "Required Skill = Mob Level × 5 (e.g., level 60 mob requires skill 300)",
     -- Skinning Leveling Guide Tips
     ["SKINNING_TIP_1_75"] = "Kill mobs level 1-15. Barrens (Horde) or Westfall/Loch Modan (Alliance) are ideal for Light Leather.",
-    ["SKINNING_TIP_75_150"] = "Kill mobs level 15-30. Hillsbrad Foothills is excellent for Medium Leather.",
+    ["SKINNING_TIP_75_150"] = "Kill mobs level 15-30. South Barrens/Camp Taurajo (Horde) is great to start — Thuwd is a strategic trainer there. Follow into Thousand Needles. Hillsbrad Foothills and Stonetalon are also excellent.",
     ["SKINNING_TIP_150_205"] = "Kill mobs level 30-40. Stranglethorn Vale is the BEST zone for Heavy Leather.",
     ["SKINNING_TIP_205_260"] = "Kill mobs level 40-52. Un'Goro Crater (dinosaurs) is amazing for Thick Leather.",
     ["SKINNING_TIP_260_300"] = "Kill mobs level 52-60. Winterspring is the best zone for Rugged Leather.",
@@ -1217,6 +1373,8 @@ Locales.enUS = {
     ["SKINNING_LOC_30_TIP"] = "ONLY source of Nether Dragonscales! Requires 350+ skill.",
     ["SKINNING_LOC_31_TIP"] = "ONLY source of Cobra Scales! Farm in a group.",
     ["SKINNING_LOC_32_TIP"] = "Alternative for high-level farming.",
+    ["SKINNING_LOC_33_TIP"] = "Camp Taurajo is strategic! Thuwd (Horde trainer up to 225) is here. Kodos and Zhevras drop Medium Leather. Perfect route for the South Barrens → Thousand Needles transition.",
+    ["SKINNING_LOC_34_TIP"] = "Great transition from Barrens into Medium Leather. Gores and Cougars are easy kills. You can push into Heavy Leather here too.",
     -- Fishing Locations
     ["FISHING_LOC_1_SPOT"] = "Any body of water in the starting zone",
     ["FISHING_LOC_1_TIP"] = "It doesn't matter where you fish at low skill. Focus on leveling as fast as possible.",
@@ -1303,7 +1461,83 @@ Locales.esES = {
     ["TAB_LEVELING"] = "Subir Nivel",
     ["TAB_SHOPPING"] = "Compras",
     ["TAB_FARMING"] = "Farmeo",
-    
+    ["TAB_DAILIES"] = "Diarias",
+
+    -- Daily Quests UI
+    ["DAILIES_TITLE"]        = "Quests Diarias",
+    ["DAILY_NPC_LABEL"]      = "Quest Giver:",
+    ["DAILY_REWARD_LABEL"]   = "Recompensa:",
+    ["DAILY_ITEMS_LABEL"]    = "Objetos necesarios:",
+    ["DAILY_STEPS_LABEL"]    = "Cómo hacerlo:",
+    ["DAILY_WHERE_LABEL"]    = "Dónde:",
+    ["DAILY_MAP_BTN"]        = "Ver en el Mapa",
+    ["DAILY_ROTATE_TIP"]     = "Las quests rotan diariamente — solo 1 quest disponible por día.",
+
+    -- Daily Quest Content
+    ["DAILY_NO_QUESTS"]             = "No hay quests diarias disponibles.",
+    ["DAILY_COOKING_REWARD_TIP"]    = "Contiene ingredientes de cocina aleatorios y posibilidad de recetas raras.",
+    ["DAILY_FISHING_REWARD_TIP"]    = "Contiene objetos útiles y posibilidad de Jewel of the Firelord y otros objetos raros.",
+    -- Revenge is Served
+    ["DAILY_RVNG_SUMMARY"]  = "Recoge 4 Clefthoof Meat de los Dying Clefthooves en Nagrand.",
+    ["DAILY_RVNG_STEP1"]    = "Ve a Nagrand (zona de Matar's Grave / suroeste).",
+    ["DAILY_RVNG_STEP2"]    = "Mata Dying Clefthooves — sueltan Clefthoof Meat.",
+    ["DAILY_RVNG_STEP3"]    = "Recoge 4x Clefthoof Meat y regresa a The Rokk.",
+    ["DAILY_RVNG_MAP"]      = "Suroeste de Nagrand cerca de Oshu'gun.",
+    -- Super Hot Stew
+    ["DAILY_SHS_SUMMARY"]   = "Recoge 4 Magma Crab Meat de los cangrejos en Scalewing Shelf (Blade's Edge).",
+    ["DAILY_SHS_STEP1"]     = "Ve a Blade's Edge Mountains — Scalewing Shelf (extremo este).",
+    ["DAILY_SHS_STEP2"]     = "Mata Scalewing Serpents o Magma Crabs en la zona rocosa.",
+    ["DAILY_SHS_STEP3"]     = "Recoge 4x Magma Crab Meat y regresa a The Rokk.",
+    ["DAILY_SHS_MAP"]       = "Scalewing Shelf — extremo este de Blade's Edge Mountains.",
+    -- Soup for the Soul
+    ["DAILY_SFTS_SUMMARY"]  = "Lleva 4 Mok'Nathal Shortribs + 6 Shimmer Stout a The Rokk.",
+    ["DAILY_SFTS_STEP1"]    = "Mok'Nathal Shortribs: cómpralos a Xerintha Ravenoak (Sylvanaar, Alliance) o Sassa Weldwell (Thunderlord, Horde).",
+    ["DAILY_SFTS_STEP2"]    = "Shimmer Stout: cómpralo a Keegan Ironbreaker (Wildhammer) o cualquier posadero de Shattrath.",
+    ["DAILY_SFTS_STEP3"]    = "Entrega ambos a The Rokk.",
+    ["DAILY_SFTS_MAP"]      = "Compra los objetos en Blade's Edge o Shattrath antes de entregar.",
+    -- Fishy Feast
+    ["DAILY_FF_SUMMARY"]    = "Pesca 4 peces de las Highland Mixed Schools en Terokkar Forest.",
+    ["DAILY_FF_STEP1"]      = "Ve a los lagos de Terokkar Forest — busca Highland Mixed Schools.",
+    ["DAILY_FF_STEP2"]      = "Pesca 4x de la escuela (cualquier pez cuenta).",
+    ["DAILY_FF_STEP3"]      = "Regresa a The Rokk en Shattrath.",
+    ["DAILY_FF_ITEM_NAME"]  = "Pez (Highland Mixed School)",
+    ["DAILY_FF_MAP"]        = "Cualquier lago de Terokkar tiene Highland Mixed Schools.",
+    -- Shrimpin' Ain't Easy
+    ["DAILY_SAE_SUMMARY"]   = "Pesca un Bloated Barbed Gill Trout en Terokkar Forest.",
+    ["DAILY_SAE_STEP1"]     = "Old Man Barlo te da un cebo especial (Shiny Bauble).",
+    ["DAILY_SAE_STEP2"]     = "Pesca en cualquier río o lago de Terokkar Forest.",
+    ["DAILY_SAE_STEP3"]     = "Puedes pescar un Bloated Barbed Gill Trout — inspecciónalo para obtener el objeto de la quest.",
+    ["DAILY_SAE_STEP4"]     = "Regresa a Old Man Barlo.",
+    ["DAILY_SAE_MAP"]       = "Pesca en cualquier agua de Terokkar. Abre el pez para obtener el objeto.",
+    -- Bait Bandits
+    ["DAILY_BB_SUMMARY"]    = "Atrapa un Enormous Barbed Gill Trout en Terokkar Forest.",
+    ["DAILY_BB_STEP1"]      = "Usa el cebo dado por Old Man Barlo.",
+    ["DAILY_BB_STEP2"]      = "Pesca en ríos o lagos de Terokkar Forest.",
+    ["DAILY_BB_STEP3"]      = "Puedes pescar un Enormous Barbed Gill Trout — contiene el objeto de la quest.",
+    ["DAILY_BB_STEP4"]      = "Regresa a Old Man Barlo.",
+    ["DAILY_BB_MAP"]        = "Pesca en cualquier agua de Terokkar. Abre el pez para obtener el objeto.",
+    -- Rock Lobster
+    ["DAILY_RL_SUMMARY"]    = "Pesca un Crescent-Tail Skullfish en Silmyr Lake.",
+    ["DAILY_RL_STEP1"]      = "Quédate en Silmyr Lake (donde está Old Man Barlo).",
+    ["DAILY_RL_STEP2"]      = "Pesca directamente en el lago — busca Mudfish Schools.",
+    ["DAILY_RL_STEP3"]      = "Atrapa un Crescent-Tail Skullfish.",
+    ["DAILY_RL_STEP4"]      = "Regresa a Old Man Barlo.",
+    ["DAILY_RL_MAP"]        = "Silmyr Lake — donde está Old Man Barlo.",
+    -- Thunder Away!
+    ["DAILY_TA_SUMMARY"]    = "Pesca un Lightning Eel en los lagos de Nagrand.",
+    ["DAILY_TA_STEP1"]      = "Ve a Nagrand — cualquier lago abierto.",
+    ["DAILY_TA_STEP2"]      = "Sugerencia: Skysong Lake (centro-sur) o Sunspring Lake.",
+    ["DAILY_TA_STEP3"]      = "Pesca hasta atrapar un Lightning Eel.",
+    ["DAILY_TA_STEP4"]      = "Regresa a Old Man Barlo en Terokkar.",
+    ["DAILY_TA_MAP"]        = "Cualquier lago abierto de Nagrand. Skysong Lake es el más accesible.",
+    -- The One That Got Away
+    ["DAILY_TOTGA_SUMMARY"] = "Pesca un Blackfin Darter en las aguas de Skettis (Terokkar).",
+    ["DAILY_TOTGA_STEP1"]   = "Ve a Skettis (sureste de Terokkar Forest) — zona arakkoa.",
+    ["DAILY_TOTGA_STEP2"]   = "Pesca en las aguas de Skettis.",
+    ["DAILY_TOTGA_STEP3"]   = "Atrapa un Blackfin Darter.",
+    ["DAILY_TOTGA_STEP4"]   = "Regresa a Old Man Barlo.",
+    ["DAILY_TOTGA_MAP"]     = "Skettis está en el sureste de Terokkar Forest (zona de arakkoa voladores).",
+
     -- Profession Status
     ["NOT_LEARNED"] = "No aprendida",
     ["SKILL_LEVEL"] = "%d / %d",
@@ -1507,6 +1741,7 @@ Locales.esES = {
     -- Map Pins
     ["BTN_SHOW_ON_MAP"]    = "Ver en el Mapa",
     ["BTN_SHOW_ON_MAP_TT"] = "Marca el PNJ/ubicación en el Mapa del Mundo.",
+    ["FISHING_SPOT_LABEL"]  = "Punto de Pesca",
 
     -- Gathering Guide Buttons/UI
     ["GUIDE_STOP_BTN"] = "Detener Guía ■",
@@ -1536,7 +1771,7 @@ Locales.esES = {
     ["SKINNING_SKILL_FORMULA"] = "Habilidad requerida = Nivel del Mob × 5 (ej: mob nivel 60 requiere habilidad 300)",
     -- Skinning Leveling Guide Tips
     ["SKINNING_TIP_1_75"] = "Mata mobs de nivel 1-15. Barrens (Horda) o Westfall/Loch Modan (Alianza) son ideales para Light Leather.",
-    ["SKINNING_TIP_75_150"] = "Mata mobs de nivel 15-30. Hillsbrad Foothills es excelente para Medium Leather.",
+    ["SKINNING_TIP_75_150"] = "Mata mobs de nivel 15-30. El sur de Barrens/Camp Taurajo (Horda) es bueno para empezar — Thuwd es un entrenador estratégico. Continúa hacia Thousand Needles. Hillsbrad Foothills y Stonetalon también son excelentes.",
     ["SKINNING_TIP_150_205"] = "Mata mobs de nivel 30-40. Stranglethorn Vale es la MEJOR zona para Heavy Leather.",
     ["SKINNING_TIP_205_260"] = "Mata mobs de nivel 40-52. Un'Goro Crater (dinosaurios) es increíble para Thick Leather.",
     ["SKINNING_TIP_260_300"] = "Mata mobs de nivel 52-60. Winterspring es la mejor zona para Rugged Leather.",
@@ -1857,6 +2092,8 @@ Locales.esES = {
     ["SKINNING_LOC_30_TIP"] = "¡ÚNICA fuente de Nether Dragonscales! Requiere skill 350+.",
     ["SKINNING_LOC_31_TIP"] = "¡ÚNICA fuente de Cobra Scales! Farmea en grupo.",
     ["SKINNING_LOC_32_TIP"] = "Alternativa para farmear de alto nivel.",
+    ["SKINNING_LOC_33_TIP"] = "¡Camp Taurajo es estratégico! Thuwd (entrenador Horda hasta 225) está aquí. Kodos y Zhevras dan Medium Leather. Ruta perfecta para la transición Barrens Sur → Thousand Needles.",
+    ["SKINNING_LOC_34_TIP"] = "Excelente transición de Barrens a Medium Leather. Gores y Cougars son fáciles. También puedes subir hasta Heavy Leather aquí.",
     -- Fishing Locations
     ["FISHING_LOC_1_SPOT"] = "Cualquier masa de agua en la zona inicial",
     ["FISHING_LOC_1_TIP"] = "No importa dónde pesques con skill baja. Concéntrate en subir de skill lo más rápido posible.",

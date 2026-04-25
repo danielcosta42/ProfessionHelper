@@ -70,7 +70,7 @@ ProfessionHelper.Skinning = {
                 {
                     zone = "The Barrens",
                     faction = "Horde",
-                    route = "Large area around Crossroads. Focus on Zhevras and Raptors.",
+                    route = "Large area around Crossroads (North). Focus on Zhevras, Raptors and Lions north/central of the zone.",
                     mobs = "Zhevras, Raptors, Lions, Hyenas",
                     tips = ProfessionHelper.L["SKINNING_LOC_3_TIP"],
                     levelRange = "10-25",
@@ -99,6 +99,22 @@ ProfessionHelper.Skinning = {
             skillRange = {75, 110},
             leather = "Medium Leather, Medium Hide",
             locations = {
+                {
+                    zone = "The Barrens",
+                    faction = "Horde",
+                    route = "South Barrens: Kill Kodos, Zhevras, and Prairie Lions south of Camp Taurajo. Trainer Thuwd is at Camp Taurajo \226\128\148 train here (up to skill 225) before heading into Thousand Needles!",
+                    mobs = "Kodos, Zhevras, Prairie Lions, Hyenas",
+                    tips = ProfessionHelper.L["SKINNING_LOC_33_TIP"],
+                    levelRange = "22-32",
+                },
+                {
+                    zone = "Thousand Needles",
+                    faction = "Both",
+                    route = "Natural continuation from South Barrens. Kill Salt Flats Vultures, Cougars, and Kodos in the canyon plateau. Great Medium Leather with lower competition than Alliance zones.",
+                    mobs = "Salt Flats Vultures, Cougars, Kodos, Prairie Stalkers",
+                    tips = ProfessionHelper.L["SKINNING_LOC_34_TIP"],
+                    levelRange = "25-35",
+                },
                 {
                     zone = "Stonetalon Mountains",
                     faction = "Both",

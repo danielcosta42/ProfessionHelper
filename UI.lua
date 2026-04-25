@@ -387,8 +387,11 @@ function PH:CreateMainWindow()
 
     local tabSteps    = MakeTab(tabBar, PH.L["TAB_LEVELING"],  "steps",    nil, 0)
     local tabShopping = MakeTab(tabBar, PH.L["TAB_SHOPPING"],   "shopping", tabSteps)
+    local tabDailies  = MakeTab(tabBar, PH.L["TAB_DAILIES"],    "dailies",  tabShopping)
     frame.tabSteps    = tabSteps
     frame.tabShopping = tabShopping
+    frame.tabDailies  = tabDailies
+    tabDailies:Hide()
 
     -- Scroll area
     local scrollFrame, scrollChild = CreateScrollFrame(contentArea, "PHContentScroll")
@@ -620,8 +623,9 @@ function PH:UpdateTabVisuals()
     if not frame then return end
     local active = self.craftingTab or "steps"
 
-    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping }) do
-        if tab.tabKey == active then
+    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping, frame.tabDailies }) do
+        if not tab:IsShown() then -- skip hidden tabs (e.g. Dailies on non-daily professions)
+        elseif tab.tabKey == active then
             MakeFlat(tab, { T.accent[1], T.accent[2], T.accent[3], 0.18 }, { T.accent[1], T.accent[2], T.accent[3], 0.5 })
             tab.label:SetText(hexc(T.accent) .. tab.rawText .. "|r")
         else
@@ -660,9 +664,16 @@ function PH:UpdateContentPanel()
 
     local isCrafting = (profData.type ~= "gathering")
     local isCombo = (profData.type == "combo")
+    local hasDailies = (profData.name == "Cooking" or profData.name == "Fishing" or profData.name == "Fishing & Cooking")
     if isCrafting then
         frame.tabBar:Show()
         frame.contentScroll:SetPoint("TOPLEFT", 8, -(T.tabH + 12))
+        if hasDailies then
+            frame.tabDailies:Show()
+        else
+            frame.tabDailies:Hide()
+            if self.craftingTab == "dailies" then self.craftingTab = "steps" end
+        end
         self:UpdateTabVisuals()
     else
         frame.tabBar:Hide()
@@ -767,6 +778,8 @@ function PH:UpdateContentPanel()
     -- Dispatch
     if profData.type == "gathering" then
         y = self:CreateGatheringContent(scrollChild, profData, currentSkill, y)
+    elseif self.craftingTab == "dailies" then
+        y = self:CreateDailiesContent(scrollChild, profData, y)
     elseif isCombo then
         -- Combo uses crafting content with combo skill awareness
         local minSkill = 0
@@ -1696,6 +1709,205 @@ function PH:RenderGoldFarmingGuide(parent, yOffset, profName, comboSkills)
             y = y - 4
         end -- if data
     end -- profNames
+
+    return y
+end
+
+-------------------------------------------------------------------------------
+-- Dailies content (Cooking + Fishing daily quests)
+-------------------------------------------------------------------------------
+function PH:CreateDailiesContent(parent, profData, yOffset)
+    local y = yOffset
+
+    -- Determine which daily sets to show
+    local sets = {}
+    if profData.name == "Cooking" or profData.name == "Fishing & Cooking" then
+        if PH.Dailies and PH.Dailies.Cooking then
+            table.insert(sets, PH.Dailies.Cooking)
+        end
+    end
+    if profData.name == "Fishing" or profData.name == "Fishing & Cooking" then
+        if PH.Dailies and PH.Dailies.Fishing then
+            table.insert(sets, PH.Dailies.Fishing)
+        end
+    end
+
+    if #sets == 0 then
+        local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        msg:SetPoint("TOP", 0, y - 20)
+        msg:SetJustifyH("CENTER")
+        msg:SetText(hexc(T.textMuted) .. PH.L["DAILY_NO_QUESTS"] .. "|r")
+        return y - 60
+    end
+
+    local MP = PH.MapPins
+
+    for _, dailySet in ipairs(sets) do
+        -- ---- Quest giver header card ----
+        local npcCard = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        npcCard:SetPoint("TOPLEFT", 0, y)
+        npcCard:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+        npcCard:SetHeight(52)
+        MakePanel(npcCard, { 0.12, 0.10, 0.06, 0.95 })
+
+        local npcName = npcCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        npcName:SetPoint("LEFT", 12, 6)
+        npcName:SetText(hexc(T.gold) .. dailySet.npc .. "|r")
+
+        local npcLoc = npcCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        npcLoc:SetPoint("LEFT", 12, -10)
+        npcLoc:SetText(hexc(T.textSecondary) .. dailySet.npcZone .. " - " .. dailySet.npcLocation .. "|r")
+
+        -- "Ver no Mapa" button for quest giver
+        if MP and MP.HasPinsForSource and MP:HasPinsForSource("Quest: " .. dailySet.npc) then
+            local mapBtn = PillButton(npcCard, 88, 20, PH.L["BTN_SHOW_ON_MAP"], T.accent)
+            mapBtn:SetPoint("RIGHT", -8, 0)
+            mapBtn:SetScript("OnClick", function()
+                MP:ShowSourcePins("Quest: " .. dailySet.npc)
+            end)
+            mapBtn:SetScript("OnEnter", function(self)
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:AddLine(PH.L["BTN_SHOW_ON_MAP_TT"])
+                GameTooltip:Show()
+            end)
+            mapBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+        end
+
+        -- Reward line
+        local rewardLbl = npcCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        rewardLbl:SetPoint("BOTTOMLEFT", 10, 6)
+        rewardLbl:SetPoint("RIGHT", npcCard, "RIGHT", -10, 0)
+        rewardLbl:SetJustifyH("LEFT")
+        rewardLbl:SetText(hexc(T.textSecondary) .. PH.L["DAILY_REWARD_LABEL"] .. "|r " .. hexc(T.green) .. dailySet.reward .. "|r")
+        if dailySet.rewardTip then
+            rewardLbl:SetScript("OnEnter", function(self)
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip:AddLine(dailySet.rewardTip, 1, 1, 1, true)
+                GameTooltip:Show()
+            end)
+            rewardLbl:SetScript("OnLeave", function() GameTooltip:Hide() end)
+        end
+
+        y = y - 60
+
+        -- Rotate tip
+        local tipLbl = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        tipLbl:SetPoint("TOPLEFT", 4, y)
+        tipLbl:SetPoint("RIGHT", parent, "RIGHT", -4, 0)
+        tipLbl:SetJustifyH("LEFT")
+        tipLbl:SetText(hexc(T.gold) .. "[!] |r" .. hexc(T.textSecondary) .. PH.L["DAILY_ROTATE_TIP"] .. "|r")
+        y = y - 20
+
+        -- ---- Quest cards ----
+        for _, quest in ipairs(dailySet.quests) do
+            local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+            card:SetPoint("TOPLEFT", 0, y)
+            card:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+            MakePanel(card, T.bgCard)
+
+            local cy = -10
+
+            -- Quest name
+            local qName = card:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            qName:SetPoint("TOPLEFT", 12, cy)
+            qName:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+            qName:SetJustifyH("LEFT")
+            qName:SetText(hexc(T.white) .. quest.name .. "|r")
+            cy = cy - 18
+
+            -- Summary
+            local qSum = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            qSum:SetPoint("TOPLEFT", 12, cy)
+            qSum:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+            qSum:SetJustifyH("LEFT")
+            qSum:SetText(hexc(T.textSecondary) .. quest.summary .. "|r")
+            local sumH = qSum:GetStringHeight() or 13
+            cy = cy - math.max(20, sumH + 4)
+
+            -- Items needed
+            if quest.items and #quest.items > 0 then
+                local iLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                iLabel:SetPoint("TOPLEFT", 12, cy)
+                iLabel:SetText(hexc(T.accent) .. PH.L["DAILY_ITEMS_LABEL"] .. "|r")
+                cy = cy - 16
+
+                for _, item in ipairs(quest.items) do
+                    local iRow = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                    iRow:SetPoint("TOPLEFT", 20, cy)
+                    iRow:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+                    iRow:SetJustifyH("LEFT")
+                    iRow:SetText(hexc(T.gold) .. "• " .. hexc(T.white) .. item.count .. "x " .. item.name .. "|r")
+                    local rh = iRow:GetStringHeight() or 13
+                    cy = cy - math.max(16, rh + 2)
+                end
+            end
+
+            -- Steps
+            if quest.steps and #quest.steps > 0 then
+                local stLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                stLabel:SetPoint("TOPLEFT", 12, cy)
+                stLabel:SetText(hexc(T.accent) .. PH.L["DAILY_STEPS_LABEL"] .. "|r")
+                cy = cy - 16
+
+                for si, step in ipairs(quest.steps) do
+                    local sRow = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                    sRow:SetPoint("TOPLEFT", 20, cy)
+                    sRow:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+                    sRow:SetJustifyH("LEFT")
+                    sRow:SetText(hexc(T.textMuted) .. si .. ". |r" .. hexc(T.textSecondary) .. step.text .. "|r")
+                    local sh = sRow:GetStringHeight() or 13
+                    cy = cy - math.max(16, sh + 4)
+                end
+            end
+
+            -- Where label + map button row
+            if quest.zone then
+                cy = cy - 4
+                local sep = card:CreateTexture(nil, "ARTWORK")
+                sep:SetPoint("TOPLEFT", 12, cy)
+                sep:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+                sep:SetHeight(1)
+                sep:SetColorTexture(rgba(T.border))
+                cy = cy - 8
+
+                local whereLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                whereLabel:SetPoint("TOPLEFT", 12, cy)
+                whereLabel:SetPoint("RIGHT", card, "RIGHT", -100, 0)
+                whereLabel:SetJustifyH("LEFT")
+                local mapTipText = quest.mapTip or quest.zone
+                whereLabel:SetText(hexc(T.accent) .. PH.L["DAILY_WHERE_LABEL"] .. "|r " .. hexc(T.textSecondary) .. mapTipText .. "|r")
+
+                -- Map button for quest location
+                if MP and quest.zone and quest.coords then
+                    local locMapBtn = PillButton(card, 88, 20, PH.L["BTN_SHOW_ON_MAP"], T.accent)
+                    locMapBtn:SetPoint("TOPRIGHT", card, "TOPRIGHT", -8, cy + 3)
+                    locMapBtn:SetScript("OnClick", function()
+                        MP:ShowPins({ {
+                            name    = quest.name,
+                            zone    = quest.zone,
+                            x       = quest.coords.x,
+                            y       = quest.coords.y,
+                            pinType = "quest",
+                        } })
+                    end)
+                    locMapBtn:SetScript("OnEnter", function(self)
+                        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                        GameTooltip:AddLine(PH.L["BTN_SHOW_ON_MAP_TT"])
+                        GameTooltip:Show()
+                    end)
+                    locMapBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+                end
+
+                cy = cy - 20
+            end
+
+            cy = cy - 8
+            card:SetHeight(math.abs(cy) + 4)
+            y = y - card:GetHeight() - 6
+        end
+
+        y = y - 12  -- spacing between sets (for combo)
+    end
 
     return y
 end

@@ -33,6 +33,7 @@ Data\GoldFarming.lua
 Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
+Data\Dailies.lua
 TSMIntegration.lua
 BagScanner.lua
 RecipeTracker.lua
