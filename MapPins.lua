@@ -64,87 +64,90 @@ end
 -------------------------------------------------------------------------------
 local NPC_COORDS = {
     -- ========== COOKING ==========
-    ["Andrew Hilbert"]        = { zone = "Silverpine Forest",       x = 0.47, y = 0.67, type = "vendor" },
-    ["Drac Roughcut"]         = { zone = "Loch Modan",              x = 0.35, y = 0.51, type = "vendor" },
-    ["Kendor Kabonka"]        = { zone = "Stormwind City",          x = 0.53, y = 0.71, type = "vendor" },
-    ["Keena"]                 = { zone = "Arathi Highlands",        x = 0.46, y = 0.46, type = "vendor" },
-    ["Hammon Karwn"]          = { zone = "Stranglethorn Vale",      x = 0.33, y = 0.33, type = "vendor" },
-    ["Himmik"]                = { zone = "Winterspring",            x = 0.60, y = 0.50, type = "vendor" },
-    ["Bale"]                  = { zone = "Felwood",                 x = 0.45, y = 0.17, type = "vendor" },
-    ["Malygen"]               = { zone = "Felwood",                 x = 0.45, y = 0.17, type = "vendor" },
-    ["Gikkix"]                = { zone = "Tanaris",                 x = 0.65, y = 0.24, type = "vendor" },
-    ["Cookie One-Eye"]        = { zone = "Hellfire Peninsula",      x = 0.55, y = 0.36, type = "vendor" },
-    ["Sid Limbardi"]          = { zone = "Hellfire Peninsula",      x = 0.55, y = 0.64, type = "vendor" },
-    ["Nula the Butcher"]      = { zone = "Nagrand",                 x = 0.52, y = 0.42, type = "vendor" },
-    ["Uriku"]                 = { zone = "Nagrand",                 x = 0.52, y = 0.44, type = "vendor" },
-    ["Innkeeper Grilka"]      = { zone = "Nagrand",                 x = 0.52, y = 0.42, type = "vendor" },
-    ["Supply Officer Mills"]  = { zone = "Terokkar Forest",         x = 0.55, y = 0.63, type = "vendor" },
-    ["Xerintha Ravenoak"]     = { zone = "Blade's Edge Mountains",  x = 0.43, y = 0.23, type = "vendor" },
-    ["Sassa Weldwell"]        = { zone = "Blade's Edge Mountains",  x = 0.58, y = 0.44, type = "vendor" },
-    ["Sheendra Tallgrass"]    = { zone = "Feralas",                 x = 0.77, y = 0.46, type = "vendor" },
-    ["Vivianna"]              = { zone = "Feralas",                 x = 0.32, y = 0.43, type = "vendor" },
-    ["Kelsey Yance"]          = { zone = "Stranglethorn Vale",      x = 0.27, y = 0.77, type = "vendor" },
-    ["Calandrath"]            = { zone = "Silithus",                x = 0.49, y = 0.46, type = "quest"  },
-    ["Desert Recipe"]         = { zone = "Silithus",                x = 0.49, y = 0.46, type = "quest"  },
-    ["Zurai"]                 = { zone = "Zangarmarsh",             x = 0.38, y = 0.58, type = "vendor" },
-    ["Doba"]                  = { zone = "Zangarmarsh",             x = 0.68, y = 0.51, type = "vendor" },
-    ["Juno Dufrain"]          = { zone = "Zangarmarsh",             x = 0.51, y = 0.50, type = "vendor" },
-    ["Innkeeper Biribi"]      = { zone = "Terokkar Forest",         x = 0.55, y = 0.63, type = "vendor" },
-    ["Rungor"]                = { zone = "Terokkar Forest",         x = 0.51, y = 0.41, type = "vendor" },
+    ["Andrew Hilbert"]        = { zone = "Silverpine Forest",       x = 0.459, y = 0.670, type = "vendor" },  -- The Sepulcher
+    ["Drac Roughcut"]         = { zone = "Loch Modan",              x = 0.326, y = 0.408, type = "vendor" },  -- Thelsamar inn
+    ["Kendor Kabonka"]        = { zone = "Stormwind City",          x = 0.632, y = 0.260, type = "vendor" },  -- Stonefire Tavern, Dwarven District
+    ["Keena"]                 = { zone = "Arathi Highlands",        x = 0.744, y = 0.415, type = "vendor" },  -- Hammerfall (Horde)
+    ["Hammon Karwn"]          = { zone = "Stranglethorn Vale",      x = 0.420, y = 0.142, type = "vendor" },  -- Nesingwary's Expedition
+    ["Himmik"]                = { zone = "Winterspring",            x = 0.602, y = 0.358, type = "vendor" },  -- Everlook
+    ["Bale"]                  = { zone = "Felwood",                 x = 0.428, y = 0.566, type = "vendor" },  -- Bloodvenom Post (Horde)
+    ["Malygen"]               = { zone = "Felwood",                 x = 0.518, y = 0.724, type = "vendor" },  -- Talonbranch Glade (Alliance)
+    ["Gikkix"]                = { zone = "Tanaris",                 x = 0.674, y = 0.224, type = "vendor" },  -- Steamwheedle Port
+    ["Cookie One-Eye"]        = { zone = "Hellfire Peninsula",      x = 0.552, y = 0.354, type = "vendor" },  -- Thrallmar (Horde)
+    ["Sid Limbardi"]          = { zone = "Hellfire Peninsula",      x = 0.540, y = 0.638, type = "vendor" },  -- Honor Hold (Alliance)
+    ["Nula the Butcher"]      = { zone = "Nagrand",                 x = 0.580, y = 0.357, type = "vendor" },  -- Garadar (Horde)
+    ["Uriku"]                 = { zone = "Nagrand",                 x = 0.566, y = 0.422, type = "vendor" },  -- Garadar area
+    ["Innkeeper Grilka"]      = { zone = "Nagrand",                 x = 0.564, y = 0.420, type = "vendor" },  -- Garadar inn (Horde)
+    ["Supply Officer Mills"]  = { zone = "Terokkar Forest",         x = 0.544, y = 0.554, type = "vendor" },  -- Allerian Stronghold (Alliance)
+    ["Xerintha Ravenoak"]     = { zone = "Blade's Edge Mountains",  x = 0.418, y = 0.670, type = "vendor" },  -- Sylvanaar (Alliance)
+    ["Sassa Weldwell"]        = { zone = "Blade's Edge Mountains",  x = 0.500, y = 0.584, type = "vendor" },  -- Thunderlord Stronghold (Horde)
+    ["Sheendra Tallgrass"]    = { zone = "Feralas",                 x = 0.762, y = 0.446, type = "vendor" },  -- Camp Mojache (Horde)
+    ["Vivianna"]              = { zone = "Feralas",                 x = 0.310, y = 0.440, type = "vendor" },  -- Feathermoon Stronghold (Alliance)
+    ["Kelsey Yance"]          = { zone = "Stranglethorn Vale",      x = 0.272, y = 0.774, type = "vendor" },  -- Booty Bay
+    ["Calandrath"]            = { zone = "Silithus",                x = 0.522, y = 0.362, type = "quest"  },  -- Cenarion Hold
+    ["Desert Recipe"]         = { zone = "Silithus",                x = 0.522, y = 0.362, type = "quest"  },  -- Cenarion Hold
+    ["Zurai"]                 = { zone = "Zangarmarsh",             x = 0.802, y = 0.660, type = "vendor" },  -- Swamprat Post (Horde, NE)
+    ["Doba"]                  = { zone = "Zangarmarsh",             x = 0.800, y = 0.658, type = "vendor" },  -- Swamprat Post (Horde, NE)
+    ["Juno Dufrain"]          = { zone = "Zangarmarsh",             x = 0.786, y = 0.638, type = "vendor" },  -- Cenarion Refuge (neutral, E)
+    ["Innkeeper Biribi"]      = { zone = "Terokkar Forest",         x = 0.534, y = 0.426, type = "vendor" },  -- Stonebreaker Hold (Horde)
+    ["Rungor"]                = { zone = "Terokkar Forest",         x = 0.532, y = 0.424, type = "vendor" },  -- Stonebreaker Hold (Horde)
 
     -- ========== ENGINEERING ==========
-    ["Viggz Shinesparked"]    = { zone = "Shattrath City",          x = 0.35, y = 0.67, type = "vendor" },
-    ["Xizzer Fizzbolt"]       = { zone = "Winterspring",            x = 0.60, y = 0.50, type = "vendor" },
-    ["Wind Trader Lathrai"]   = { zone = "Shattrath City",          x = 0.50, y = 0.40, type = "vendor" },
-    ["Feera"]                 = { zone = "Exodar",                  x = 0.34, y = 0.58, type = "vendor" },
-    ["Yatheon"]               = { zone = "Silvermoon City",         x = 0.69, y = 0.23, type = "vendor" },
-    ["Lebowski"]              = { zone = "Hellfire Peninsula",       x = 0.55, y = 0.64, type = "vendor" },
-    ["Captured Gnome"]        = { zone = "Zangarmarsh",             x = 0.38, y = 0.58, type = "vendor" },
-    ["Crazk Sparks"]          = { zone = "Stranglethorn Vale",      x = 0.27, y = 0.77, type = "vendor" },
+    ["Viggz Shinesparked"]    = { zone = "Shattrath City",          x = 0.652, y = 0.699, type = "vendor" },  -- Lower City
+    ["Xizzer Fizzbolt"]       = { zone = "Winterspring",            x = 0.592, y = 0.350, type = "vendor" },  -- Everlook
+    ["Wind Trader Lathrai"]   = { zone = "Shattrath City",          x = 0.720, y = 0.310, type = "vendor" },  -- Lower City (near World's End Tavern)
+    ["Feera"]                 = { zone = "Exodar",                  x = 0.542, y = 0.446, type = "vendor" },  -- Traders' Tier
+    ["Yatheon"]               = { zone = "Silvermoon City",         x = 0.710, y = 0.246, type = "vendor" },  -- Royal Exchange
+    ["Lebowski"]              = { zone = "Hellfire Peninsula",      x = 0.544, y = 0.640, type = "vendor" },  -- Honor Hold (Alliance)
+    ["Captured Gnome"]        = { zone = "Zangarmarsh",             x = 0.196, y = 0.546, type = "vendor" },  -- Sporeggar area (SW)
+    ["Crazk Sparks"]          = { zone = "Stranglethorn Vale",      x = 0.274, y = 0.774, type = "vendor" },  -- Booty Bay
 
     -- ========== ALCHEMY ==========
-    ["Haalrun"]               = { zone = "Zangarmarsh",             x = 0.68, y = 0.51, type = "vendor" },
-    ["Daga Ramba"]            = { zone = "Blade's Edge Mountains",  x = 0.50, y = 0.58, type = "vendor" },
-    ["Leeli Longhaggle"]      = { zone = "Terokkar Forest",         x = 0.55, y = 0.63, type = "vendor" },
-    ["Nakodu"]                = { zone = "Shattrath City",          x = 0.35, y = 0.67, type = "vendor" },
-    ["Halaa Research Token"]  = { zone = "Nagrand",                 x = 0.40, y = 0.59, type = "vendor" },
+    ["Haalrun"]               = { zone = "Zangarmarsh",             x = 0.676, y = 0.508, type = "vendor" },  -- Telredor (Alliance)
+    ["Daga Ramba"]            = { zone = "Blade's Edge Mountains",  x = 0.500, y = 0.582, type = "vendor" },  -- Thunderlord Stronghold (Horde)
+    ["Leeli Longhaggle"]      = { zone = "Terokkar Forest",         x = 0.546, y = 0.552, type = "vendor" },  -- Allerian Stronghold (Alliance)
+    ["Nakodu"]                = { zone = "Shattrath City",          x = 0.620, y = 0.688, type = "vendor" },  -- Lower City
+    ["Halaa Research Token"]  = { zone = "Nagrand",                 x = 0.408, y = 0.478, type = "vendor" },  -- Halaa (center Nagrand)
 
     -- ========== BLACKSMITHING ==========
-    ["Fedryen Swiftspear"]    = { zone = "Zangarmarsh",             x = 0.51, y = 0.50, type = "vendor" },
-    ["Derotain Mudsipper"]    = { zone = "Tanaris",                 x = 0.52, y = 0.27, type = "quest"  },
+    ["Fedryen Swiftspear"]    = { zone = "Zangarmarsh",             x = 0.790, y = 0.640, type = "vendor" },  -- Cenarion Refuge (E)
+    ["Derotain Mudsipper"]    = { zone = "Tanaris",                 x = 0.516, y = 0.280, type = "quest"  },  -- Gadgetzan
 
     -- ========== FIRST AID ==========
-    ["Deneb Walker"]          = { zone = "Arathi Highlands",        x = 0.48, y = 0.46, type = "vendor" },
-    ["Balai Lok'Wein"]        = { zone = "Dustwallow Marsh",        x = 0.44, y = 0.56, type = "vendor" },
-    ["Burko"]                 = { zone = "Hellfire Peninsula",       x = 0.35, y = 0.50, type = "vendor" },
-    ["Aresella"]              = { zone = "Hellfire Peninsula",       x = 0.39, y = 0.68, type = "vendor" },
+    ["Deneb Walker"]          = { zone = "Arathi Highlands",        x = 0.374, y = 0.462, type = "vendor" },  -- Refuge Pointe (Alliance)
+    ["Balai Lok'Wein"]        = { zone = "Dustwallow Marsh",        x = 0.296, y = 0.322, type = "vendor" },  -- Brackenwall Village (Horde)
+    ["Burko"]                 = { zone = "Hellfire Peninsula",      x = 0.550, y = 0.356, type = "vendor" },  -- Thrallmar (Horde)
+    ["Aresella"]              = { zone = "Hellfire Peninsula",      x = 0.538, y = 0.650, type = "vendor" },  -- Honor Hold (Alliance)
 
     -- ========== ENCHANTING ==========
-    ["Dalria"]                = { zone = "Ashenvale",               x = 0.32, y = 0.65, type = "vendor" },
-    ["Daniel Bartlett"]       = { zone = "Undercity",               x = 0.56, y = 0.30, type = "vendor" },
-    ["Madame Ruby"]           = { zone = "Shattrath City",          x = 0.29, y = 0.44, type = "vendor" },
-    ["Rina Dulmare"]          = { zone = "Shattrath City",          x = 0.72, y = 0.44, type = "vendor" },
+    ["Dalria"]                = { zone = "Ashenvale",               x = 0.352, y = 0.486, type = "vendor" },  -- Astranaar (Alliance)
+    ["Daniel Bartlett"]       = { zone = "Undercity",               x = 0.626, y = 0.372, type = "vendor" },  -- Magic Quarter
+    ["Madame Ruby"]           = { zone = "Shattrath City",          x = 0.648, y = 0.700, type = "vendor" },  -- Lower City
+    ["Rina Dulmare"]          = { zone = "Shattrath City",          x = 0.372, y = 0.268, type = "vendor" },  -- Aldor Rise
 
     -- ========== JEWELCRAFTING ==========
-    ["Jandia"]                = { zone = "Thousand Needles",        x = 0.52, y = 0.42, type = "vendor" },
-    ["Neal Allen"]            = { zone = "Wetlands",                x = 0.19, y = 0.56, type = "vendor" },
-    ["Kireena"]               = { zone = "Desolace",                x = 0.58, y = 0.69, type = "vendor" },
-    ["Micha Yance"]           = { zone = "Hillsbrad Foothills",     x = 0.46, y = 0.47, type = "vendor" },
-    ["Karaaz"]                = { zone = "Netherstorm",             x = 0.71, y = 0.44, type = "vendor" },
+    ["Jandia"]                = { zone = "Thousand Needles",        x = 0.414, y = 0.248, type = "vendor" },  -- Freewind Post (Horde mesa, NW)
+    ["Neal Allen"]            = { zone = "Wetlands",                x = 0.086, y = 0.586, type = "vendor" },  -- Menethil Harbor
+    ["Kireena"]               = { zone = "Desolace",                x = 0.212, y = 0.744, type = "vendor" },  -- Shadowprey Village (Horde, SW coast)
+    ["Micha Yance"]           = { zone = "Hillsbrad Foothills",     x = 0.520, y = 0.586, type = "vendor" },  -- Southshore
+    ["Karaaz"]                = { zone = "Netherstorm",             x = 0.324, y = 0.674, type = "vendor" },  -- Area 52 (SW Netherstorm)
 
     -- ========== LEATHERWORKING ==========
-    ["Cro Threadstrong"]      = { zone = "Shattrath City",          x = 0.46, y = 0.35, type = "vendor" },
-    ["Almaador"]              = { zone = "Shattrath City",          x = 0.47, y = 0.45, type = "vendor" },
+    ["Cro Threadstrong"]      = { zone = "Shattrath City",          x = 0.632, y = 0.710, type = "vendor" },  -- Lower City
+    ["Almaador"]              = { zone = "Shattrath City",          x = 0.546, y = 0.378, type = "vendor" },  -- Terrace of Light (Sha'tar)
 
     -- ========== TAILORING ==========
-    ["Eiin"]                  = { zone = "Shattrath City",          x = 0.36, y = 0.67, type = "vendor" },
-    ["Arrond"]                = { zone = "Shadowmoon Valley",       x = 0.33, y = 0.33, type = "vendor" },
+    ["Eiin"]                  = { zone = "Shattrath City",          x = 0.650, y = 0.680, type = "vendor" },  -- Lower City
+    ["Arrond"]                = { zone = "Shadowmoon Valley",       x = 0.336, y = 0.306, type = "vendor" },  -- Shadowmoon Village (Horde)
+
+    -- ========== SKINNING ==========
+    ["Thuwd"]                 = { zone = "The Barrens",             x = 0.474, y = 0.594, type = "trainer" }, -- Camp Taurajo
 
     -- ========== FISHING / FISHINGCOOKING ==========
-    ["Nat Pagle"]             = { zone = "Dustwallow Marsh",        x = 0.55, y = 0.28, type = "quest"  },
-    ["Old Man Heming"]        = { zone = "Stranglethorn Vale",      x = 0.27, y = 0.77, type = "quest"  },
-    ["Dirge Quikcleave"]      = { zone = "Tanaris",                 x = 0.52, y = 0.27, type = "quest"  },
-    ["Clamlette Surprise"]    = { zone = "Tanaris",                 x = 0.52, y = 0.27, type = "quest"  },
+    ["Nat Pagle"]             = { zone = "Dustwallow Marsh",        x = 0.628, y = 0.530, type = "quest"  },  -- Nat's Landing (island E of Theramore)
+    ["Old Man Heming"]        = { zone = "Stranglethorn Vale",      x = 0.270, y = 0.772, type = "quest"  },  -- Booty Bay docks
+    ["Dirge Quikcleave"]      = { zone = "Tanaris",                 x = 0.514, y = 0.282, type = "quest"  },  -- Gadgetzan
+    ["Clamlette Surprise"]    = { zone = "Tanaris",                 x = 0.514, y = 0.282, type = "quest"  },  -- Gadgetzan
 }
 
 -------------------------------------------------------------------------------

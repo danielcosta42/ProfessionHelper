@@ -15,6 +15,7 @@ ProfessionHelper.Skinning = {
             "Yonn Deepcut (Orgrimmar)",
             "Rand Rhoads (Undercity)",
             "Mooranta (Thunder Bluff)",
+            "Thuwd (Camp Taurajo - The Barrens)",
             "Seymour (Shattrath)",
         },
     },
