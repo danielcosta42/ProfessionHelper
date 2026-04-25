@@ -78,14 +78,14 @@ ProfessionHelper.FirstAid = {
             recipe = "Heavy Silk Bandage",
             count = 50,
             materials = { { name = "Silk Cloth", count = 100 } },
-            source = "Manual: Heavy Silk Bandage (mesmo vendor do Expert book)",
+            source = "Manual: Heavy Silk Bandage — sold by Deneb Walker (Arathi Highlands, Alliance) / Balai Lok'Wein (Dustwallow Marsh, Horde)",
         },
         {
             range = {210, 225},
             recipe = "Mageweave Bandage",
             count = 30,
             materials = { { name = "Mageweave Cloth", count = 30 } },
-            source = "Manual: Mageweave Bandage (mesmo vendor do Expert book)",
+            source = "Manual: Mageweave Bandage — sold by Deneb Walker (Arathi Highlands, Alliance) / Balai Lok'Wein (Dustwallow Marsh, Horde)",
         },
         -- ==================== ARTISAN (225-300) ====================
         {
@@ -101,7 +101,7 @@ ProfessionHelper.FirstAid = {
             recipe = "Heavy Mageweave Bandage",
             count = 30,
             materials = { { name = "Mageweave Cloth", count = 60 } },
-            source = "Trainer — requer Triage quest completa",
+            source = "Manual: Heavy Mageweave Bandage — sold by Doctor Gustaf VanHowzen (Theramore, Alliance) / Doctor Gregory Victor (Hammerfall, Horde) after Triage quest",
         },
         {
             range = {260, 290},

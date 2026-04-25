@@ -12,7 +12,8 @@ ProfessionHelper.Enchanting = {
         },
         ["Horde"] = {
             "Malcomb Wynn (Undercity)",
-            "Voodoo Troll (Orgrimmar)",
+            "Godan (Orgrimmar, Valley of Honor)",
+            "Mot Dawnstrider (Thunder Bluff)",
             "Johan Barnes (Shattrath, Lower City)",
         },
     },

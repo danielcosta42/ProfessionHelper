@@ -216,6 +216,13 @@ ProfessionHelper.Herbalism = {
                     levelRange = "40-50",
                 },
                 {
+                    zone = "Alterac Mountains",
+                    faction = "Both",
+                    route = "Circle the ruins of Alterac City and Strahnbrad through the mountains. Best zone for Fadeleaf — extremely dense nodes.",
+                    tips = ProfessionHelper.L["HERBALISM_LOC_38_TIP"],
+                    levelRange = "35-45",
+                },
+                {
                     zone = "Feralas",
                     faction = "Both",
                     route = "Circle the forest edges and pass through Camp Mojache/Feathermoon.",

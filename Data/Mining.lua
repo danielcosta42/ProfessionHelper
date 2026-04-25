@@ -284,6 +284,13 @@ ProfessionHelper.Mining = {
                     tips = ProfessionHelper.L["MINING_LOC_20_TIP"],
                     levelRange = "48-55",
                 },
+                {
+                    zone = "Thousand Needles",
+                    faction = "Both",
+                    route = "Circle the canyon walls and elevated plateaus. Dense Mithril nodes with very low competition. Natural route from The Barrens.",
+                    tips = ProfessionHelper.L["MINING_LOC_33_TIP"],
+                    levelRange = "25-35",
+                },
             },
         },
         
