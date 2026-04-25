@@ -39,6 +39,53 @@ local function rgb(t) return t[1], t[2], t[3] end
 local function rgba(t, a) return t[1], t[2], t[3], a or t[4] or 1 end
 local function hexc(t) return string.format("|cff%02x%02x%02x", t[1]*255, t[2]*255, t[3]*255) end
 
+-------------------------------------------------------------------------------
+-- Filters a source string (e.g. "Vendor: X (Zone, Horde) / Y (Zone, Alliance)")
+-- to only show entries relevant to the player's faction.
+-- Entries that mention neither faction are always kept (neutral vendors).
+-------------------------------------------------------------------------------
+local function FilterSourceByFaction(source)
+    if not source or source == "" then return source end
+
+    local playerFaction = UnitFactionGroup("player") or "Alliance"
+    local oppFaction    = (playerFaction == "Alliance") and "Horde" or "Alliance"
+
+    -- If the string mentions no faction at all, return it unchanged
+    if not source:find(playerFaction, 1, true) and not source:find(oppFaction, 1, true) then
+        return source
+    end
+
+    -- Preserve the prefix ("Vendor: ", "Quest: ", etc.)
+    local prefix  = source:match("^[^:]+:%s*") or ""
+    local content = source:sub(#prefix + 1)
+
+    -- Split on " / " separators
+    local parts = {}
+    local rest  = content
+    while true do
+        local i = rest:find(" / ", 1, true)
+        if i then
+            table.insert(parts, rest:sub(1, i - 1))
+            rest = rest:sub(i + 3)
+        else
+            if rest ~= "" then table.insert(parts, rest) end
+            break
+        end
+    end
+
+    -- Keep entries that do NOT mention the opposite faction
+    local kept = {}
+    for _, part in ipairs(parts) do
+        if not part:find(oppFaction, 1, true) then
+            table.insert(kept, part)
+        end
+    end
+
+    -- Safety: if nothing survived keep the original
+    if #kept == 0 then return source end
+    return prefix .. table.concat(kept, " / ")
+end
+
 -- State
 PH.craftingTab = "steps"
 PH.viewedStepIndex = nil
@@ -1149,19 +1196,20 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
 
     -- Source (where to get the recipe)
     if step.source and step.source ~= "" and not isComplete then
+        local filteredSource = FilterSourceByFaction(step.source)
         local sl = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         sl:SetPoint("TOPLEFT", 12, iy)
         sl:SetPoint("RIGHT", card, "RIGHT", -12, 0)
         sl:SetJustifyH("LEFT")
-        sl:SetText(hexc(T.textMuted) .. PH.L["RECIPE"] .. ":|r " .. hexc(T.accent) .. step.source .. "|r")
+        sl:SetText(hexc(T.textMuted) .. PH.L["RECIPE"] .. ":|r " .. hexc(T.accent) .. filteredSource .. "|r")
         iy = iy - math.max(14, sl:GetStringHeight() + 4)
 
         -- Map pin button (shown when NPC coordinates are known)
-        if PH.MapPins and PH.MapPins:HasPinsForSource(step.source) then
+        if PH.MapPins and PH.MapPins:HasPinsForSource(filteredSource) then
             local mapBtn = PillButton(card, 110, 18, PH.L["BTN_SHOW_ON_MAP"], T.gold)
             mapBtn:SetPoint("TOPLEFT", 12, iy)
             mapBtn:SetScript("OnClick", function()
-                PH.MapPins:ShowSourcePins(step.source)
+                PH.MapPins:ShowSourcePins(filteredSource)
             end)
             mapBtn:SetScript("OnEnter", function(self)
                 GameTooltip:SetOwner(self, "ANCHOR_RIGHT")

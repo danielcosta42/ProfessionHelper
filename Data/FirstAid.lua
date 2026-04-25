@@ -25,11 +25,11 @@ ProfessionHelper.FirstAid = {
         { name = "Silk Bandage", creates = 1, materials = { { name = "Silk Cloth", count = 1 } }, orange = 150, yellow = 180, green = 200, grey = 210, source = "Trainer" },
         { name = "Heavy Silk Bandage", creates = 1, materials = { { name = "Silk Cloth", count = 2 } }, orange = 180, yellow = 210, green = 225, grey = 240, source = "Vendor: Deneb Walker (Arathi, Alliance) / Balai Lok'Wein (Dustwallow, Horde) — Expert First Aid book" },
         { name = "Mageweave Bandage", creates = 1, materials = { { name = "Mageweave Cloth", count = 1 } }, orange = 210, yellow = 240, green = 255, grey = 270, source = "Vendor: Deneb Walker (Arathi, Alliance) / Balai Lok'Wein (Dustwallow, Horde) — Manual" },
-        { name = "Heavy Mageweave Bandage", creates = 1, materials = { { name = "Mageweave Cloth", count = 2 } }, orange = 240, yellow = 270, green = 285, grey = 300, source = "Trainer — requer Triage quest (Doctor Gustaf VanHowzen Alliance / Doctor Gregory Victor Horde)" },
+        { name = "Heavy Mageweave Bandage", creates = 1, materials = { { name = "Mageweave Cloth", count = 2 } }, orange = 240, yellow = 270, green = 285, grey = 300, source = "Quest: Doctor Gustaf VanHowzen (Theramore, Alliance) / Doctor Gregory Victor (Hammerfall, Horde) — Triage quest" },
         { name = "Runecloth Bandage", creates = 1, materials = { { name = "Runecloth", count = 1 } }, orange = 260, yellow = 290, green = 305, grey = 320, source = "Trainer" },
         { name = "Heavy Runecloth Bandage", creates = 1, materials = { { name = "Runecloth", count = 2 } }, orange = 290, yellow = 320, green = 335, grey = 350, source = "Trainer" },
-        { name = "Netherweave Bandage", creates = 1, materials = { { name = "Netherweave Cloth", count = 1 } }, orange = 330, yellow = 340, green = 350, grey = 360, source = "Vendor: Burko (Temple of Telhamat) / Aresella (Falcon Watch) — Manual" },
-        { name = "Heavy Netherweave Bandage", creates = 1, materials = { { name = "Netherweave Cloth", count = 2 } }, orange = 360, yellow = 370, green = 375, grey = 380, source = "Vendor: Burko (Temple of Telhamat) / Aresella (Falcon Watch) — Manual" },
+        { name = "Netherweave Bandage", creates = 1, materials = { { name = "Netherweave Cloth", count = 1 } }, orange = 330, yellow = 340, green = 350, grey = 360, source = "Vendor: Burko (Temple of Telhamat, Alliance) / Aresella (Falcon Watch, Horde) — Manual" },
+        { name = "Heavy Netherweave Bandage", creates = 1, materials = { { name = "Netherweave Cloth", count = 2 } }, orange = 360, yellow = 370, green = 375, grey = 380, source = "Vendor: Burko (Temple of Telhamat, Alliance) / Aresella (Falcon Watch, Horde) — Manual" },
     },
 
     levelingGuide = {

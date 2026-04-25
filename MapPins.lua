@@ -116,8 +116,8 @@ local NPC_COORDS = {
     -- ========== FIRST AID ==========
     ["Deneb Walker"]          = { zone = "Arathi Highlands",        x = 0.374, y = 0.462, type = "vendor" },  -- Refuge Pointe (Alliance)
     ["Balai Lok'Wein"]        = { zone = "Dustwallow Marsh",        x = 0.296, y = 0.322, type = "vendor" },  -- Brackenwall Village (Horde)
-    ["Burko"]                 = { zone = "Hellfire Peninsula",      x = 0.550, y = 0.356, type = "vendor" },  -- Thrallmar (Horde)
-    ["Aresella"]              = { zone = "Hellfire Peninsula",      x = 0.538, y = 0.650, type = "vendor" },  -- Honor Hold (Alliance)
+    ["Burko"]                 = { zone = "Hellfire Peninsula",      x = 0.510, y = 0.608, type = "vendor" },  -- Temple of Telhamat (Alliance)
+    ["Aresella"]              = { zone = "Hellfire Peninsula",      x = 0.555, y = 0.748, type = "vendor" },  -- Falcon Watch (Horde)
 
     -- ========== ENCHANTING ==========
     ["Dalria"]                = { zone = "Ashenvale",               x = 0.352, y = 0.486, type = "vendor" },  -- Astranaar (Alliance)
