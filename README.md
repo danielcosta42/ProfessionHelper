@@ -101,7 +101,9 @@ Profession Helper gives you optimized step-by-step leveling guides, automatic sh
 ## Compatibility
 
 - World of Warcraft: The Burning Crusade Classic (2.5.x)
+- WoW Classic (Vanilla / 1.x)
 - WoW Classic Anniversary (Season of Discovery / Anniversary realms)
+- **Not supported:** Retail WoW (Dragonflight / The War Within and above)
 - **Optional:** TradeSkillMaster (TSM), Auctionator
 
 ---
