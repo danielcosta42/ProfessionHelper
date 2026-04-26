@@ -1,128 +1,160 @@
-name: Manual Release
+name: Lint, Version & Release
 
 on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version to release (must match ## Version: in .toc, e.g. 1.2.3)'
-        required: true
-        type: string
-
-permissions:
-  contents: write
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  release:
-    name: Create Release Package
+  lint:
+    name: Luacheck
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout Repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Luacheck
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lua5.1 luarocks > /dev/null
+          sudo luarocks install luacheck > /dev/null
+
+      - name: Run Luacheck
+        run: luacheck . --config .luacheckrc
+
+  release:
+    name: Version & Release
+    needs: lint
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Validate Version in TOC
+      - name: Compute next version
+        id: version
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          TOC_VERSION=$(grep "^## Version:" ProfessionHelper.toc | sed 's/## Version: //')
-          if [ "$TOC_VERSION" != "$VERSION" ]; then
-            echo "❌ Version mismatch! TOC has '$TOC_VERSION', input is '$VERSION'"
-            exit 1
+          # Get latest semver tag, default to 0.0.0 if none
+          LATEST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+          if [ -z "$LATEST" ]; then
+            LATEST="v0.0.0"
           fi
-          echo "✅ Version validated: $VERSION"
+          echo "Latest tag: $LATEST"
 
-      - name: Create Package Directory
-        run: |
-          mkdir -p package/ProfessionHelper
-          echo "📦 Package directory created"
+          # Strip 'v' prefix and split
+          CURRENT="${LATEST#v}"
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
 
-      - name: Copy Addon Files
-        run: |
-          # Copy Lua files
-          cp *.lua package/ProfessionHelper/ 2>/dev/null || true
-          
-          # Copy TOC file
-          cp *.toc package/ProfessionHelper/
-          
-          # Copy documentation
-          cp LICENSE package/ProfessionHelper/
-          cp README.md package/ProfessionHelper/
-          cp CHANGELOG.md package/ProfessionHelper/
-          
-          # Copy directories
-          cp -r Locales package/ProfessionHelper/
-          cp -r Data package/ProfessionHelper/
-          
-          echo "✅ Files copied successfully"
+          # Determine bump from commit messages since last tag
+          COMMITS=$(git log "$LATEST"..HEAD --pretty=format:"%s" 2>/dev/null || git log --pretty=format:"%s")
 
-      - name: List Package Contents
-        run: |
-          echo "📋 Package contents:"
-          find package/ProfessionHelper -type f | sort
-
-      - name: Create ZIP Archive
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          cd package
-          zip -r ../ProfessionHelper-v${VERSION}.zip ProfessionHelper/
-          cd ..
-          echo "✅ ZIP created: ProfessionHelper-v${VERSION}.zip"
-          ls -lh ProfessionHelper-v${VERSION}.zip
-
-      - name: Generate Changelog
-        id: changelog
-        run: |
-          VERSION="${{ github.event.inputs.version }}"
-          CHANGELOG=$(sed -n "/^## \[${VERSION}\]/,/^## \[/p" CHANGELOG.md | sed '$d')
-          if [ -z "$CHANGELOG" ]; then
-            CHANGELOG="Release version ${VERSION}"
+          if echo "$COMMITS" | grep -qiE "^(feat|feature)(\(.+\))?!:|BREAKING CHANGE"; then
+            MAJOR=$((MAJOR + 1)); MINOR=0; PATCH=0
+          elif echo "$COMMITS" | grep -qiE "^(feat|feature)(\(.+\))?:"; then
+            MINOR=$((MINOR + 1)); PATCH=0
+          else
+            PATCH=$((PATCH + 1))
           fi
-          echo "$CHANGELOG" > release_notes.md
-          echo "📝 Changelog generated"
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.event.inputs.version }}
-          files: ProfessionHelper-v${{ github.event.inputs.version }}.zip
-          body_path: release_notes.md
-          draft: false
-          prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
+          NEXT="${MAJOR}.${MINOR}.${PATCH}"
+          echo "Next version: $NEXT"
+          echo "next=$NEXT" >> "$GITHUB_OUTPUT"
 
-      - name: Upload to CurseForge
-        continue-on-error: true
-        uses: itsmeow/curseforge-upload@v3
-        with:
-          token: ${{ secrets.CURSEFORGE_TOKEN }}
-          project_id: '1520857'
-          game_endpoint: wow
-          file_path: ProfessionHelper-v${{ github.event.inputs.version }}.zip
-          changelog_type: markdown
-          display_name: Profession Helper v${{ github.event.inputs.version }}
-          game_versions: '11302,11303'
-          release_type: release
-
-      - name: Upload to WoWInterface
-        continue-on-error: true
+      - name: Update TOC and Core version
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          curl -X POST "https://api.wowinterface.com/addons/update" \
-            -H "x-api-token: ${{ secrets.WOWI_API_TOKEN }}" \
-            -F "id=YOUR_ADDON_ID" \
-            -F "version=${VERSION}" \
-            -F "updatefile=@ProfessionHelper-v${VERSION}.zip" \
-            -F "changelog=$(cat release_notes.md)"
-          echo "✅ Uploaded to WoWInterface"
+          sed -i "s/^## Version: .*/## Version: ${{ steps.version.outputs.next }}/" ProfessionHelper.toc
+          sed -i "s/PH\.version = \".*\"/PH.version = \"${{ steps.version.outputs.next }}\"/" Core.lua
 
-      - name: Publish Summary
+      - name: Generate changelog entry
         run: |
-          VERSION="${{ github.event.inputs.version }}"
-          echo "## 🎉 Release v${VERSION} Published!" >> $GITHUB_STEP_SUMMARY
-          echo "### 📦 Published to:" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ GitHub Releases" >> $GITHUB_STEP_SUMMARY
-          echo "- ⚙️ CurseForge (if token configured)" >> $GITHUB_STEP_SUMMARY
-          echo "- ⚙️ WoWInterface (if token configured)" >> $GITHUB_STEP_SUMMARY
-          echo "### 📥 Download:" >> $GITHUB_STEP_SUMMARY
-          echo "[ProfessionHelper-v${VERSION}.zip](https://github.com/${{ github.repository }}/releases/download/v${VERSION}/ProfessionHelper-v${VERSION}.zip)" >> $GITHUB_STEP_SUMMARY
+          VERSION="${{ steps.version.outputs.next }}"
+          DATE=$(date +%Y-%m-%d)
+          LATEST=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -1)
+
+          # Collect commits since last tag, grouped by type
+          if [ -n "$LATEST" ]; then
+            COMMITS=$(git log "$LATEST"..HEAD --pretty=format:"%s" 2>/dev/null)
+          else
+            COMMITS=$(git log --pretty=format:"%s")
+          fi
+
+          ADDED=""
+          FIXED=""
+          CHANGED=""
+          OTHER=""
+
+          while IFS= read -r msg; do
+            [ -z "$msg" ] && continue
+            # Skip CI commits
+            echo "$msg" | grep -qE "^\s*(chore: bump version|Merge)" && continue
+
+            # Categorise by conventional commit prefix
+            if echo "$msg" | grep -qiE "^feat(\(.+\))?[!]?:"; then
+              line=$(echo "$msg" | sed -E 's/^[Ff]eat(\([^)]*\))?[!]?:\s*//')
+              ADDED="${ADDED}\n- ${line}"
+            elif echo "$msg" | grep -qiE "^fix(\(.+\))?:"; then
+              line=$(echo "$msg" | sed -E 's/^[Ff]ix(\([^)]*\))?:\s*//')
+              FIXED="${FIXED}\n- ${line}"
+            elif echo "$msg" | grep -qiE "^(refactor|perf|style)(\(.+\))?:"; then
+              line=$(echo "$msg" | sed -E 's/^[A-Za-z]+(\([^)]*\))?:\s*//')
+              CHANGED="${CHANGED}\n- ${line}"
+            else
+              # Include non-chore/ci/docs commits as other changes
+              echo "$msg" | grep -qiE "^(chore|ci|docs|test)(\(.+\))?:" && continue
+              OTHER="${OTHER}\n- ${msg}"
+            fi
+          done <<< "$COMMITS"
+
+          # Build the entry
+          ENTRY="## [${VERSION}] - ${DATE}"
+          [ -n "$ADDED" ]   && ENTRY="${ENTRY}\n\n### Added${ADDED}"
+          [ -n "$FIXED" ]   && ENTRY="${ENTRY}\n\n### Fixed${FIXED}"
+          [ -n "$CHANGED" ] && ENTRY="${ENTRY}\n\n### Changed${CHANGED}"
+          [ -n "$OTHER" ]   && ENTRY="${ENTRY}\n\n### Other${OTHER}"
+
+          # Prepend to CHANGELOG.md (after the header line)
+          if [ -f CHANGELOG.md ]; then
+            head -n 3 CHANGELOG.md > CHANGELOG.tmp
+            echo "" >> CHANGELOG.tmp
+            echo -e "$ENTRY" >> CHANGELOG.tmp
+            echo "" >> CHANGELOG.tmp
+            tail -n +4 CHANGELOG.md >> CHANGELOG.tmp
+            mv CHANGELOG.tmp CHANGELOG.md
+          else
+            echo -e "# ProfessionHelper Changelog\n\nAll notable changes to this project will be documented in this file.\n\n${ENTRY}" > CHANGELOG.md
+          fi
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add ProfessionHelper.toc Core.lua CHANGELOG.md
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "chore: bump version to ${{ steps.version.outputs.next }} [skip ci]"
+          git push origin main
+
+      - name: Create and push tag
+        run: |
+          git tag -a "v${{ steps.version.outputs.next }}" -m "Release v${{ steps.version.outputs.next }}"
+          git push origin "v${{ steps.version.outputs.next }}"
+
+      - name: Trigger publish workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'publish.yml',
+              ref: 'v${{ steps.version.outputs.next }}',
+            });
+
+

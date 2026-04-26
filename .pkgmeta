@@ -1,0 +1,19 @@
+package-as: ProfessionHelper
+
+ignore:
+  - README.md
+  - CHANGELOG.md
+  - LICENSE
+  - .github
+  - .gitignore
+  - .gitattributes
+  - .luacheckrc
+  - screenshots
+  - package.json
+  - "*.md"
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+enable-nolib-creation: no

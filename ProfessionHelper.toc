@@ -11,6 +11,7 @@
 ## X-License: Free for personal use
 ## X-Localizations: ptBR, enUS, esES
 ## X-Curse-Project-ID: profession-helper-tbc
+## X-Wago-ID: aNDMRr6o
 ## SavedVariables: ProfessionHelperDB
 ## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 

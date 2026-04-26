@@ -1,19 +1,2 @@
-# Git attributes for cross-platform compatibility
-
-# Scripts should be executable
-*.sh text eol=lf
-
-# Ensure line endings
-*.lua text eol=lf
-*.toc text eol=lf
-*.md text eol=lf
-*.json text eol=lf
-*.yml text eol=lf
-*.yaml text eol=lf
-
-# Binary files
-*.zip binary
-*.png binary
-*.jpg binary
-*.jpeg binary
-*.gif binary
+# Auto detect text files and perform LF normalization
+* text=auto
