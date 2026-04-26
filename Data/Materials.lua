@@ -166,7 +166,6 @@ ProfessionHelper.Materials = {
     ["Weak Flux"] = { id = 2880, icon = "inv_misc_ammo_gunpowder_01", vendor = true, farmable = false, vendorPrice = 100 },
     ["Strong Flux"] = { id = 3466, icon = "inv_misc_ammo_gunpowder_02", vendor = true, farmable = false, vendorPrice = 500 },
     ["Elemental Flux"] = { id = 18567, icon = "inv_misc_ammo_gunpowder_03", vendor = true, farmable = false, vendorPrice = 3000 },
-    ["Arcane Dust"] = { id = 22445, icon = "inv_enchant_dustarcane", vendor = false, farmable = false },
     ["Coarse Thread"] = { id = 2320, icon = "inv_misc_thread_01", vendor = true, farmable = false, vendorPrice = 10 },
     ["Fine Thread"] = { id = 2321, icon = "inv_misc_thread_01", vendor = true, farmable = false, vendorPrice = 100 },
     ["Silken Thread"] = { id = 4291, icon = "inv_misc_thread_02", vendor = true, farmable = false, vendorPrice = 500 },
