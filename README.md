@@ -122,6 +122,14 @@ Yes, completely free and open source.
 
 ---
 
+## Support the Project
+
+If Profession Helper saves you time and gold, consider buying me a coffee! All donations go toward keeping the addon maintained and updated.
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?business=daniel.cfdutra13%40gmail.com&currency_code=USD)
+
+---
+
 ## Credits
 
 **Chehul @ DreamScyther-US**
