@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.17.0] - 2026-04-26
+
+### Added
+- add donation section to README for project support
+
+
 ## [1.16.2] - 2026-04-26
 
 ### Fixed
