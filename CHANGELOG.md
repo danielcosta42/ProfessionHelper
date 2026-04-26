@@ -2,6 +2,19 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.16.0] - 2026-04-26
+
+### Added
+- update luacheck configuration to suppress additional warnings and include new globals for WoW API
+
+### Fixed
+- remove Arcane Dust from materials list
+- add missing warning suppression for unused variable in luacheck configuration
+
+### Other
+- Add localization for source labels and improve UI text
+
+
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
