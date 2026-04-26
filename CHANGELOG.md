@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.16.1] - 2026-04-26
+
+### Fixed
+- update CurseForge API key reference in publish workflow
+
+
 ## [1.16.0] - 2026-04-26
 
 ### Added
