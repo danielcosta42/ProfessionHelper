@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.17.1] - 2026-04-26
+
+### Fixed
+- update publish workflow to include 'classic' argument for packaging docs: add compatibility note for WoW Classic and clarify unsupported versions
+
+
 ## [1.17.0] - 2026-04-26
 
 ### Added
