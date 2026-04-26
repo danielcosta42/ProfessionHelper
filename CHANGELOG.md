@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.16.2] - 2026-04-26
+
+### Fixed
+- update CurseForge Project ID in toc file
+
+
 ## [1.16.1] - 2026-04-26
 
 ### Fixed
