@@ -3,13 +3,24 @@
 std = "lua51"
 max_line_length = false
 
+-- Suppress warnings that are false positives or acceptable in WoW addon code
+ignore = {
+    "212",  -- unused argument (self in event handlers is intentional)
+    "213",  -- unused loop variable
+    "311",  -- value overwritten before use (intentional in data files)
+    "411",  -- redefining local variable
+    "421",  -- shadowing local
+    "431",  -- shadowing upvalue
+    "432",  -- shadowing upvalue argument
+    "542",  -- empty if branch
+    "611",  -- line contains only whitespace
+}
+
 -- Globals that the addon WRITES to
 globals = {
-    -- Addon tables
     "PH",
+    "ProfessionHelper",
     "ProfessionHelperDB",
-
-    -- Slash commands
     "SlashCmdList",
     "SLASH_PROFESSIONHELPER1",
     "SLASH_PROFESSIONHELPER2",
@@ -27,10 +38,14 @@ read_globals = {
     "GameFontNormalHuge",
     "GameFontHighlight",
     "GameFontHighlightSmall",
+    "ChatFontNormal",
     "BackdropTemplateMixin",
     "STANDARD_TEXT_FONT",
     "DEFAULT_CHAT_FRAME",
     "Minimap",
+    "WorldMapFrame",
+    "ToggleWorldMap",
+    "WorldMapFrame_SetDisplayedMapByID",
 
     -- WoW API: Input
     "IsShiftKeyDown",
@@ -41,12 +56,22 @@ read_globals = {
     "GetLocale",
     "GetTime",
     "GetRealmName",
+    "GetRealZoneText",
     "ReloadUI",
     "InCombatLockdown",
     "PlaySound",
     "hooksecurefunc",
     "StaticPopup_Show",
     "ChatFrame_AddMessageEventFilter",
+    "SOUNDKIT",
+    "wipe",
+    "time",
+
+    -- WoW API: Unit functions
+    "UnitName",
+    "UnitClass",
+    "UnitLevel",
+    "UnitFactionGroup",
 
     -- WoW API: Items & Inventory
     "GetItemInfo",
@@ -54,6 +79,8 @@ read_globals = {
     "GetItemCount",
     "GetItemQualityColor",
     "GetCursorPosition",
+    "GetCoinTextureString",
+    "GetMoney",
 
     -- WoW API: Containers
     "C_Container",
@@ -67,16 +94,35 @@ read_globals = {
     "ExpandSkillHeader",
     "CollapseSkillHeader",
     "GetTradeSkillLine",
+    "GetNumTradeSkills",
+    "GetTradeSkillInfo",
+    "GetSpellInfo",
+
+    -- WoW API: Map
+    "C_Map",
 
     -- WoW API: Chat & Social
     "SendChatMessage",
 
-    -- WoW API: Minimap & World
+    -- WoW API: Timers
     "C_Timer",
 
-    -- WoW Global colors/strings
+    -- WoW Global strings/colors
     "RAID_CLASS_COLORS",
     "ITEM_QUALITY_COLORS",
+    "LOOT_ITEM_SELF",
+    "LOOT_ITEM_SELF_MULTIPLE",
+    "GOLD_AMOUNT",
+    "SILVER_AMOUNT",
+    "COPPER_AMOUNT",
+
+    -- Third-party libraries
+    "LibStub",
+    "HBD_PINS_WORLDMAP_SHOW_PARENT",
+
+    -- Auctionator (optional integration)
+    "Auctionator",
+    "AUCTIONATOR_ITEM_BUY_PRICE",
 
     -- TSM (optional integration)
     "TSM_API",
