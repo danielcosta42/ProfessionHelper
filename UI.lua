@@ -40,6 +40,23 @@ local function rgba(t, a) return t[1], t[2], t[3], a or t[4] or 1 end
 local function hexc(t) return string.format("|cff%02x%02x%02x", t[1]*255, t[2]*255, t[3]*255) end
 
 -------------------------------------------------------------------------------
+-- Translates known English source labels to the player's locale.
+-- Vendor NPC strings are intentionally left in English for MapPins compatibility.
+-------------------------------------------------------------------------------
+local SOURCE_MAP = {
+    ["Trainer"]             = "SOURCE_TRAINER",
+    ["Trainer (Outland)"]   = "SOURCE_TRAINER_OUTLAND",
+    ["World Drop"]          = "SOURCE_WORLD_DROP",
+    ["World Drop Recipe"]   = "SOURCE_WORLD_DROP",
+    ["Drop"]                = "SOURCE_DROP",
+}
+local function LocalizeSource(src)
+    local key = SOURCE_MAP[src]
+    if key then return PH.L[key] end
+    return src
+end
+
+-------------------------------------------------------------------------------
 -- Filters a source string (e.g. "Vendor: X (Zone, Horde) / Y (Zone, Alliance)")
 -- to only show entries relevant to the player's faction.
 -- Entries that mention neither faction are always kept (neutral vendors).
@@ -459,7 +476,7 @@ function PH:CreateMainWindow()
     homeBtn:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
         GameTooltip:AddLine(hexc(T.gold) .. "Profession Helper|r")
-        GameTooltip:AddLine("Home / Credits", T.textSecondary[1], T.textSecondary[2], T.textSecondary[3])
+        GameTooltip:AddLine(PH.L["HOME_CREDITS"], T.textSecondary[1], T.textSecondary[2], T.textSecondary[3])
         GameTooltip:Show()
     end)
     homeBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
@@ -1011,7 +1028,7 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
     navFrame:SetPoint("TOPLEFT", 0, y)
     navFrame:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
 
-    local prevBtn = PillButton(navFrame, 70, 22, "< Anterior", T.accent)
+    local prevBtn = PillButton(navFrame, 70, 22, "< " .. PH.L["PREVIOUS"], T.accent)
     prevBtn:SetPoint("LEFT", 0, 0)
     if viewIdx <= 1 then prevBtn:SetAlpha(0.3); prevBtn:Disable() end
     prevBtn:SetScript("OnClick", function()
@@ -1210,11 +1227,12 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
     -- Source (where to get the recipe)
     if step.source and step.source ~= "" and not isComplete then
         local filteredSource = FilterSourceByFaction(step.source)
+        local displaySource  = LocalizeSource(filteredSource)
         local sl = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         sl:SetPoint("TOPLEFT", 12, iy)
         sl:SetPoint("RIGHT", card, "RIGHT", -12, 0)
         sl:SetJustifyH("LEFT")
-        sl:SetText(hexc(T.textMuted) .. PH.L["RECIPE"] .. ":|r " .. hexc(T.accent) .. filteredSource .. "|r")
+        sl:SetText(hexc(T.textMuted) .. PH.L["RECIPE"] .. ":|r " .. hexc(T.accent) .. displaySource .. "|r")
         iy = iy - math.max(14, sl:GetStringHeight() + 4)
 
         -- Map pin button (shown when NPC coordinates are known)
@@ -2024,7 +2042,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     navFrame:SetPoint("TOPLEFT", 0, y)
     navFrame:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
 
-    local prevBtn = PillButton(navFrame, 70, 22, "< Anterior", T.accent)
+    local prevBtn = PillButton(navFrame, 70, 22, "< " .. PH.L["PREVIOUS"], T.accent)
     prevBtn:SetPoint("LEFT", 0, 0)
     if viewIdx <= 1 then prevBtn:SetAlpha(0.3); prevBtn:Disable() end
     prevBtn:SetScript("OnClick", function()
@@ -2089,7 +2107,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     MakeFlat(footerCard, T.bgInput)
     local ft = footerCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     ft:SetPoint("LEFT", 8, 0)
-    ft:SetText(hexc(T.textSecondary) .. remaining .. " passos restantes|r")
+    ft:SetText(hexc(T.textSecondary) .. string.format(PH.L["STEPS_REMAINING"], remaining) .. "|r")
     y = y - 30
 
     -- Smelting section (Mining)
@@ -2282,7 +2300,7 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill, p
             local zn = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
             zn:SetPoint("TOPLEFT", 6, rowIy)
             zn:SetText(fc .. loc.zone .. "|r" ..
-                (loc.levelRange and ("  " .. hexc(T.textMuted) .. "Lv " .. loc.levelRange .. "|r") or ""))
+                (loc.levelRange and ("  " .. hexc(T.textMuted) .. PH.L["LV"] .. " " .. loc.levelRange .. "|r") or ""))
             rowIy = rowIy - 14
 
             -- Route
@@ -2303,7 +2321,7 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill, p
                 mb:SetPoint("TOPLEFT", 6, rowIy)
                 mb:SetPoint("RIGHT", row, "RIGHT", -6, 0)
                 mb:SetJustifyH("LEFT")
-                mb:SetText(hexc(T.orange) .. "Mobs:|r " .. hexc(T.textPrimary) .. loc.mobs .. "|r")
+                mb:SetText(hexc(T.orange) .. PH.L["MOBS_LABEL"] .. ":|r " .. hexc(T.textPrimary) .. loc.mobs .. "|r")
                 rowIy = rowIy - 16
             end
 
