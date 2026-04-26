@@ -5,6 +5,7 @@ max_line_length = false
 
 -- Suppress warnings that are false positives or acceptable in WoW addon code
 ignore = {
+    "211",  -- unused variable / unused function (positional API returns, dead utility code)
     "212",  -- unused argument (self in event handlers is intentional)
     "213",  -- unused loop variable
     "311",  -- value overwritten before use (intentional in data files)
