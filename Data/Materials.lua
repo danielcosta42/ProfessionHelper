@@ -305,4 +305,123 @@ ProfessionHelper.Materials = {
     ["Coarse Grinding Stone"] = { id = 3478, icon = "inv_stone_grindingstone_02", vendor = false, farmable = false },
     ["Heavy Grinding Stone"] = { id = 3486, icon = "inv_stone_grindingstone_03", vendor = false, farmable = false },
     ["Solid Grinding Stone"] = { id = 7966, icon = "inv_stone_grindingstone_04", vendor = false, farmable = false },
+
+    -- ==================== WRATH OF THE LICH KING MATERIALS ====================
+    -- Northrend Herbs
+    ["Goldclover"]        = { id = 36901, icon = "inv_misc_herb_goldclover",   vendor = false, farmable = true },
+    ["Tiger Lily"]        = { id = 36905, icon = "inv_misc_herb_tigerlily",    vendor = false, farmable = true },
+    ["Talandra's Rose"]   = { id = 36907, icon = "inv_misc_herb_talandrasrose",vendor = false, farmable = true },
+    ["Deadnettle"]        = { id = 36904, icon = "inv_misc_herb_deadnettle",   vendor = false, farmable = true },
+    ["Adder's Tongue"]    = { id = 36903, icon = "inv_misc_herb_adderstongue", vendor = false, farmable = true },
+    ["Icethorn"]          = { id = 36906, icon = "inv_misc_herb_icethorn",     vendor = false, farmable = true },
+    ["Lichbloom"]         = { id = 36908, icon = "inv_misc_herb_lichbloom",    vendor = false, farmable = true },
+    ["Frost Lotus"]       = { id = 36910, icon = "inv_misc_herb_frostlotus",   vendor = false, farmable = true },
+    -- Northrend Ores & Bars
+    ["Cobalt Ore"]        = { id = 36909, icon = "inv_ore_titanium_01",        vendor = false, farmable = true },
+    ["Cobalt Bar"]        = { id = 36912, icon = "inv_ingot_09",               vendor = false, farmable = false },
+    ["Saronite Ore"]      = { id = 36912, icon = "inv_ore_saronite_chunk",     vendor = false, farmable = true },
+    ["Saronite Bar"]      = { id = 36918, icon = "inv_ingot_10",               vendor = false, farmable = false },
+    ["Titanium Ore"]      = { id = 36910, icon = "inv_ore_titanium_01",        vendor = false, farmable = true },
+    ["Titanium Bar"]      = { id = 36926, icon = "inv_ingot_titanium",         vendor = false, farmable = false },
+    ["Titansteel Bar"]    = { id = 36928, icon = "inv_ingot_titansteel",       vendor = false, farmable = false },
+    ["Titanium Rod"]      = { id = 41617, icon = "inv_misc_rod_07",            vendor = false, farmable = false },
+    -- Northrend Leathers
+    ["Borean Leather"]        = { id = 33568, icon = "inv_misc_leatherscrap_11",  vendor = false, farmable = true },
+    ["Heavy Borean Leather"]  = { id = 38425, icon = "inv_misc_leatherscrap_12",  vendor = false, farmable = false },
+    ["Arctic Fur"]            = { id = 44128, icon = "inv_misc_pelt_bear_03",      vendor = false, farmable = true },
+    -- Northrend Cloth
+    ["Frostweave Cloth"]      = { id = 33470, icon = "inv_fabric_frostweave",      vendor = false, farmable = true },
+    ["Bolt of Frostweave"]    = { id = 38330, icon = "inv_fabric_frostweave",      vendor = false, farmable = false },
+    ["Bolt of Imbued Frostweave"] = { id = 41498, icon = "inv_fabric_frostweave",  vendor = false, farmable = false },
+    -- Northrend Crystallized Elementals
+    ["Crystallized Fire"]     = { id = 37700, icon = "inv_elemental_primal_fire",  vendor = false, farmable = true },
+    ["Crystallized Water"]    = { id = 37701, icon = "inv_elemental_primal_water", vendor = false, farmable = true },
+    ["Crystallized Earth"]    = { id = 37702, icon = "inv_elemental_primal_earth", vendor = false, farmable = true },
+    ["Crystallized Shadow"]   = { id = 37703, icon = "inv_elemental_primal_shadow",vendor = false, farmable = true },
+    ["Crystallized Life"]     = { id = 37704, icon = "inv_elemental_primal_life",  vendor = false, farmable = true },
+    ["Crystallized Air"]      = { id = 37705, icon = "inv_elemental_primal_air",   vendor = false, farmable = true },
+    -- Northrend Eternal Elementals
+    ["Eternal Fire"]          = { id = 35623, icon = "inv_elemental_eternal_fire",  vendor = false, farmable = true },
+    ["Eternal Water"]         = { id = 35624, icon = "inv_elemental_eternal_water", vendor = false, farmable = true },
+    ["Eternal Earth"]         = { id = 35622, icon = "inv_elemental_eternal_earth", vendor = false, farmable = true },
+    ["Eternal Shadow"]        = { id = 35627, icon = "inv_elemental_eternal_shadow",vendor = false, farmable = true },
+    ["Eternal Life"]          = { id = 35625, icon = "inv_elemental_eternal_life",  vendor = false, farmable = true },
+    ["Eternal Air"]           = { id = 35626, icon = "inv_elemental_eternal_air",   vendor = false, farmable = true },
+    -- Northrend Enchanting
+    ["Infinite Dust"]         = { id = 34054, icon = "inv_enchant_dustlarge",      vendor = false, farmable = false },
+    ["Greater Cosmic Essence"]= { id = 34055, icon = "inv_enchant_essencecosmic",  vendor = false, farmable = false },
+    ["Dream Shard"]           = { id = 34052, icon = "inv_enchant_shardprismaticlarge", vendor = false, farmable = false },
+    ["Abyss Crystal"]         = { id = 34057, icon = "inv_enchant_shardprismaticlarge", vendor = false, farmable = false },
+    -- Northrend JC Gems
+    ["Bloodstone"]   = { id = 37929, icon = "inv_jewelcrafting_gem_33", vendor = false, farmable = true },
+    ["Sun Crystal"]  = { id = 36918, icon = "inv_jewelcrafting_gem_34", vendor = false, farmable = true },
+    ["Chalcedony"]   = { id = 36931, icon = "inv_jewelcrafting_gem_30", vendor = false, farmable = true },
+    ["Dark Jade"]    = { id = 36917, icon = "inv_jewelcrafting_gem_32", vendor = false, farmable = true },
+    -- Northrend Cooking / Meat
+    ["Chunk of Mammoth Meat"] = { id = 43000, icon = "inv_misc_food_meat_raw_01", vendor = false, farmable = true },
+    ["Chilled Meat"]          = { id = 43001, icon = "inv_misc_food_meat_raw_02", vendor = false, farmable = true },
+    ["Shoveltusk Flank"]      = { id = 41801, icon = "inv_misc_food_meat_raw_03", vendor = false, farmable = true },
+    ["Dragonfin Angelfish"]   = { id = 43573, icon = "inv_misc_fish_08",          vendor = false, farmable = true },
+    -- Northrend Inscription inks (for shopping list)
+    ["Ivory Ink"]        = { id = 39684, icon = "inv_inscription_inkblack00",   vendor = false, farmable = false },
+    ["Midnight Ink"]     = { id = 39685, icon = "inv_inscription_inkblue00",    vendor = false, farmable = false },
+    ["Lion's Ink"]       = { id = 39686, icon = "inv_inscription_inkorange00",  vendor = false, farmable = false },
+    ["Jadefire Ink"]     = { id = 39687, icon = "inv_inscription_inkgreen00",   vendor = false, farmable = false },
+    ["Celestial Ink"]    = { id = 39688, icon = "inv_inscription_inkpurple00",  vendor = false, farmable = false },
+    ["Shimmering Ink"]   = { id = 39689, icon = "inv_inscription_inksilver00",  vendor = false, farmable = false },
+    ["Ethereal Ink"]     = { id = 39690, icon = "inv_inscription_inkorange00",  vendor = false, farmable = false },
+    ["Ink of the Sea"]   = { id = 43118, icon = "inv_inscription_inkblue00",    vendor = false, farmable = false },
+    ["Snowfall Ink"]     = { id = 43119, icon = "inv_inscription_inkwhite00",   vendor = false, farmable = false },
+    ["Light Parchment"]  = { id = 39684, icon = "inv_scroll_03", vendor = true, farmable = false, vendorPrice = 10 },
+    ["Resilient Parchment"] = { id = 43146, icon = "inv_scroll_03", vendor = true, farmable = false, vendorPrice = 50 },
+    ["Eternium Thread"]  = { id = 22529, icon = "inv_misc_thread", vendor = true, farmable = false, vendorPrice = 300 },
+
+    -- ==================== CATACLYSM MATERIALS ====================
+    -- Cata Herbs
+    ["Cinderbloom"]       = { id = 52983, icon = "inv_misc_herb_cinderbloom",    vendor = false, farmable = true },
+    ["Stormvine"]         = { id = 52984, icon = "inv_misc_herb_stormvine",      vendor = false, farmable = true },
+    ["Azshara's Veil"]    = { id = 52985, icon = "inv_misc_herb_azsharasveil",   vendor = false, farmable = true },
+    ["Heartblossom"]      = { id = 52986, icon = "inv_misc_herb_heartblossom",   vendor = false, farmable = true },
+    ["Twilight Jasmine"]  = { id = 52988, icon = "inv_misc_herb_twilightjasmine",vendor = false, farmable = true },
+    ["Whiptail"]          = { id = 52987, icon = "inv_misc_herb_whiptail",       vendor = false, farmable = true },
+    -- Cata Ores & Bars
+    ["Obsidium Ore"]      = { id = 53038, icon = "inv_ore_obsidium",             vendor = false, farmable = true },
+    ["Obsidium Bar"]      = { id = 53042, icon = "inv_ingot_obsidium",           vendor = false, farmable = false },
+    ["Hardened Obsidium Bar"] = { id = 53044, icon = "inv_ingot_obsidium",       vendor = false, farmable = false },
+    ["Elementium Ore"]    = { id = 52185, icon = "inv_ore_elementium_chunk",     vendor = false, farmable = true },
+    ["Elementium Bar"]    = { id = 52030, icon = "inv_ingot_elementium",         vendor = false, farmable = false },
+    ["Hardened Elementium Bar"] = { id = 55268, icon = "inv_ingot_elementium",   vendor = false, farmable = false },
+    ["Pyrite Ore"]        = { id = 52186, icon = "inv_ore_pyrite_chunk",         vendor = false, farmable = true },
+    ["Pyrium Bar"]        = { id = 52031, icon = "inv_ingot_pyrium",             vendor = false, farmable = false },
+    ["Elementium Rod"]    = { id = 67285, icon = "inv_misc_rod_07",              vendor = false, farmable = false },
+    -- Cata Volatile Elementals
+    ["Volatile Fire"]     = { id = 52328, icon = "inv_elemental_volatile_fire",  vendor = false, farmable = true },
+    ["Volatile Water"]    = { id = 52329, icon = "inv_elemental_volatile_water", vendor = false, farmable = true },
+    ["Volatile Earth"]    = { id = 52325, icon = "inv_elemental_volatile_earth", vendor = false, farmable = true },
+    ["Volatile Air"]      = { id = 52326, icon = "inv_elemental_volatile_air",   vendor = false, farmable = true },
+    ["Volatile Life"]     = { id = 52327, icon = "inv_elemental_volatile_life",  vendor = false, farmable = true },
+    -- Cata Cloth
+    ["Embersilk Cloth"]       = { id = 53010, icon = "inv_fabric_embersilk_bolts", vendor = false, farmable = true },
+    ["Bolt of Embersilk Cloth"]= { id = 54591, icon = "inv_fabric_embersilk_bolts", vendor = false, farmable = false },
+    -- Cata Leathers
+    ["Savage Leather"]         = { id = 63369, icon = "inv_misc_leatherscrap_11",  vendor = false, farmable = true },
+    ["Heavy Savage Leather"]   = { id = 63370, icon = "inv_misc_leatherscrap_12",  vendor = false, farmable = false },
+    ["Pristine Hide"]          = { id = 63371, icon = "inv_misc_pelt_bear_03",      vendor = false, farmable = true },
+    ["Blackened Dragonscale"]  = { id = 63371, icon = "inv_misc_scales_03",         vendor = false, farmable = true },
+    ["Twilight Scale"]         = { id = 63372, icon = "inv_misc_scales_03",         vendor = false, farmable = true },
+    -- Cata Enchanting
+    ["Hypnotic Dust"]          = { id = 52719, icon = "inv_enchant_dustlarge",      vendor = false, farmable = false },
+    ["Greater Celestial Essence"] = { id = 52721, icon = "inv_enchant_essencecosmic", vendor = false, farmable = false },
+    ["Heavenly Shard"]         = { id = 52733, icon = "inv_enchant_shardprismaticlarge", vendor = false, farmable = false },
+    -- Cata JC Gems
+    ["Carnelian"]  = { id = 52940, icon = "inv_jewelcrafting_gem_37", vendor = false, farmable = true },
+    ["Hessonite"]  = { id = 52941, icon = "inv_jewelcrafting_gem_38", vendor = false, farmable = true },
+    ["Jasper"]     = { id = 52942, icon = "inv_jewelcrafting_gem_35", vendor = false, farmable = true },
+    ["Alicite"]    = { id = 52943, icon = "inv_jewelcrafting_gem_36", vendor = false, farmable = true },
+    -- Cata Cooking / Meat
+    ["Giant Catfish"]   = { id = 60668, icon = "inv_misc_fish_08",          vendor = false, farmable = true },
+    ["Crocolisk Tail"]  = { id = 60668, icon = "inv_misc_food_meat_raw_01", vendor = false, farmable = true },
+    ["Dragon Flank"]    = { id = 60669, icon = "inv_misc_food_meat_raw_02", vendor = false, farmable = true },
+    ["Abyssal Clam"]    = { id = 55997, icon = "inv_misc_shell_03",         vendor = false, farmable = true },
+    ["Deepsea Sagefish"]= { id = 60793, icon = "inv_misc_fish_03",          vendor = false, farmable = true },
 }

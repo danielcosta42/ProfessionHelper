@@ -43,6 +43,16 @@ ProfessionHelper.Skinning = {
         { leather = "Cobra Scales", mobLevel = "Coilfang Snakes", skillRequired = "340+" },
         { leather = "Wind Scales", mobLevel = "Wind Serpents", skillRequired = "340+" },
         { leather = "Nether Dragonscales", mobLevel = "Netherwing", skillRequired = "350+" },
+        -- Wrath
+        { leather = "Borean Leather",       mobLevel = "68-80", skillRequired = "350-415" },
+        { leather = "Heavy Borean Leather", mobLevel = "70-80", skillRequired = "400-450" },
+        { leather = "Arctic Fur",           mobLevel = "80 elites", skillRequired = "425+" },
+        -- Cata
+        { leather = "Savage Leather",       mobLevel = "80-85", skillRequired = "425-500" },
+        { leather = "Heavy Savage Leather", mobLevel = "83-85", skillRequired = "450-525" },
+        { leather = "Pristine Hide",        mobLevel = "Rare beasts 83-85", skillRequired = "500+" },
+        { leather = "Blackened Dragonscale",mobLevel = "Dragonkin 83-85", skillRequired = "480+" },
+        { leather = "Twilight Scale",       mobLevel = "Twilight Drakes", skillRequired = "475+" },
     },
     
     farmingLocations = {
@@ -420,6 +430,41 @@ ProfessionHelper.Skinning = {
         {
             range = {350, 375},
             tip = ProfessionHelper.L["SKINNING_TIP_350_375"],
+        },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 420},
+            tip = "Skin Rhinos, Mammoths, and Wolvars in Borean Tundra and Grizzly Hills for Borean Leather (skill 350+). Shoveltusks in Howling Fjord also give good amounts.",
+        },
+        {
+            range = {420, 450},
+            tip = "Skin Jormungar Worms in Storm Peaks and Icecrown for Heavy Borean Leather (skill 400+). Arctic Fur is a rare drop (1-2%) from high-level Northrend beasts — very valuable for LW!",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 500},
+            tip = "Skin beasts in Mount Hyjal, Vashj'ir, and Deepholm for Savage Leather (skill 425+). 10x Savage Leather = 1x Heavy Savage Leather at the LW trainer.",
+        },
+        {
+            range = {500, 525},
+            tip = "Skin Twilight Drakes in Twilight Highlands for Twilight Scale (475+). Skin Dragonkin in Twilight Highlands for Blackened Dragonscale (480+). Pristine Hide drops rarely from large Cata beasts — very valuable for LW epic patterns!",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Leatherworking",
+            type       = "primary",
+            benefit    = "A sinergia mais direta do jogo: cada mob abatido gera leather diretamente para LW. Zero custo de materials.",
+            tip        = "Sholazar Basin (mobs de bestias) é perfeito para Arctic Fur WotLK. Nagrand é o melhor para TBC.",
+        },
+        {
+            profession = "Enchanting",
+            type       = "gold",
+            benefit    = "Skin grandes volumes para LW → craft itens baratos → desencante para materials de Enchanting. Cadeia de ouro.",
         },
     },
 }

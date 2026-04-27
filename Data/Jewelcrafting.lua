@@ -217,5 +217,106 @@ ProfessionHelper.Jewelcrafting = {
             source = "World Drop (Outland) / AH",
             tip = ProfessionHelper.L["JEWELCRAFTING_TIP_350_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Bloodstone Band",
+            count = 30,
+            materials = {
+                { name = "Bloodstone", count = 60 },
+                { name = "Crystallized Earth", count = 60 },
+            },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {400, 420},
+            recipe = "Sun Rock Ring",
+            count = 25,
+            materials = {
+                { name = "Sun Crystal", count = 50 },
+                { name = "Crystallized Earth", count = 50 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {420, 440},
+            recipe = "Stoneguard Band",
+            count = 25,
+            materials = {
+                { name = "Chalcedony", count = 100 },
+                { name = "Eternal Earth", count = 50 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Shadowmight Ring",
+            count = 15,
+            materials = {
+                { name = "Dark Jade", count = 60 },
+                { name = "Eternal Shadow", count = 30 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 475},
+            recipe = "Carnelian Spikes",
+            count = 30,
+            materials = { { name = "Carnelian", count = 90 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {475, 495},
+            recipe = "Hessonite Band",
+            count = 25,
+            materials = {
+                { name = "Hessonite", count = 75 },
+                { name = "Volatile Earth", count = 50 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {495, 510},
+            recipe = "Jasper Ring",
+            count = 20,
+            materials = {
+                { name = "Jasper", count = 80 },
+                { name = "Volatile Earth", count = 40 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {510, 525},
+            recipe = "Alicite Pendant",
+            count = 20,
+            materials = {
+                { name = "Alicite", count = 60 },
+                { name = "Volatile Air", count = 40 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Mining",
+            type       = "primary",
+            benefit    = "Prospectar ore é o core de JC. Mining fornece Saronite, Titanium e Elementium para prospectar e obter gemas raras.",
+            tip        = "Prospectar Saronite Ore em lotes é a maior fonte de gemas WotLK. Buy low, prospect, sell gems.",
+        },
+        {
+            profession = "Enchanting",
+            type       = "economy",
+            benefit    = "Gemas e encantamentos são sempre comprados juntos ao montar gear de raid. Combina muito bem.",
+        },
+        {
+            profession = "Blacksmithing",
+            type       = "economy",
+            benefit    = "Blacksmiths criam soquetes extras em Bracers e Gloves. JC preenchem com gemas JC exclusivas (Dragon's Eye — 3 por JC, não trocáveis).",
+        },
     },
 }

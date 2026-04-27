@@ -140,5 +140,35 @@ ProfessionHelper.FirstAid = {
             materials = { { name = "Netherweave Cloth", count = 40 } },
             source = "Manual: Heavy Netherweave Bandage (same vendor as the Master book)",
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Frostweave Bandage",
+            count = 30,
+            materials = { { name = "Frostweave Cloth", count = 60 } },
+            source = "Grand Master First Aid Trainer (Northrend — Howling Fjord: Sergeant Alive of the Horde / Alliance). Requires Manual.",
+        },
+        {
+            range = {400, 450},
+            recipe = "Heavy Frostweave Bandage",
+            count = 65,
+            materials = { { name = "Frostweave Cloth", count = 260 } },
+            source = "Grand Master Trainer (Northrend — learn at 400 skill). Frostweave Cloth drops from all humanoids in Northrend.",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 485},
+            recipe = "Embersilk Bandage",
+            count = 40,
+            materials = { { name = "Embersilk Cloth", count = 80 } },
+            source = "Illustrious First Aid Trainer (Cataclysm — Stormwind / Orgrimmar). Requires Manual from trainer.",
+        },
+        {
+            range = {485, 525},
+            recipe = "Heavy Embersilk Bandage",
+            count = 50,
+            materials = { { name = "Embersilk Cloth", count = 150 } },
+            source = "Illustrious Trainer (learn at 485). Embersilk Cloth drops from humanoids in Cataclysm zones.",
+        },
     },
 }

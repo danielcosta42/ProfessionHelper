@@ -226,5 +226,99 @@ ProfessionHelper.Tailoring = {
             source = "Vendor: Arrond (Shadowmoon Valley)",
             tip = ProfessionHelper.L["TAILORING_TIP_360_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 395},
+            recipe = "Bolt of Frostweave",
+            count = 25,
+            materials = { { name = "Frostweave Cloth", count = 125 } },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {395, 420},
+            recipe = "Bolt of Imbued Frostweave",
+            count = 30,
+            materials = {
+                { name = "Bolt of Frostweave", count = 60 },
+                { name = "Infinite Dust", count = 60 },
+            },
+            source = "Vendor: Sifting through Frostweave (trainer or Eiin equivalent Dalaran)",
+        },
+        {
+            range = {420, 440},
+            recipe = "Frostweave Bag",
+            count = 25,
+            materials = {
+                { name = "Bolt of Frostweave", count = 400 },
+                { name = "Eternium Thread", count = 25 },
+            },
+            source = "Grand Master Trainer (Northrend) — bags sell well on AH!",
+        },
+        {
+            range = {440, 450},
+            recipe = "Duskweave Belt",
+            count = 15,
+            materials = {
+                { name = "Bolt of Imbued Frostweave", count = 45 },
+                { name = "Infinite Dust", count = 30 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 460},
+            recipe = "Bolt of Embersilk Cloth",
+            count = 12,
+            materials = { { name = "Embersilk Cloth", count = 60 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {460, 490},
+            recipe = "Embersilk Robe",
+            count = 35,
+            materials = {
+                { name = "Bolt of Embersilk Cloth", count = 210 },
+                { name = "Eternium Thread", count = 35 },
+            },
+            source = "Illustrious Trainer (Cataclysm)",
+        },
+        {
+            range = {490, 510},
+            recipe = "Deathsilk Bracers",
+            count = 25,
+            materials = {
+                { name = "Bolt of Embersilk Cloth", count = 100 },
+                { name = "Volatile Air", count = 50 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {510, 525},
+            recipe = "Bloodthirsty Embersilk Robe",
+            count = 20,
+            materials = {
+                { name = "Bolt of Embersilk Cloth", count = 160 },
+                { name = "Volatile Fire", count = 40 },
+                { name = "Eternium Thread", count = 20 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Enchanting",
+            type       = "primary",
+            benefit    = "Melhor combinação para casters sem gathering. Craft itens de pano baratos e desencante para materials. Perfeito para leveling.",
+            tip        = "Craft Netherweave Bags — se der lucro no AH, venda. Se não, desencante para Arcane Dust.",
+        },
+        {
+            profession = "Inscription",
+            type       = "gold",
+            benefit    = "Tailors usam Enchanting Vellums (feitos por Scribes) para armazenar encantamentos no AH.",
+        },
     },
 }

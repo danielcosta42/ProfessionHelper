@@ -142,6 +142,67 @@ ProfessionHelper.Cooking = {
             source = "Vendor: Xerintha Ravenoak (Sylvanaar, Blade's Edge, Alliance) / Sassa Weldwell (Thunderlord Stronghold, Blade's Edge, Horde)",
             tip = ProfessionHelper.L["COOKING_TIP_355_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Mammoth Meal",
+            count = 30,
+            materials = { { name = "Chunk of Mammoth Meat", count = 120 } },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra). Meat from Mammoths/Rhinos in Borean Tundra.",
+        },
+        {
+            range = {400, 420},
+            recipe = "Worm Delight",
+            count = 25,
+            materials = { { name = "Chilled Meat", count = 100 } },
+            source = "Grand Master Trainer (Northrend). Chilled Meat drops from most Northrend beasts.",
+        },
+        {
+            range = {420, 440},
+            recipe = "Tender Shoveltusk Steak",
+            count = 25,
+            materials = { { name = "Shoveltusk Flank", count = 25 } },
+            source = "Grand Master Trainer (Northrend). Shoveltusk Flank from Shoveltusks in Howling Fjord.",
+        },
+        {
+            range = {440, 450},
+            recipe = "Blackened Dragonfin",
+            count = 12,
+            materials = { { name = "Dragonfin Angelfish", count = 12 } },
+            source = "Grand Master Trainer (Northrend). Dragonfin Angelfish fished in Dragonblight. Stat food — sell extras on AH!",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 480},
+            recipe = "Salted Eye",
+            count = 35,
+            materials = { { name = "Giant Catfish", count = 35 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar). Giant Catfish fished in Cata zones.",
+        },
+        {
+            range = {480, 500},
+            recipe = "Beer Basted Crocolisk",
+            count = 25,
+            materials = { { name = "Crocolisk Tail", count = 25 } },
+            source = "Trainer (Cataclysm). Crocolisk Tail from Crocolisks in Uldum and Twilight Highlands.",
+        },
+        {
+            range = {500, 515},
+            recipe = "Grilled Dragon",
+            count = 20,
+            materials = { { name = "Dragon Flank", count = 40 } },
+            source = "Trainer (Cataclysm). Dragon Flank from Drakes in Twilight Highlands and Deepholm.",
+        },
+        {
+            range = {515, 525},
+            recipe = "Seafood Magnifique Feast",
+            count = 12,
+            materials = {
+                { name = "Abyssal Clam", count = 240 },
+                { name = "Deepsea Sagefish", count = 60 },
+            },
+            source = "Trainer (Cataclysm). Feast feeds the entire raid — sell these for great profit!",
+        },
     },
 
     tips = {

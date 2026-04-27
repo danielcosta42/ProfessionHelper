@@ -551,5 +551,93 @@ ProfessionHelper.Engineering = {
             },
             source = "Vendor: Lebowski (Honor Hold, Alliance) / Captured Gnome (Zabra'jin, Horde)",
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Handful of Cobalt Bolts",
+            count = 30,
+            materials = { { name = "Cobalt Bar", count = 90 } },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {400, 420},
+            recipe = "Overcharged Capacitor",
+            count = 25,
+            materials = {
+                { name = "Cobalt Bar", count = 100 },
+                { name = "Crystallized Earth", count = 25 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {420, 440},
+            recipe = "Froststeel Tube",
+            count = 25,
+            materials = {
+                { name = "Cobalt Bar", count = 150 },
+                { name = "Crystallized Water", count = 25 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Explosive Decoy",
+            count = 15,
+            materials = {
+                { name = "Cobalt Bar", count = 30 },
+                { name = "Frostweave Cloth", count = 15 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 485},
+            recipe = "Obsidium Bolts",
+            count = 40,
+            materials = { { name = "Obsidium Bar", count = 120 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {485, 510},
+            recipe = "Tightening Straps",
+            count = 30,
+            materials = {
+                { name = "Embersilk Cloth", count = 150 },
+                { name = "Obsidium Bar", count = 90 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {510, 525},
+            recipe = "Electrostatic Condenser",
+            count = 20,
+            materials = {
+                { name = "Elementium Bar", count = 240 },
+                { name = "Volatile Air", count = 80 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Mining",
+            type       = "primary",
+            benefit    = "Engineering consome TODOS os tipos de ore/bar. Mining fornece materiais de forma gratuita e permite leveling sem custo.",
+            tip        = "Cobalt, Saronite e Titanium são essenciais para Engineering 350-450. Mine e smelt tudo.",
+        },
+        {
+            profession = "Blacksmithing",
+            type       = "economy",
+            benefit    = "Compartilham os mesmos materiais de Mining. Em raides, ambas têm forte demanda de bars e kits.",
+        },
+        {
+            profession = "Alchemy",
+            type       = "gold",
+            benefit    = "Engineers com Alchemy podem criar e usar goggles + flasks/elixirs para máximo de performance. Forte combo PvE.",
+        },
     },
 }

@@ -389,6 +389,109 @@ ProfessionHelper.Herbalism = {
                 },
             },
         },
+        -- ==================== NORTHREND HERBS (375-450) ====================
+        {
+            skillRange = {375, 425},
+            herb = "Goldclover, Tiger Lily, Talandra's Rose, Deadnettle",
+            locations = {
+                {
+                    zone = "Howling Fjord",
+                    faction = "Both",
+                    route = "Coastal loops around the southern peninsula and eastern cliffs. Inland river valleys.",
+                    tips  = "Best starter Northrend herb zone. Goldclover (350) and Tiger Lily (375) very abundant. Good for Inscription milling.",
+                    levelRange = "68-72",
+                },
+                {
+                    zone = "Grizzly Hills",
+                    faction = "Both",
+                    route = "Follow river banks and forest clearings. The Grizzlemaw area is especially dense.",
+                    tips  = "Talandra's Rose (375) appears in Grizzly Hills. Dense spawns make this very efficient.",
+                    levelRange = "73-75",
+                },
+                {
+                    zone = "Borean Tundra",
+                    faction = "Both",
+                    route = "Southern and eastern areas near D.E.H.T.A. and Coldrock Quarry.",
+                    tips  = "Goldclover is very abundant here. Deadnettle also appears as a secondary herb.",
+                    levelRange = "68-72",
+                },
+            },
+        },
+        {
+            skillRange = {425, 450},
+            herb = "Adder's Tongue, Icethorn, Lichbloom, Frost Lotus",
+            locations = {
+                {
+                    zone = "Sholazar Basin",
+                    faction = "Both",
+                    route = "Full perimeter loop of the basin, then cross through the center. Extremely dense.",
+                    tips  = "BEST NORTHREND HERB ZONE. Adder's Tongue (400) is abundant everywhere. Great for Inscription milling — Azure Pigment → Ink of the Sea.",
+                    levelRange = "76-78",
+                },
+                {
+                    zone = "Storm Peaks",
+                    faction = "Both",
+                    route = "Valley floor between Ulduar and K3 (south), then eastern Storm Peaks.",
+                    tips  = "Icethorn (435) + Lichbloom (435) give Icy Pigment → Snowfall Ink. Sell Snowfall Ink for big gold!",
+                    levelRange = "77-80",
+                },
+                {
+                    zone = "Icecrown",
+                    faction = "Both",
+                    route = "Outer ring of Icecrown, following cliff edges south and east of the Citadel.",
+                    tips  = "Mix of Icethorn and Lichbloom. Frost Lotus spawns rarely alongside other herbs \u2014 very valuable!",
+                    levelRange = "77-80",
+                },
+            },
+        },
+        -- ==================== CATACLYSM HERBS (450-525) ====================
+        {
+            skillRange = {450, 500},
+            herb = "Cinderbloom, Stormvine, Heartblossom, Azshara's Veil",
+            locations = {
+                {
+                    zone = "Mount Hyjal",
+                    faction = "Both",
+                    route = "Lower Hyjal near Nordrassil, then spiral upward through the Ashen Fields.",
+                    tips  = "Cinderbloom (425) is extremely abundant. Best zone for Alchemy Elixir of the Cobra mats.",
+                    levelRange = "80-82",
+                },
+                {
+                    zone = "Deepholm",
+                    faction = "Both",
+                    route = "Outer ring of the zone, particularly around the Temple of Earth.",
+                    tips  = "Heartblossom (475) only spawns in Deepholm — required for Alchemy Elixir of Deep Earth and Potion of Deepholm.",
+                    levelRange = "82-83",
+                },
+                {
+                    zone = "Vashj'ir — Shimmering Expanse",
+                    faction = "Both",
+                    route = "Mid-depth areas of Shimmering Expanse, sweeping around the kelp forests.",
+                    tips  = "Azshara's Veil (475) only in Vashj'ir. Requires underwater breathing or Vashj'ir seahorse. Good value herb.",
+                    levelRange = "80-82",
+                },
+            },
+        },
+        {
+            skillRange = {500, 525},
+            herb = "Twilight Jasmine, Whiptail",
+            locations = {
+                {
+                    zone = "Twilight Highlands",
+                    faction = "Both",
+                    route = "Northern and eastern Highlands near the Vermillion Redoubt. Loop through Bloodgulch.",
+                    tips  = "Twilight Jasmine (500) only in Twilight Highlands. Required for high-end Alchemy flasks. Pairs with Inscription milling.",
+                    levelRange = "84-85",
+                },
+                {
+                    zone = "Uldum",
+                    faction = "Both",
+                    route = "Northern Uldum near Ramkahen. Whiptail spawns densely along the Nile-like river.",
+                    tips  = "Whiptail (500) in Uldum is incredibly dense. Best zone for Whiptail. Pair with Archaeology dig sites here!",
+                    levelRange = "83-85",
+                },
+            },
+        },
     },
     
     -- Leveling guide
@@ -424,6 +527,47 @@ ProfessionHelper.Herbalism = {
         {
             range = {340, 375},
             tip = ProfessionHelper.L["HERBALISM_TIP_340_375"],
+        },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 420},
+            tip = "Pick Goldclover (skill 350), Tiger Lily (375), and Talandra's Rose (375) in Howling Fjord and Grizzly Hills. Excellent for Inscription milling.",
+        },
+        {
+            range = {420, 450},
+            tip = "Pick Adder's Tongue (skill 400) in Sholazar Basin — best single zone for Inscription inks. Pick Icethorn (435) and Lichbloom (435) in Storm Peaks and Icecrown for Snowfall Ink. Frost Lotus (450) spawns as rare bonus near high-level herbs.",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 500},
+            tip = "Pick Cinderbloom (skill 425) in Mount Hyjal and Deepholm. Pick Stormvine (425) in Vashj'ir. Pick Heartblossom (475) in Deepholm — high value for Alchemy.",
+        },
+        {
+            range = {500, 525},
+            tip = "Pick Twilight Jasmine (500) in Twilight Highlands — highest skill requirement herb. Pick Whiptail (500) in Uldum alongside Tol'vir dig sites. Pick Azshara's Veil (475) in Vashj'ir for Alchemy Potion of the Tol'vir.",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Alchemy",
+            type       = "primary",
+            benefit    = "A sinergia número 1 do jogo: herbs direto para flasks, elixires e poções. Mil% de retorno sobre custo zero.",
+            tip        = "Northrend: Adder's Tongue (Sholazar Basin) e Goldclover (Grizzly Hills) são as herbs mais versáteis.",
+        },
+        {
+            profession = "Inscription",
+            type       = "primary",
+            benefit    = "Herbs são moaías para Pigments → Inks → Glyphs. Use o Ink Trader em Dalaran para simplificar.",
+            tip        = "Colheita de herbs baratas (Goldclover, Adder's Tongue) cobre TODO o nivelamento de Inscription.",
+        },
+        {
+            profession = "Mining",
+            type       = "economy",
+            benefit    = "Gathering duplo: herb+ore em uma única volta do mapa. Ideal para acumular materiais para craftings.",
         },
     },
 }

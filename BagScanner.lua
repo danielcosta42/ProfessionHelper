@@ -6,6 +6,21 @@
 ProfessionHelper = ProfessionHelper or {}
 local PH = ProfessionHelper
 
+-- C_Container polyfill for Classic/TBC/Wrath (pre-Cata API)
+if not C_Container then
+    C_Container = {
+        GetContainerNumSlots = GetContainerNumSlots,
+        GetContainerItemLink = GetContainerItemLink,
+        GetContainerItemInfo = function(bag, slot)
+            local tex, count, locked, q, readable, lootable, link, isFiltered, noValue, id =
+                GetContainerItemInfo(bag, slot)
+            return { iconFileID = tex, stackCount = count, isLocked = locked,
+                     quality = q, isReadable = readable, hasLoot = lootable,
+                     itemLink = link, isFiltered = isFiltered, noValue = noValue, itemID = id }
+        end,
+    }
+end
+
 PH.BagScanner = {}
 local BS = PH.BagScanner
 

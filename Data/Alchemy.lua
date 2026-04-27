@@ -215,5 +215,110 @@ ProfessionHelper.Alchemy = {
             source = "Drop: Captain Skarloc (Old Hillsbrad Foothills)",
             tip = ProfessionHelper.L["ALCHEMY_TIP_365_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 390},
+            recipe = "Elixir of Mighty Strength",
+            count = 18,
+            materials = {
+                { name = "Tiger Lily", count = 72 },
+            },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {390, 420},
+            recipe = "Potion of Speed",
+            count = 35,
+            materials = {
+                { name = "Goldclover", count = 175 },
+                { name = "Adder's Tongue", count = 175 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {420, 440},
+            recipe = "Runic Healing Potion",
+            count = 25,
+            materials = {
+                { name = "Icethorn", count = 50 },
+                { name = "Lichbloom", count = 50 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Flask of the Frost Wyrm",
+            count = 15,
+            materials = {
+                { name = "Goldclover", count = 105 },
+                { name = "Lichbloom", count = 45 },
+                { name = "Crystallized Life", count = 45 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 480},
+            recipe = "Elixir of the Cobra",
+            count = 35,
+            materials = {
+                { name = "Cinderbloom", count = 105 },
+                { name = "Stormvine", count = 105 },
+            },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {480, 500},
+            recipe = "Elixir of Deep Earth",
+            count = 25,
+            materials = {
+                { name = "Heartblossom", count = 75 },
+                { name = "Volatile Earth", count = 50 },
+            },
+            source = "Illustrious Trainer (Cataclysm)",
+        },
+        {
+            range = {500, 510},
+            recipe = "Potion of the Tol'vir",
+            count = 15,
+            materials = {
+                { name = "Whiptail", count = 75 },
+                { name = "Volatile Life", count = 75 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {510, 525},
+            recipe = "Flask of Steelskin",
+            count = 18,
+            materials = {
+                { name = "Cinderbloom", count = 144 },
+                { name = "Twilight Jasmine", count = 144 },
+                { name = "Volatile Life", count = 144 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Herbalism",
+            type       = "primary",
+            benefit    = "Fornece 100% das herbs gratuitamente. A combinação mais forte do jogo para leveling + renda passiva.",
+            tip        = "Suba Herbalism + Alchemy juntas — role herb em qualquer zona e processe tudo.",
+        },
+        {
+            profession = "Inscription",
+            type       = "gold",
+            benefit    = "Ambas usam herbs. Alquimistas fazem flask/elixir de alta demanda; Scribes fazem glyphs. Compartilhe coleta de herbs.",
+        },
+        {
+            profession = "Jewelcrafting",
+            type       = "gold",
+            benefit    = "Elixir of Expertise (+35 Expertise) é BiS para JC durante leveling de raides. Alta demanda no AH.",
+        },
     },
 }

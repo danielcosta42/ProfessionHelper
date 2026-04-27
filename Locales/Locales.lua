@@ -336,6 +336,17 @@ Locales.ptBR = {
     ["MINING_TIP_245_300"] = "Mine Thorium em Un'Goro Crater (MELHOR), Winterspring, ou Silithus. Rich Thorium dá mais skill.",
     ["MINING_TIP_300_325"] = "Mine Fel Iron em Hellfire Peninsula. Esta zona tem a melhor densidade de Fel Iron em Outland.",
     ["MINING_TIP_325_375"] = "Mine Adamantite em Nagrand (MELHOR) ou Blade's Edge Mountains. Rich Adamantite para skill final.",
+    -- Mining WotLK Tips
+    ["MINING_TIP_375_425"] = "Mine Cobalt Ore em Howling Fjord (MELHOR) ou Borean Tundra. Cobalt é abundante em falesias e litorais. Smelt Cobalt Bar em skill 350+. DICA: Dragonblight mistura Cobalt e Saronite após skill 400.",
+    ["MINING_TIP_425_450"] = "Mine Saronite Ore em Icecrown (MELHOR), Storm Peaks ou Zul'Drak. Saronite é a espinha dorsal da mineração WotLK. Titanium aparece junto em Storm Peaks — vale muito no AH. Smelt Titansteel Bar (CD diário): 3 Titanium + Crystallized Fire + Earth + Shadow = FORTUNE!",
+    -- Inscription Leveling Tips
+    ["INSCRIPTION_TIP_225_260"] = "ATENÇÃO: Celestial Ink fica CINZA em skill 260! Troque para Shimmering Ink antes de 260. Shimmering Ink já é laranja em skill 230, então vale usar mesmo antes do limite. DICA WotLK: Jessica Sellers em Dalaran troca qualquer tinta por Ink of the Sea (1:1) — use Northrend herbs baratas para substituir qualquer tinta!",
+    ["INSCRIPTION_TIP_260_285"] = "Shimmering Ink vem de ervas TBC: Felweed, Dreaming Glory, Terocone, Ancient Lichen → Silvery Pigment. Shimmering Ink fica cinza em skill 285 — não ultrapasse! ALTERNATIVA: Use o Ink Trader Jessica Sellers em Dalaran para trocar Ink of the Sea por Shimmering Ink se as ervas TBC forem caras.",
+    ["INSCRIPTION_TIP_285_350"] = "Ethereal Ink vem de: Ancient Lichen (dungeons TBC: Coilfang, Auchindoun) e Nightmare Vine (Shadowmoon Valley) → Nether Pigment. Ethereal Ink é LARANJA em 285 — 100% de skill-up garantido! Use o Ink Trader em Dalaran se as ervas forem caras.",
+    ["INSCRIPTION_TIP_350_385"] = "GRAND MASTER: Aprenda com Feyden Darkin em Dalaran. Ink of the Sea vem de ervas Northrend (Goldclover, Tiger Lily, Adder's Tongue, Talandra's Rose) → Azure Pigment. DICA ESSENCIAL: Jessica Sellers em Dalaran (próximo ao trainer) troca qualquer tinta por Ink of the Sea 1:1!",
+    ["INSCRIPTION_TIP_385_420"] = "Nesta faixa os glyphs já ficam verdes — craft mais para compensar. Adder's Tongue (Sholazar Basin) é a melhor herb de Northrend para Inscription: alta densidade, Azure Pigment garantido. Compre em lotes no AH nos dias de reset.",
+    ["INSCRIPTION_TIP_420_435"] = "Northrend Inscription Research: 1 vez por dia, consome 6 Ink of the Sea + 1 Resilient Parchment. Descobre glyphs aleatórios que só podem ser aprendidos assim! Snowfall Ink (rare pigment de Northrend) vale muito para Darkmoon Cards.",
+    ["INSCRIPTION_TIP_435_450"] = "Darkmoon Card: Nobles são extremamente valiosas (set completo = Darkmoon Card: Greatness, um dos melhores trinkets do WotLK). Craft e venda no AH durante Darkmoon Faire! Research diária continua sendo essencial.",
     -- Skinning Skill Formula
     ["SKINNING_SKILL_FORMULA"] = "Skill necessário = Nível do Mob × 5 (ex: mob nível 60 requer skill 300)",
     -- Skinning Leveling Guide Tips
@@ -1209,6 +1220,17 @@ Locales.enUS = {
     ["MINING_TIP_245_300"] = "Mine Thorium in Un'Goro Crater (BEST), Winterspring, or Silithus. Rich Thorium gives more skill.",
     ["MINING_TIP_300_325"] = "Mine Fel Iron in Hellfire Peninsula. This zone has the best Fel Iron density in Outland.",
     ["MINING_TIP_325_375"] = "Mine Adamantite in Nagrand (BEST) or Blade's Edge Mountains. Rich Adamantite for final skill.",
+    -- Mining WotLK Tips
+    ["MINING_TIP_375_425"] = "Mine Cobalt Ore in Howling Fjord (BEST) or Borean Tundra. Cobalt is abundant along cliffs and coastlines. Smelt Cobalt Bar at skill 350+. TIP: Dragonblight mixes Cobalt and Saronite after skill 400.",
+    ["MINING_TIP_425_450"] = "Mine Saronite Ore in Icecrown (BEST), Storm Peaks, or Zul'Drak. Saronite is the backbone of WotLK mining. Titanium nodes appear alongside in Storm Peaks — very valuable on the AH. Smelt Titansteel Bar (daily CD): 3 Titanium + Crystallized Fire + Earth + Shadow = big gold!",
+    -- Inscription Leveling Tips
+    ["INSCRIPTION_TIP_225_260"] = "WARNING: Celestial Ink turns GREY at skill 260! Switch to Shimmering Ink before reaching 260. Shimmering Ink is already orange at skill 230, so use it as soon as you can. WotLK TIP: Jessica Sellers in Dalaran trades any ink for Ink of the Sea (1:1) — use cheap Northrend herbs to substitute any ink!",
+    ["INSCRIPTION_TIP_260_285"] = "Shimmering Ink comes from TBC herbs: Felweed, Dreaming Glory, Terocone, Ancient Lichen → Silvery Pigment. Shimmering Ink turns grey at skill 285 — don't go past it! ALTERNATIVE: Use Ink Trader Jessica Sellers in Dalaran to trade Ink of the Sea for Shimmering Ink if TBC herbs are expensive.",
+    ["INSCRIPTION_TIP_285_350"] = "Ethereal Ink comes from: Ancient Lichen (TBC dungeons: Coilfang, Auchindoun) and Nightmare Vine (Shadowmoon Valley) → Nether Pigment. Ethereal Ink is ORANGE at 285 — 100% skill-up guaranteed! Use the Ink Trader in Dalaran if herbs are expensive.",
+    ["INSCRIPTION_TIP_350_385"] = "GRAND MASTER: Learn from Feyden Darkin in Dalaran. Ink of the Sea comes from Northrend herbs (Goldclover, Tiger Lily, Adder's Tongue, Talandra's Rose) → Azure Pigment. KEY TIP: Jessica Sellers in Dalaran (near the trainer) trades any ink for Ink of the Sea 1:1!",
+    ["INSCRIPTION_TIP_385_420"] = "In this range glyphs turn green — craft more to compensate. Adder's Tongue (Sholazar Basin) is the best Northrend herb for Inscription: high density, guaranteed Azure Pigment. Buy in bulk on the AH on reset days.",
+    ["INSCRIPTION_TIP_420_435"] = "Northrend Inscription Research: once per day, costs 6 Ink of the Sea + 1 Resilient Parchment. Discovers random glyphs only learnable this way! Snowfall Ink (rare Northrend pigment) is valuable for Darkmoon Cards.",
+    ["INSCRIPTION_TIP_435_450"] = "Darkmoon Card: Nobles are extremely valuable (full set = Darkmoon Card: Greatness, one of the best WotLK trinkets). Craft and sell on the AH during Darkmoon Faire! Daily research continues to be essential.",
     -- Skinning Skill Formula
     ["SKINNING_SKILL_FORMULA"] = "Required Skill = Mob Level × 5 (e.g., level 60 mob requires skill 300)",
     -- Skinning Leveling Guide Tips
@@ -2082,6 +2104,17 @@ Locales.esES = {
     ["MINING_TIP_245_300"] = "Mina Thorium en Un'Goro Crater (MEJOR), Winterspring o Silithus. Rich Thorium da más habilidad.",
     ["MINING_TIP_300_325"] = "Mina Fel Iron en Hellfire Peninsula. Esta zona tiene la mejor densidad de Fel Iron en Outland.",
     ["MINING_TIP_325_375"] = "Mina Adamantite en Nagrand (MEJOR) o Blade's Edge Mountains. Rich Adamantite para habilidad final.",
+    -- Mining WotLK Tips
+    ["MINING_TIP_375_425"] = "Mina Cobalt Ore en Howling Fjord (MEJOR) o Borean Tundra. Cobalt es abundante en acantilados y costas. Funde Cobalt Bar a partir de habilidad 350. CONSEJO: Dragonblight mezcla Cobalt y Saronite tras habilidad 400.",
+    ["MINING_TIP_425_450"] = "Mina Saronite Ore en Icecrown (MEJOR), Storm Peaks o Zul'Drak. Saronite es la base de la minería WotLK. Los nódulos de Titanium aparecen en Storm Peaks — muy valiosos en el AH. Funde Titansteel Bar (CD diario): 3 Titanium + Crystallized Fire + Earth + Shadow = \u00a1gran oro!",
+    -- Inscription Leveling Tips
+    ["INSCRIPTION_TIP_225_260"] = "ATENCIÓN: \u00a1Celestial Ink se vuelve GRIS en habilidad 260! Cambia a Shimmering Ink antes de llegar a 260. Shimmering Ink ya es naranja en habilidad 230. CONSEJO WotLK: Jessica Sellers en Dalaran cambia cualquier tinta por Ink of the Sea (1:1).",
+    ["INSCRIPTION_TIP_260_285"] = "Shimmering Ink viene de hierbas TBC: Felweed, Dreaming Glory, Terocone, Ancient Lichen → Silvery Pigment. Se vuelve gris en habilidad 285. ALTERNATIVA: Usa al comerciante de tintas Jessica Sellers en Dalaran.",
+    ["INSCRIPTION_TIP_285_350"] = "Ethereal Ink viene de Ancient Lichen (mazmorras TBC: Coilfang, Auchindoun) y Nightmare Vine (Shadowmoon Valley) → Nether Pigment. Ethereal Ink es NARANJA en 285 — \u00a1100% de subida garantizada!",
+    ["INSCRIPTION_TIP_350_385"] = "GRAN MAESTRO: Aprende con Feyden Darkin en Dalaran. Ink of the Sea viene de hierbas de Northrend → Azure Pigment. CONSEJO CLAVE: Jessica Sellers en Dalaran cambia cualquier tinta por Ink of the Sea 1:1.",
+    ["INSCRIPTION_TIP_385_420"] = "En este rango los glifos se vuelven verdes — fabrica más para compensar. Adder's Tongue (Sholazar Basin) es la mejor hierba de Northrend para Inscription.",
+    ["INSCRIPTION_TIP_420_435"] = "Northrend Inscription Research: una vez al día, cuesta 6 Ink of the Sea + 1 Resilient Parchment. Descubre glifos aleatorios. Snowfall Ink vale mucho para Darkmoon Cards.",
+    ["INSCRIPTION_TIP_435_450"] = "Darkmoon Card: Nobles son extremadamente valiosas (set completo = Darkmoon Card: Greatness). \u00a1Fabrica y vende en el AH durante Darkmoon Faire!",
     -- Skinning Skill Formula
     ["SKINNING_SKILL_FORMULA"] = "Habilidad requerida = Nivel del Mob × 5 (ej: mob nivel 60 requiere habilidad 300)",
     -- Skinning Leveling Guide Tips

@@ -263,5 +263,94 @@ ProfessionHelper.Blacksmithing = {
             source = "Trainer (Outland)",
             tip = ProfessionHelper.L["BLACKSMITHING_TIP_360_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Cobalt Plate Gloves",
+            count = 30,
+            materials = { { name = "Cobalt Bar", count = 240 } },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {400, 425},
+            recipe = "Cobalt Helm",
+            count = 28,
+            materials = { { name = "Cobalt Bar", count = 280 } },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {425, 440},
+            recipe = "Notched Cobalt War Axe",
+            count = 20,
+            materials = { { name = "Cobalt Bar", count = 200 } },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Savage Saronite Helm",
+            count = 15,
+            materials = { { name = "Saronite Bar", count = 120 } },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 470},
+            recipe = "Obsidium Skeleton Key",
+            count = 25,
+            materials = { { name = "Obsidium Bar", count = 100 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {470, 500},
+            recipe = "Hardened Obsidium Belt",
+            count = 35,
+            materials = {
+                { name = "Hardened Obsidium Bar", count = 210 },
+                { name = "Volatile Earth", count = 140 },
+            },
+            source = "Illustrious Trainer (Cataclysm)",
+        },
+        {
+            range = {500, 515},
+            recipe = "Bloodied Rubium Belt",
+            count = 20,
+            materials = {
+                { name = "Elementium Bar", count = 80 },
+                { name = "Volatile Earth", count = 40 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {515, 525},
+            recipe = "Hardened Elementium Girdle",
+            count = 15,
+            materials = {
+                { name = "Hardened Elementium Bar", count = 120 },
+                { name = "Volatile Earth", count = 60 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Mining",
+            type       = "primary",
+            benefit    = "A sinergia clássica do WoW. Mining fornece todos os bars necessários para Blacksmithing. Economiza 50-80% de custo de leveling.",
+            tip        = "Saronite Bar, Cobalt Bar e Titansteel Bar são os materiais centrais do WotLK. Mine tudo!.",
+        },
+        {
+            profession = "Enchanting",
+            type       = "gold",
+            benefit    = "Desencante itens craftados descartáveis para materials de Enchanting. Reduz desperdício.",
+        },
+        {
+            profession = "Jewelcrafting",
+            type       = "economy",
+            benefit    = "Blacksmiths podem criar soquetes extras em armaduras (Bracer/Gloves). JC preenchem esses soquetes com gemas.",
+        },
     },
 }

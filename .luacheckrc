@@ -25,6 +25,7 @@ globals = {
     "SlashCmdList",
     "SLASH_PROFESSIONHELPER1",
     "SLASH_PROFESSIONHELPER2",
+    "C_Container",  -- polyfill for pre-Cata clients
 }
 
 -- Globals that the addon READS (WoW environment)

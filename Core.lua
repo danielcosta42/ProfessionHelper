@@ -14,6 +14,12 @@ PH.author = "Chehul @ DreamScyther-US"
 PH.github = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
 
+-- Runtime WoW interface version (e.g. 11503 = Vanilla, 20504 = TBC, 30403 = Wrath, 40402 = Cata)
+do
+    local _, _, _, toc = GetBuildInfo()
+    PH.interfaceVersion = toc or 0
+end
+
 -- Configuration defaults
 PH.defaults = {
     minimapButtonPosition = 45,
@@ -54,28 +60,31 @@ end
 -- All profession data references
 PH.Professions = {
     -- Primary Crafting
-    { name = "Alchemy", data = "Alchemy", icon = "Trade_Alchemy", type = "crafting" },
-    { name = "Blacksmithing", data = "Blacksmithing", icon = "Trade_BlackSmithing", type = "crafting" },
-    { name = "Enchanting", data = "Enchanting", icon = "Trade_Engraving", type = "crafting" },
-    { name = "Engineering", data = "Engineering", icon = "Trade_Engineering", type = "crafting" },
-    { name = "Jewelcrafting", data = "Jewelcrafting", icon = "INV_Misc_Gem_02", type = "crafting" },
-    { name = "Leatherworking", data = "Leatherworking", icon = "Trade_LeatherWorking", type = "crafting" },
-    { name = "Tailoring", data = "Tailoring", icon = "Trade_Tailoring", type = "crafting" },
-    
+    { name = "Alchemy",        data = "Alchemy",        icon = "Trade_Alchemy",               type = "crafting" },
+    { name = "Blacksmithing",  data = "Blacksmithing",  icon = "Trade_BlackSmithing",         type = "crafting" },
+    { name = "Enchanting",     data = "Enchanting",     icon = "Trade_Engraving",             type = "crafting" },
+    { name = "Engineering",    data = "Engineering",    icon = "Trade_Engineering",           type = "crafting" },
+    { name = "Jewelcrafting",  data = "Jewelcrafting",  icon = "INV_Misc_Gem_02",             type = "crafting", minVersion = 20000 },
+    { name = "Inscription",    data = "Inscription",    icon = "INV_Inscription_Tradeskill01",type = "crafting", minVersion = 30000 },
+    { name = "Leatherworking", data = "Leatherworking", icon = "Trade_LeatherWorking",        type = "crafting" },
+    { name = "Tailoring",      data = "Tailoring",      icon = "Trade_Tailoring",             type = "crafting" },
+
     -- Primary Gathering
-    { name = "Herbalism", data = "Herbalism", icon = "Trade_Herbalism", type = "gathering" },
-    { name = "Mining", data = "Mining", icon = "Trade_Mining", type = "gathering" },
-    { name = "Skinning", data = "Skinning", icon = "INV_Misc_Pelt_Wolf_01", type = "gathering" },
-    
+    { name = "Herbalism",      data = "Herbalism",      icon = "Trade_Herbalism",             type = "gathering" },
+    { name = "Mining",         data = "Mining",         icon = "Trade_Mining",                type = "gathering" },
+    { name = "Skinning",       data = "Skinning",        icon = "INV_Misc_Pelt_Wolf_01",       type = "gathering" },
+
     -- Secondary
-    { name = "Cooking", data = "Cooking", icon = "INV_Misc_Food_15", type = "secondary" },
-    { name = "First Aid", data = "FirstAid", icon = "Spell_Holy_SealOfSacrifice", type = "secondary" },
-    { name = "Fishing", data = "Fishing", icon = "Trade_Fishing", type = "secondary" },
+    { name = "Cooking",        data = "Cooking",        icon = "INV_Misc_Food_15",            type = "secondary" },
+    { name = "First Aid",      data = "FirstAid",       icon = "Spell_Holy_SealOfSacrifice",  type = "secondary" },
+    { name = "Fishing",        data = "Fishing",        icon = "Trade_Fishing",               type = "secondary" },
+    { name = "Archaeology",    data = "Archaeology",    icon = "Trade_Archaeology",           type = "secondary", minVersion = 40000 },
 
     -- Combo guides
-    { name = "Herbalism & Alchemy", data = "HerbalismAlchemy", icon = "Trade_Herbalism", type = "combo" },
-    { name = "Skinning & Leatherworking", data = "SkinningLeatherworking", icon = "INV_Misc_Pelt_Wolf_01", type = "combo" },
-    { name = "Fishing & Cooking", data = "FishingCooking", icon = "Trade_Fishing", type = "combo" },
+    { name = "Herbalism & Alchemy",         data = "HerbalismAlchemy",      icon = "Trade_Herbalism",        type = "combo" },
+    { name = "Skinning & Leatherworking",   data = "SkinningLeatherworking",icon = "INV_Misc_Pelt_Wolf_01",  type = "combo" },
+    { name = "Fishing & Cooking",           data = "FishingCooking",        icon = "Trade_Fishing",          type = "combo" },
+    -- Future: Inscription + Herbalism combo guide can be added here
 }
 
 -- Get profession data by name
@@ -354,6 +363,16 @@ function PH:OnEvent(event, ...)
         local addonName = ...
         if addonName == "ProfessionHelper" then
             self:InitializeDB()
+
+            -- Remove professions not available in this WoW version
+            local iVer = PH.interfaceVersion
+            for i = #PH.Professions, 1, -1 do
+                local p = PH.Professions[i]
+                if p.minVersion and iVer < p.minVersion then
+                    table.remove(PH.Professions, i)
+                end
+            end
+
             if self.BagScanner then self.BagScanner:Initialize() end
             if self.CooldownTracker then self.CooldownTracker:Initialize() end
             if self.RecipeTracker then self.RecipeTracker:Initialize() end

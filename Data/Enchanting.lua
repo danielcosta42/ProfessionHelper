@@ -260,5 +260,104 @@ ProfessionHelper.Enchanting = {
             source = "Trainer (Outland)",
             tip = ProfessionHelper.L["ENCHANTING_TIP_360_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 380},
+            recipe = "Runed Titanium Rod",
+            count = 1,
+            materials = {
+                { name = "Titanium Rod", count = 1 },
+                { name = "Infinite Dust", count = 12 },
+                { name = "Greater Cosmic Essence", count = 6 },
+                { name = "Runed Eternium Rod", count = 1 },
+            },
+            source = "Grand Master Trainer (Northrend — required to progress rod chain)",
+        },
+        {
+            range = {380, 415},
+            recipe = "Enchant Boots - Greater Fortitude",
+            count = 40,
+            materials = { { name = "Infinite Dust", count = 240 } },
+            source = "Grand Master Trainer (Northrend — Dalaran)",
+        },
+        {
+            range = {415, 440},
+            recipe = "Enchant Ring - Greater Spellpower",
+            count = 30,
+            materials = {
+                { name = "Infinite Dust", count = 240 },
+                { name = "Greater Cosmic Essence", count = 120 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Enchant Weapon - Exceptional Spellpower",
+            count = 12,
+            materials = {
+                { name = "Infinite Dust", count = 144 },
+                { name = "Greater Cosmic Essence", count = 48 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 455},
+            recipe = "Runed Elementium Rod",
+            count = 1,
+            materials = {
+                { name = "Elementium Rod", count = 1 },
+                { name = "Hypnotic Dust", count = 6 },
+                { name = "Greater Celestial Essence", count = 6 },
+                { name = "Runed Titanium Rod", count = 1 },
+            },
+            source = "Illustrious Trainer (Cataclysm — required for rod chain)",
+        },
+        {
+            range = {455, 480},
+            recipe = "Enchant Boots - Earthen Vitality",
+            count = 30,
+            materials = { { name = "Hypnotic Dust", count = 120 } },
+            source = "Illustrious Trainer (Cataclysm)",
+        },
+        {
+            range = {480, 505},
+            recipe = "Enchant Bracers - Speed",
+            count = 30,
+            materials = { { name = "Hypnotic Dust", count = 450 } },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {505, 525},
+            recipe = "Enchant Cloak - Greater Intellect",
+            count = 25,
+            materials = {
+                { name = "Hypnotic Dust", count = 125 },
+                { name = "Greater Celestial Essence", count = 50 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Tailoring",
+            type       = "primary",
+            benefit    = "A melhor combinação para quem não tem profissão de gathering. Tailor cria itens para DE, Enchanting processa tudo em materiais e encanta o resultado.",
+            tip        = "Craft Netherweave Bags ou Wool Cloth items — desencante tudo para materials de Enchanting.",
+        },
+        {
+            profession = "Blacksmithing",
+            type       = "gold",
+            benefit    = "Blacksmiths podem ser encantados por Enchanters para maior valor de revenda. Itens craftados DEáveis geram Arcane Dust e Illusion Dust.",
+        },
+        {
+            profession = "Inscription",
+            type       = "gold",
+            benefit    = "Scribes criam Enchanting Vellums para vender encantamentos no AH! Alta sinergia de mercado.",
+        },
     },
 }

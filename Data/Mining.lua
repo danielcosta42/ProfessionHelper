@@ -9,13 +9,17 @@ ProfessionHelper.Mining = {
             "Gelman Stonehand (Stormwind)",
             "Geofram Bouldertoe (Ironforge)",
             "Matt Johnson (Darnassus)",
-            "Hurnak Grimmord (Shattrath)",
+            "Hurnak Grimmord (Shattrath — Master)",
+            "Fendrig Redbeard (Howling Fjord — Valgarde — Grand Master)",
+            "Tansy Puddlefizz (Borean Tundra — Valiance Keep — Grand Master)",
         },
         ["Horde"] = {
             "Makaru (Orgrimmar)",
             "Brom Killian (Undercity)",
             "Brek Stonehoof (Thunder Bluff)",
-            "Hurnak Grimmord (Shattrath)",
+            "Hurnak Grimmord (Shattrath — Master)",
+            "Brunna Ironaxe (Howling Fjord — Vengeance Landing — Grand Master)",
+            "Crog Steelspine (Borean Tundra — Warsong Hold — Grand Master)",
         },
     },
     
@@ -111,6 +115,50 @@ ProfessionHelper.Mining = {
             skillYellow = 400,
             skillGreen = 425,
             skillGrey = 450,
+        },
+        -- WotLK Ores
+        {
+            ore = "Cobalt Ore",
+            skillRequired = 350,
+            skillYellow = 375,
+            skillGreen = 400,
+            skillGrey = 450,
+        },
+        {
+            ore = "Saronite Ore",
+            skillRequired = 400,
+            skillYellow = 425,
+            skillGreen = 450,
+            skillGrey = 500,
+        },
+        {
+            ore = "Titanium Ore",
+            skillRequired = 450,
+            skillYellow = 475,
+            skillGreen = 500,
+            skillGrey = 550,
+        },
+        -- Cataclysm Ores
+        {
+            ore = "Obsidium Ore",
+            skillRequired = 425,
+            skillYellow = 450,
+            skillGreen = 475,
+            skillGrey = 525,
+        },
+        {
+            ore = "Elementium Ore",
+            skillRequired = 475,
+            skillYellow = 500,
+            skillGreen = 525,
+            skillGrey = 575,
+        },
+        {
+            ore = "Pyrite Ore",
+            skillRequired = 500,
+            skillYellow = 525,
+            skillGreen = 550,
+            skillGrey = 600,
         },
     },
     
@@ -401,6 +449,111 @@ ProfessionHelper.Mining = {
                 },
             },
         },
+        -- ==================== COBALT / WRATH (375-425) ====================
+        {
+            skillRange = {375, 425},
+            ore = "Cobalt Ore",
+            locations = {
+                {
+                    zone = "Howling Fjord",
+                    faction = "Both",
+                    route = "Fly the eastern and southern coastline, then loop through the interior hillsides.",
+                    tips  = "Best starter Northrend zone for Cobalt. Very dense node spawns along cliffs and coast.",
+                    levelRange = "68-72",
+                },
+                {
+                    zone = "Borean Tundra",
+                    faction = "Both",
+                    route = "Fly the northern and eastern ridges. Cobalt nodes cluster around rocky outcroppings.",
+                    tips  = "Good alternative to Howling Fjord. Also drops Crystallized Earth alongside ore.",
+                    levelRange = "68-72",
+                },
+                {
+                    zone = "Dragonblight",
+                    faction = "Both",
+                    route = "Figure-8 around the central frozen plains and the Star's Rest / Wyrmrest area.",
+                    tips  = "Mix of Cobalt and early Saronite. Good for transitioning at skill 400+.",
+                    levelRange = "72-75",
+                },
+            },
+        },
+        -- ==================== SARONITE / TITANIUM (425-450) ====================
+        {
+            skillRange = {425, 450},
+            ore = "Saronite Ore, Titanium Ore",
+            locations = {
+                {
+                    zone = "Icecrown",
+                    faction = "Both",
+                    route = "Outer ring of Icecrown, following the cliff edges. Some interior loops around Argent Tournament.",
+                    tips  = "Best overall Saronite zone. Titanium nodes also appear here \u2014 very valuable. Bring epic flying!",
+                    levelRange = "77-80",
+                },
+                {
+                    zone = "Storm Peaks",
+                    faction = "Both",
+                    route = "Follow the valley floor between Ulduar and K3. The eastern finger south of Dun Niffelem is excellent.",
+                    tips  = "High Titanium density alongside Saronite. Best zone for Titanium farming specifically.",
+                    levelRange = "77-80",
+                },
+                {
+                    zone = "Zul'Drak",
+                    faction = "Both",
+                    route = "Outer ring of the zone, hugging the cliffs.",
+                    tips  = "Dense Saronite spawns. Lower Titanium count than Storm Peaks but faster Saronite route.",
+                    levelRange = "74-77",
+                },
+            },
+        },
+        -- ==================== OBSIDIUM / CATA (450-500) ====================
+        {
+            skillRange = {450, 500},
+            ore = "Obsidium Ore",
+            locations = {
+                {
+                    zone = "Mount Hyjal",
+                    faction = "Both",
+                    route = "Lower and mid zones of Hyjal, especially near the Ashen Fields and Firelands Invasion area.",
+                    tips  = "Best Obsidium zone. Very compact with high node density. Also drops Volatile Earth.",
+                    levelRange = "80-82",
+                },
+                {
+                    zone = "Deepholm",
+                    faction = "Both",
+                    route = "The Ring of Earths outer perimeter and Temple of Earth area.",
+                    tips  = "Good Obsidium density. Also has some Elementium nodes appearing at higher levels.",
+                    levelRange = "82-83",
+                },
+                {
+                    zone = "Vashj'ir",
+                    faction = "Both",
+                    route = "Shimmering Expanse and Abyssal Depths ocean floor.",
+                    tips  = "Underwater but very high node count. Requires Abyssal Seahorse mount for efficient farming.",
+                    levelRange = "80-82",
+                },
+            },
+        },
+        -- ==================== ELEMENTIUM / PYRITE (500-525) ====================
+        {
+            skillRange = {500, 525},
+            ore = "Elementium Ore, Pyrite Ore",
+            locations = {
+                {
+                    zone = "Twilight Highlands",
+                    faction = "Both",
+                    route = "Loop through Bloodgulch and the Verrall Delta. Eastern highlands have the best density.",
+                    tips  = "Best Elementium zone. Pyrite appears alongside Elementium \u2014 can contain uncommon/rare Cata gems!",
+                    levelRange = "84-85",
+                },
+                {
+                    zone = "Uldum",
+                    faction = "Both",
+                    route = "Northern and eastern Uldum around Ramkahen and the Oasis area.",
+                    tips  = "Excellent combined Elementium + Pyrite zone. Good to pair with Archaeology dig sites here.",
+                    levelRange = "83-85",
+                },
+            },
+        },
     },
     
     -- Smelting recipes for leveling
@@ -419,8 +572,15 @@ ProfessionHelper.Mining = {
         { name = "Smelt Adamantite", skill = 325, materials = {{ name = "Adamantite Ore", count = 1 }} },
         { name = "Smelt Eternium", skill = 350, materials = {{ name = "Eternium Ore", count = 1 }} },
         { name = "Smelt Felsteel", skill = 355, materials = {{ name = "Fel Iron Bar", count = 3 }, { name = "Eternium Bar", count = 2 }} },
-        { name = "Smelt Khorium", skill = 375, materials = {{ name = "Khorium Ore", count = 1 }} },
-    },
+        { name = "Smelt Khorium", skill = 375, materials = {{ name = "Khorium Ore", count = 1 }} },        -- Wrath
+        { name = "Smelt Cobalt",       skill = 350, materials = {{ name = "Cobalt Ore",     count = 1 }} },
+        { name = "Smelt Saronite",     skill = 400, materials = {{ name = "Saronite Ore",   count = 2 }} },
+        { name = "Smelt Titanium",     skill = 450, materials = {{ name = "Titanium Ore",   count = 2 }} },
+        { name = "Smelt Titansteel",   skill = 450, materials = {{ name = "Titanium Bar", count = 3 }, { name = "Crystallized Fire", count = 1 }, { name = "Crystallized Water", count = 1 }, { name = "Crystallized Shadow", count = 1 }} },
+        -- Cata
+        { name = "Smelt Obsidium",     skill = 475, materials = {{ name = "Obsidium Ore",   count = 2 }} },
+        { name = "Smelt Elementium",   skill = 515, materials = {{ name = "Elementium Ore", count = 2 }} },
+        { name = "Smelt Pyrite",       skill = 525, materials = {{ name = "Pyrite Ore",     count = 2 }} },    },
     
     -- Leveling guide
     levelingGuide = {
@@ -451,6 +611,53 @@ ProfessionHelper.Mining = {
         {
             range = {325, 375},
             tip = ProfessionHelper.L["MINING_TIP_325_375"],
+        },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 425},
+            tip = ProfessionHelper.L["MINING_TIP_375_425"],
+        },
+        {
+            range = {425, 450},
+            tip = ProfessionHelper.L["MINING_TIP_425_450"],
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 500},
+            tip = "Mine Obsidium Ore in Mount Hyjal, Vashj'ir, and Deepholm (skill 475+). Obsidium is the Cata starter ore. Smelt Obsidium at 475.",
+        },
+        {
+            range = {500, 525},
+            tip = "Mine Elementium Ore in Twilight Highlands and Uldum (skill 515+). Pyrite Ore appears alongside Elementium — smelt into Pyrium Bars (skill 525). Pyrite can contain uncommon/rare gems!",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Blacksmithing",
+            type       = "primary",
+            benefit    = "Blacksmiths consomem grandes volumes de ore/bar. Mine e smelt seus próprios materiais economizando 50-70% de custo.",
+            tip        = "Saronite Bar e Cobalt Bar são essenciais para Blacksmithing 350-450.",
+        },
+        {
+            profession = "Engineering",
+            type       = "primary",
+            benefit    = "Engineering usa quase todos os ores/bars existentes. Mining permite leveling grátis dos dois.",
+            tip        = "Titansteel Bar (CD diário) vale muito no AH — essencial para Engineers e Blacksmiths de alto nível.",
+        },
+        {
+            profession = "Jewelcrafting",
+            type       = "primary",
+            benefit    = "JC prospeta ores para gemas raras. Mine + prospecte Saronite/Titanium para gemas de raid.",
+            tip        = "Prospectar Saronite Ore em grandes volumes é uma das maiores fontes de gemas de raid WotLK.",
+        },
+        {
+            profession = "Herbalism",
+            type       = "economy",
+            benefit    = "Gathering duplo no mesmo percurso de voo. Maximiza renda por hora de farm.",
         },
     },
 }

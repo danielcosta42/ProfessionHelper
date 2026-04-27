@@ -210,5 +210,95 @@ ProfessionHelper.Leatherworking = {
             source = "Vendor: Almaador (Shattrath) — Sha'tar Honored",
             tip = ProfessionHelper.L["LEATHERWORKING_TIP_365_375"],
         },
+        -- ==================== GRAND MASTER / WRATH (375-450) ====================
+        {
+            range = {375, 400},
+            recipe = "Heavy Borean Armor Kit",
+            count = 30,
+            materials = { { name = "Heavy Borean Leather", count = 150 } },
+            source = "Grand Master Trainer (Northrend — Dalaran / Howling Fjord / Borean Tundra)",
+        },
+        {
+            range = {400, 420},
+            recipe = "Nerubian Leg Armor",
+            count = 25,
+            materials = {
+                { name = "Heavy Borean Leather", count = 100 },
+                { name = "Crystallized Shadow", count = 50 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {420, 440},
+            recipe = "Overcast Headguard",
+            count = 25,
+            materials = { { name = "Borean Leather", count = 500 } },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        {
+            range = {440, 450},
+            recipe = "Frosthide Leg Armor",
+            count = 15,
+            materials = {
+                { name = "Arctic Fur", count = 60 },
+                { name = "Crystallized Fire", count = 30 },
+            },
+            source = "Grand Master Trainer (Northrend)",
+        },
+        -- ==================== ILLUSTRIOUS / CATA (450-525) ====================
+        {
+            range = {450, 475},
+            recipe = "Savage Leather Gloves",
+            count = 30,
+            materials = { { name = "Savage Leather", count = 600 } },
+            source = "Illustrious Trainer (Cataclysm — Stormwind / Orgrimmar)",
+        },
+        {
+            range = {475, 500},
+            recipe = "Deathscale Belt",
+            count = 30,
+            materials = {
+                { name = "Heavy Savage Leather", count = 360 },
+                { name = "Volatile Water", count = 60 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {500, 515},
+            recipe = "Twilight Scale Chestguard",
+            count = 20,
+            materials = {
+                { name = "Twilight Scale", count = 160 },
+                { name = "Volatile Air", count = 80 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+        {
+            range = {515, 525},
+            recipe = "Dragonscale Leg Armor",
+            count = 12,
+            materials = {
+                { name = "Pristine Hide", count = 48 },
+                { name = "Volatile Fire", count = 48 },
+            },
+            source = "Trainer (Cataclysm)",
+        },
+    },
+
+    -- ===================================================================
+    -- SINERGIAS
+    -- ===================================================================
+    synergies = {
+        {
+            profession = "Skinning",
+            type       = "primary",
+            benefit    = "Sinergia clássica: Skinner fornece leather diretamente para LW. Zero custo de materials, leveling completo.",
+            tip        = "Nagrand (Talbuks, Clefthoofs) é a melhor zona para Knothide Leather. WotLK: Dragonblight/Howling Fjord para Arctic Fur.",
+        },
+        {
+            profession = "Enchanting",
+            type       = "gold",
+            benefit    = "Craft itens de couro descartáveis e desencante para materials de Enchanting. Cadeia de valor total.",
+        },
     },
 }

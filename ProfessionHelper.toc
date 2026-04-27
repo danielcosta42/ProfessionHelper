@@ -1,5 +1,8 @@
-## Interface: 20504
-## Title: |cff30a5ffProfession Helper|r |cff808080TBC|r
+## Interface-Classic: 11503
+## Interface-BCC: 20504
+## Interface-Wrath: 30403
+## Interface-Cata: 40402
+## Title: |cff30a5ffProfession Helper|r
 ## Notes: Complete profession leveling guide with smart routes, shopping lists & TSM integration (PT/EN/ES)
 ## Notes-ptBR: Guia completo de profissões com rotas inteligentes, listas de compras e integração TSM
 ## Notes-enUS: Complete profession leveling guide with smart routes, shopping lists & TSM integration
@@ -22,6 +25,7 @@ Data\Blacksmithing.lua
 Data\Enchanting.lua
 Data\Engineering.lua
 Data\Jewelcrafting.lua
+Data\Inscription.lua
 Data\Leatherworking.lua
 Data\Tailoring.lua
 Data\Cooking.lua
@@ -30,6 +34,7 @@ Data\Mining.lua
 Data\Herbalism.lua
 Data\Skinning.lua
 Data\Fishing.lua
+Data\Archaeology.lua
 Data\GoldFarming.lua
 Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
