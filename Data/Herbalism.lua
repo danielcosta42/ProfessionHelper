@@ -439,7 +439,7 @@ ProfessionHelper.Herbalism = {
                     zone = "Icecrown",
                     faction = "Both",
                     route = "Outer ring of Icecrown, following cliff edges south and east of the Citadel.",
-                    tips  = "Mix of Icethorn and Lichbloom. Frost Lotus spawns rarely alongside other herbs \u2014 very valuable!",
+                    tips  = "Mix of Icethorn and Lichbloom. Frost Lotus spawns rarely alongside other herbs — very valuable!",
                     levelRange = "77-80",
                 },
             },

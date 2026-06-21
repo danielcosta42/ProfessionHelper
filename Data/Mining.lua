@@ -486,7 +486,7 @@ ProfessionHelper.Mining = {
                     zone = "Icecrown",
                     faction = "Both",
                     route = "Outer ring of Icecrown, following the cliff edges. Some interior loops around Argent Tournament.",
-                    tips  = "Best overall Saronite zone. Titanium nodes also appear here \u2014 very valuable. Bring epic flying!",
+                    tips  = "Best overall Saronite zone. Titanium nodes also appear here — very valuable. Bring epic flying!",
                     levelRange = "77-80",
                 },
                 {
@@ -542,7 +542,7 @@ ProfessionHelper.Mining = {
                     zone = "Twilight Highlands",
                     faction = "Both",
                     route = "Loop through Bloodgulch and the Verrall Delta. Eastern highlands have the best density.",
-                    tips  = "Best Elementium zone. Pyrite appears alongside Elementium \u2014 can contain uncommon/rare Cata gems!",
+                    tips  = "Best Elementium zone. Pyrite appears alongside Elementium — can contain uncommon/rare Cata gems!",
                     levelRange = "84-85",
                 },
                 {
