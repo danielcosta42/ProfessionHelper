@@ -1,7 +1,7 @@
 -- Profession Helper - Premium Minimalist UI
 -- Clean, icon-driven interface with modern feel
 
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 -------------------------------------------------------------------------------
 -- Theme constants
@@ -64,7 +64,7 @@ end
 local function FilterSourceByFaction(source)
     if not source or source == "" then return source end
 
-    local playerFaction = UnitFactionGroup("player") or "Alliance"
+    local playerFaction = PH.Identity:GetFaction() or "Alliance"
     local oppFaction    = (playerFaction == "Alliance") and "Horde" or "Alliance"
 
     -- If the string mentions no faction at all, return it unchanged
@@ -268,7 +268,7 @@ function PH:BuildHomePanel(parent)
     -- WoW badge
     local tbcText = parent:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     tbcText:SetPoint("TOP", 0, y)
-    tbcText:SetText(hexc(T.textMuted) .. "World of Warcraft: The Burning Crusade Classic|r")
+    tbcText:SetText(hexc(T.textMuted) .. "World of Warcraft: " .. PH:GetClientLabel() .. "|r")
 end
 
 -------------------------------------------------------------------------------
@@ -322,7 +322,7 @@ function PH:CreateMainWindow()
 
     local verBadge = header:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     verBadge:SetPoint("LEFT", title, "RIGHT", 6, -1)
-    verBadge:SetText(hexc(T.textMuted) .. "TBC|r")
+    verBadge:SetText(hexc(T.textMuted) .. PH:GetClientShortLabel() .. "|r")
 
     -- About/Info button
     local infoBtn = CreateFrame("Button", nil, header)
@@ -354,6 +354,37 @@ function PH:CreateMainWindow()
     closeHL:SetAllPoints()
     closeHL:SetColorTexture(rgba(T.red, 0.25))
     closeBtn:SetScript("OnClick", function() frame:Hide() end)
+
+    -- Header toolbar: always-visible quick access to the standalone tool panels.
+    -- These panels used to be reachable only via slash commands; the icons make
+    -- them discoverable. Laid out right-to-left, left of the about/close buttons.
+    local toolButtons = {
+        { icon = "Interface\\Icons\\INV_Misc_PocketWatch_01", tip = PH.L["CD_TITLE"], cb = function() PH:ShowCooldownUI() end },
+        { icon = "Interface\\Icons\\INV_Scroll_03",           tip = PH.L["RT_TITLE"], cb = function() PH:ShowRecipeTrackerUI() end },
+        { icon = "Interface\\Icons\\INV_Misc_GroupNeedMore",  tip = PH.L["AM_TITLE"], cb = function() PH:ShowAltManagerUI() end },
+        { icon = "Interface\\Icons\\INV_Enchant_Disenchant",  tip = PH.L["DE_TITLE"], cb = function() PH:ShowDECalcUI() end },
+        { icon = "Interface\\Icons\\INV_Misc_Coin_01",        tip = PH.L["FT_TITLE"], cb = function() PH:ShowFarmTrackerUI() end },
+    }
+    local toolSize, toolGap = 26, 4
+    for i, tool in ipairs(toolButtons) do
+        local tb = CreateFrame("Button", nil, header)
+        tb:SetSize(toolSize, toolSize)
+        tb:SetPoint("RIGHT", header, "RIGHT", -80 - (i - 1) * (toolSize + toolGap), 0)
+        local tex = tb:CreateTexture(nil, "ARTWORK")
+        tex:SetAllPoints()
+        tex:SetTexture(tool.icon)
+        tex:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+        local hl = tb:CreateTexture(nil, "HIGHLIGHT")
+        hl:SetAllPoints()
+        hl:SetColorTexture(rgba(T.accent, 0.25))
+        tb:SetScript("OnClick", tool.cb)
+        tb:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+            GameTooltip:AddLine(tool.tip)
+            GameTooltip:Show()
+        end)
+        tb:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
 
     -- Sidebar
     local sidebar = CreateFrame("Frame", nil, frame, "BackdropTemplate")
@@ -484,6 +515,7 @@ function PH:CreateMainWindow()
         for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
         homeSel:Show()
         PH.selectedProfession = nil
+        PH.Config:Set("selectedProfession", nil)
         PH.viewedStepIndex = nil
         PH.gatherViewStep = nil
         PH:UpdateContentPanel()
@@ -614,6 +646,7 @@ function PH:CreateMainWindow()
                 frame.homeSel:Hide()
                 self.selectedBar:Show()
                 PH.selectedProfession = self.professionName
+                PH.Config:Set("selectedProfession", self.professionName)
                 PH.viewedStepIndex = nil
                 PH.gatherViewStep = nil
                 PH:UpdateContentPanel()
@@ -625,6 +658,18 @@ function PH:CreateMainWindow()
         end
     end
     sideChild:SetHeight(math.abs(yOff) + 8)
+
+    -- If a profession was restored from a previous session, reflect it in the
+    -- sidebar selection (otherwise "home" stays highlighted by default).
+    if PH.selectedProfession then
+        for _, b in ipairs(profButtons) do
+            if b.professionName == PH.selectedProfession then
+                frame.homeSel:Hide()
+                b.selectedBar:Show()
+                break
+            end
+        end
+    end
     frame.profButtons = profButtons
 
     frame.UpdateContent = function() PH:UpdateContentPanel() end
@@ -675,7 +720,7 @@ function PH:UpdateContentPanel()
 
     local profData = self:GetProfessionData(self.selectedProfession)
     if not profData then
-        self:Print(string.format(PH.L["DATA_NOT_FOUND"], self.selectedProfession))
+        PH.Logger.Info(string.format(PH.L["DATA_NOT_FOUND"], self.selectedProfession))
         return
     end
 
@@ -801,7 +846,7 @@ function PH:UpdateContentPanel()
         -- Combo uses crafting content with combo skill awareness
         local minSkill = 0
         if comboSkills then
-            minSkill = 375
+            minSkill = self:GetMaxSkillForClient()
             for _, v in pairs(comboSkills) do
                 if v < minSkill then minSkill = v end
             end
@@ -880,12 +925,12 @@ end
 -- Crafting content (progress-focused)
 -------------------------------------------------------------------------------
 function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, comboSkills)
-    local targetSkill = 375
+    local targetSkill = self:GetMaxSkillForClient()
     if currentSkill < 1 then currentSkill = 1 end
 
     -- Store current skill and step index for tracker
     if self.selectedProfession then
-        self.liveTracker.previousSkill[self.selectedProfession] = self.liveTracker.previousSkill[self.selectedProfession] or currentSkill
+        self._skillTracker.previousSkill[self.selectedProfession] = self._skillTracker.previousSkill[self.selectedProfession] or currentSkill
     end
 
     local pathData = PH.PathCalculator:Calculate(profData, currentSkill, targetSkill, comboSkills)
@@ -893,10 +938,10 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
         local allDone = true
         if comboSkills then
             for _, v in pairs(comboSkills) do
-                if v < 375 then allDone = false; break end
+                if v < targetSkill then allDone = false; break end
             end
         else
-            allDone = (currentSkill >= 375)
+            allDone = (currentSkill >= targetSkill)
         end
         if allDone then
             local y = yOffset
@@ -932,8 +977,8 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
         if rEnd > stepSkillLvl then currentStepIdx = i; break end
     end
     -- Initialize step index for auto-advance detection
-    if not self.liveTracker.previousStepIdx then
-        self.liveTracker.previousStepIdx = currentStepIdx
+    if not self._skillTracker.previousStepIdx then
+        self._skillTracker.previousStepIdx = currentStepIdx
     end
     local viewIdx = self.viewedStepIndex
     if not viewIdx or viewIdx < 1 or viewIdx > totalSteps then viewIdx = currentStepIdx end
@@ -942,14 +987,9 @@ function PH:CreateCraftingContent(parent, profData, currentSkill, yOffset, combo
     -- Progress
     local progressLabel
     if comboSkills then
-        local parts = {}
-        for _, sk in ipairs(profData.skills) do
-            local v = comboSkills[sk] or 0
-            table.insert(parts, sk .. " " .. v)
-        end
-        progressLabel = string.format("PROGRESSO  (%.0f%%)", pct * 100)
+        progressLabel = string.format(PH.L["PROGRESS_LABEL_PCT"], pct * 100)
     else
-        progressLabel = string.format("PROGRESSO  %d / %d  (%.0f%%)", currentSkill, targetSkill, pct * 100)
+        progressLabel = string.format(PH.L["PROGRESS_LABEL"], currentSkill, targetSkill, pct * 100)
     end
     local _, y = SectionLabel(parent, yOffset, progressLabel)
 
@@ -1417,7 +1457,7 @@ function PH:RenderTrainers(parent, y, profData)
     local _, newY = SectionLabel(parent, y, PH.L["TRAINERS"], hexc(T.textMuted))
     y = newY
 
-    local faction = UnitFactionGroup("player") or "Alliance"
+    local faction = PH.Identity:GetFaction() or "Alliance"
     local trainers = profData.trainer[faction]
     if trainers then
         for _, trainer in ipairs(trainers) do
@@ -1434,7 +1474,7 @@ end
 -- Shopping content
 -------------------------------------------------------------------------------
 function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, comboSkills)
-    local targetSkill = 375
+    local targetSkill = self:GetMaxSkillForClient()
     if currentSkill < 1 then currentSkill = 1 end
 
     local pathData = PH.PathCalculator:Calculate(profData, currentSkill, targetSkill, comboSkills)
@@ -1469,7 +1509,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
 
     -- AH section
     if #ahItems > 0 then
-        local _, ny = SectionLabel(parent, y, "AUCTION HOUSE", hexc(T.accent))
+        local _, ny = SectionLabel(parent, y, PH.L["SECTION_AH"], hexc(T.accent))
         y = ny
 
         -- Columns
@@ -1532,7 +1572,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
         end
 
         y = y - 6
-        local tsmBtn = PillButton(parent, 180, 24, "Gerar busca TSM", T.green)
+        local tsmBtn = PillButton(parent, 180, 24, PH.L["TSM_GENERATE_BTN"], T.green)
         tsmBtn:SetPoint("TOPLEFT", 0, y)
         tsmBtn:SetScript("OnClick", function()
             local ml = {}
@@ -1545,7 +1585,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
         end)
         tsmBtn:SetScript("OnEnter", function(self)
             GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-            GameTooltip:AddLine("TSM Shopping")
+            GameTooltip:AddLine(PH.L["TSM_BTN_TITLE"])
             GameTooltip:AddLine(PH.L["TSM_BTN_TOOLTIP"], 1,1,1,true)
             GameTooltip:Show()
         end)
@@ -1555,7 +1595,7 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
 
     -- Vendor section
     if #vendorItems > 0 then
-        local _, ny = SectionLabel(parent, y, "VENDOR", hexc(T.green))
+        local _, ny = SectionLabel(parent, y, PH.L["SECTION_VENDOR"], hexc(T.green))
         y = ny
         for _, item in ipairs(vendorItems) do
             local it = parent:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
@@ -1950,7 +1990,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
         return y - 60
     end
 
-    local targetSkill = 375
+    local targetSkill = self:GetMaxSkillForClient()
     local pct = math.min(1, currentSkill / targetSkill)
     local currentStepIdx = GG:GetCurrentStepIndex(currentSkill)
 
@@ -1986,6 +2026,21 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
         GameTooltip:Show()
     end)
     guideBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    -- "Fishing Assistant" button — only for Fishing profession
+    if profData.name == "Fishing" then
+        local faBtn = PillButton(parent, 96, 24, PH.L["FA_OPEN_BTN"], T.accent)
+        faBtn:SetPoint("TOPRIGHT", 0, y)
+        faBtn:SetScript("OnClick", function() PH:ShowFishingAssistUI() end)
+        faBtn:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:AddLine(PH.L["FA_TITLE"])
+            GameTooltip:AddLine(PH.L["FA_STATUS_IDLE"], 1, 1, 1, true)
+            GameTooltip:Show()
+        end)
+        faBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
+
     y = y - 32
 
     -- Progress bar
@@ -2083,7 +2138,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
 
         local pvLbl = pvCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         pvLbl:SetPoint("TOPLEFT", 10, -4)
-        pvLbl:SetText(hexc(T.textMuted) .. "A seguir:|r")
+        pvLbl:SetText(hexc(T.textMuted) .. PH.L["NEXT_UP_LABEL"] .. "|r")
 
         local pvInfo = pvCard:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
         pvInfo:SetPoint("TOPLEFT", 10, -16)
@@ -2160,7 +2215,7 @@ function PH:CreateGatheringContent(parent, profData, currentSkill, yOffset)
     end
 
     -- Gold farming guide at max skill
-    if currentSkill >= 375 then
+    if currentSkill >= self:GetMaxSkillForClient() then
         y = y - 10
         y = self:RenderGoldFarmingGuide(parent, y, profData.name)
     end
@@ -2271,7 +2326,7 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill, p
         tip:SetPoint("TOPLEFT", 12, iy)
         tip:SetPoint("RIGHT", card, "RIGHT", -12, 0)
         tip:SetJustifyH("LEFT")
-        tip:SetText(hexc(T.gold) .. "Dica:|r " .. hexc(T.textSecondary) .. step.tip .. "|r")
+        tip:SetText(hexc(T.gold) .. PH.L["TIP_LABEL"] .. "|r " .. hexc(T.textSecondary) .. step.tip .. "|r")
         local tipH = tip:GetStringHeight() or 14
         iy = iy - math.max(16, tipH + 4)
     end
@@ -2442,7 +2497,7 @@ function PH:ShowCreditsPopup()
     
     local version = scrollChild:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     version:SetPoint("TOP", 0, y)
-    version:SetText(hexc(T.textMuted) .. PH.L["VERSION"] .. " 1.0.0 - TBC Classic|r")
+    version:SetText(hexc(T.textMuted) .. PH.L["VERSION"] .. " " .. PH.version .. " - " .. PH:GetClientLabel() .. "|r")
     y = y - 24
     
     -- Description
@@ -2451,7 +2506,7 @@ function PH:ShowCreditsPopup()
     desc:SetWidth(400)
     desc:SetJustifyH("CENTER")
     desc:SetSpacing(2)
-    desc:SetText(hexc(T.textPrimary) .. PH.L["DESCRIPTION_LINE1"] .. "|r\\n" ..
+    desc:SetText(hexc(T.textPrimary) .. PH.L["DESCRIPTION_LINE1"] .. "|r\n" ..
         hexc(T.textSecondary) .. PH.L["DESCRIPTION_LINE2"] .. "|r")
     y = y - 40
     

@@ -1,6 +1,6 @@
 -- Profession Helper - Gathering Route System
 -- Draws full farming routes on World Map + minimap arrow to next waypoint
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 -------------------------------------------------------------------------------
 -- Zone uiMapID lookup — built at runtime from HereBeDragons / C_Map

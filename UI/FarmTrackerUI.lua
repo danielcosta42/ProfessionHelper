@@ -1,8 +1,7 @@
 -- Profession Helper - Farm Tracker UI
 -- Premium minimalist floating widget (matches main UI style)
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 local FT = PH.FarmTracker
 
 -- Flat backdrop helper (same pattern as main UI)
@@ -63,7 +62,7 @@ function PH:ShowFarmTrackerUI()
 
     local titleText = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     titleText:SetPoint("LEFT", 8, 0)
-    titleText:SetText("|cffffd700Farm Tracker|r")
+    titleText:SetText("|cffffd700" .. PH.L["FT_TITLE"] .. "|r")
 
     -- Close button (text-based, flat)
     local closeBtn = CreateFrame("Button", nil, hdr)
@@ -178,13 +177,24 @@ function PH:ShowFarmTrackerUI()
     rawValue:SetText("0g")
     frame.rawValue = rawValue
 
+    -- Vendor Loot Value
+    local vendorLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    vendorLabel:SetPoint("TOPLEFT", 0, statsY - 45)
+    vendorLabel:SetText("|cffe8c84a" .. PH.L["FARM_VENDOR_VALUE_LABEL"] .. "|r")
+
+    local vendorValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    vendorValue:SetPoint("TOPRIGHT", 0, statsY - 45)
+    vendorValue:SetJustifyH("RIGHT")
+    vendorValue:SetText("0g")
+    frame.vendorValue = vendorValue
+
     -- Estimated Loot Value (TSM)
     local estLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    estLabel:SetPoint("TOPLEFT", 0, statsY - 45)
+    estLabel:SetPoint("TOPLEFT", 0, statsY - 60)
     estLabel:SetText("|cff4dda5d" .. PH.L["FARM_EST_VALUE_LABEL"] .. "|r")
 
     local estValue = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    estValue:SetPoint("TOPRIGHT", 0, statsY - 45)
+    estValue:SetPoint("TOPRIGHT", 0, statsY - 60)
     estValue:SetJustifyH("RIGHT")
     estValue:SetText("0g")
     frame.estValue = estValue
@@ -192,20 +202,20 @@ function PH:ShowFarmTrackerUI()
     -- Separator
     local sep2 = content:CreateTexture(nil, "ARTWORK")
     sep2:SetHeight(1)
-    sep2:SetPoint("TOPLEFT", 0, statsY - 59)
-    sep2:SetPoint("TOPRIGHT", 0, statsY - 59)
+    sep2:SetPoint("TOPLEFT", 0, statsY - 74)
+    sep2:SetPoint("TOPRIGHT", 0, statsY - 74)
     sep2:SetColorTexture(0.18, 0.18, 0.22, 0.6)
 
     -- Items header
     local itemsLabel = content:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    itemsLabel:SetPoint("TOPLEFT", 0, statsY - 65)
+    itemsLabel:SetPoint("TOPLEFT", 0, statsY - 80)
     itemsLabel:SetText("|cff4da6ff" .. PH.L["FARM_ITEMS_FARMED_LABEL"] .. "|r")
     frame.itemsLabel = itemsLabel
 
     -- Item rows (pool of 8)
     frame.itemRows = {}
     for i = 1, 8 do
-        local rowY = statsY - 65 - (i * 15)
+        local rowY = statsY - 80 - (i * 15)
 
         local rowFrame = CreateFrame("Frame", nil, content)
         rowFrame:SetHeight(14)
@@ -300,6 +310,9 @@ function PH:UpdateFarmTrackerUI()
     -- Raw gold from mobs
     frame.rawValue:SetText(PH.TSM:FormatMoney(FT.rawGoldLooted))
 
+    -- Vendor loot value
+    frame.vendorValue:SetText(PH.TSM:FormatMoney(FT:GetVendorLootValue()))
+
     -- Estimated loot value (TSM prices)
     local estLoot = FT:GetEstimatedLootValue()
     frame.estValue:SetText(PH.TSM:FormatMoney(estLoot))
@@ -344,7 +357,7 @@ function PH:UpdateFarmTrackerUI()
 
     -- Resize frame based on visible item rows
     local visibleItems = math.min(#topItems, 8)
-    local baseHeight = 148
+    local baseHeight = 163
     local itemsHeight = visibleItems > 0 and (18 + visibleItems * 15) or 0
     local totalHeight = baseHeight + itemsHeight + 20
     frame:SetHeight(math.max(totalHeight, 168))

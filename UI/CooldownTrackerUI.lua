@@ -1,8 +1,7 @@
 -- Profession Helper - Cooldown Tracker UI
 -- Floating mini-panel listing profession cooldown status
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 local FLAT_BG = {
     bgFile   = "Interface\\Buttons\\WHITE8X8",
@@ -52,7 +51,7 @@ function PH:ShowCooldownUI()
 
     local titleLbl = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     titleLbl:SetPoint("LEFT", 8, 0)
-    titleLbl:SetText("|cffffd700Profession Cooldowns|r")
+    titleLbl:SetText("|cffffd700" .. PH.L["CD_TITLE"] .. "|r")
 
     local closeBtn = CreateFrame("Button", nil, hdr)
     closeBtn:SetSize(20, 20)

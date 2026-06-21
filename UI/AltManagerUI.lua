@@ -1,8 +1,7 @@
 -- Profession Helper - Alt Manager UI
 -- Floating panel listing all known characters and their profession levels
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 local FLAT_BG = {
     bgFile   = "Interface\\Buttons\\WHITE8X8",
@@ -61,7 +60,7 @@ function PH:ShowAltManagerUI()
 
     local titleLbl = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     titleLbl:SetPoint("LEFT", 8, 0)
-    titleLbl:SetText("|cffffd700Alt Professions|r")
+    titleLbl:SetText("|cffffd700" .. PH.L["AM_TITLE"] .. "|r")
 
     local closeBtn = CreateFrame("Button", nil, hdr)
     closeBtn:SetSize(20, 20)

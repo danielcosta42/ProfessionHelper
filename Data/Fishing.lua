@@ -271,17 +271,27 @@ ProfessionHelper.Fishing = {
     
     -- Fishing gear
     equipment = {
-        { name = "Strong Fishing Pole", bonus = "+5 Fishing", source = "Vendor" },
-        { name = "Big Iron Fishing Pole", bonus = "+20 Fishing", source = "Shellfish Trap (Desolace)" },
-        { name = "Seth's Graphite Fishing Pole", bonus = "+20 Fishing", source = "Quest: Rather Be Fishin' (Terokkar)" },
-        { name = "Nat Pagle's Extreme Angler FC-5000", bonus = "+25 Fishing", source = "Quest: Nat Pagle, Angler Extreme" },
-        { name = "Arcanite Fishing Pole", bonus = "+35 Fishing", source = "Stranglethorn Fishing Extravaganza" },
-        { name = "Aquadynamic Fish Attractor", bonus = "+100 Fishing (lure)", source = "Crafted (Engineering)" },
-        { name = "Sharpened Fish Hook", bonus = "+100 Fishing (lure)", source = "Quest reward (TBC)" },
-        { name = "Bright Baubles", bonus = "+75 Fishing (lure)", source = "Vendor/Crafted" },
-        { name = "Nightcrawlers", bonus = "+50 Fishing (lure)", source = "Vendor" },
-        { name = "Lucky Fishing Hat", bonus = "+5 Fishing", source = "Rare Fish Extravaganza reward" },
-        { name = "Nat Pagle's Extreme Anglin' Boots", bonus = "+5 Fishing", source = "Rare Fish Extravaganza reward" },
+        -- Poles (sorted by bonus)
+        { name = "Strong Fishing Pole",                bonus = "+5 Fishing",                 source = "Vendor (fishing vendors)" },
+        { name = "Big Iron Fishing Pole",              bonus = "+20 Fishing",                source = "Looted from Shellfish Trap (Desolace)" },
+        { name = "Seth's Graphite Fishing Pole",       bonus = "+20 Fishing",                source = "Quest: Rather Be Fishin' (Terokkar — TBC)" },
+        { name = "Bone Fishing Pole",                  bonus = "+20 Fishing",                source = "Mr. Pinchy's Magical Crawdad Box (Highland Mixed Schools — TBC)" },
+        { name = "Nat Pagle's Extreme Angler FC-5000", bonus = "+25 Fishing",                source = "Quest: Nat Pagle, Angler Extreme (Dustwallow — Classic)" },
+        { name = "Mastercraft Kalu'ak Fishing Pole",   bonus = "+30 Fishing",                source = "Kalu'ak Exalted — 150g (Northrend — WotLK)" },
+        { name = "Dragon Fishing Pole",                bonus = "+30 Fishing",                source = "Fishing daily quest reward (Stormwind/Orgrimmar — Cata)" },
+        { name = "Arcanite Fishing Pole",              bonus = "+35 Fishing",                source = "1st place — Stranglethorn Fishing Extravaganza (Rare)" },
+        -- Lures / consumables (sorted by bonus)
+        { name = "Nightcrawlers",                      bonus = "+50 Fishing (10 min)",       source = "Vendor (fishing vendors)" },
+        { name = "Bright Baubles",                     bonus = "+75 Fishing (10 min)",       source = "Vendor (fishing vendors)" },
+        { name = "Flesh-Eating Worm",                  bonus = "+75 Fishing (10 min)",       source = "Bag of Fishing Treasures — Dalaran daily (WotLK)" },
+        { name = "Aquadynamic Fish Attractor",         bonus = "+100 Fishing (10 min)",      source = "Crafted (Engineering — Journeyman)" },
+        { name = "Sharpened Fish Hook",                bonus = "+100 Fishing (10 min)",      source = "Old Man Barlo fishing daily reward (Terokkar — TBC)" },
+        { name = "Glow Worm",                          bonus = "+100 Fishing (10 min)",      source = "Bag of Fishing Treasures — Dalaran daily (WotLK+)" },
+        -- Accessories
+        { name = "Lucky Fishing Hat",                  bonus = "+5 Fishing",                 source = "Rare fish turnin — Stranglethorn Extravaganza" },
+        { name = "Weather-Beaten Fishing Hat",         bonus = "+5 Fishing + Find Fish",     source = "Weather-Beaten Journal (found in floating wreckage)" },
+        { name = "Nat Pagle's Extreme Anglin' Boots",  bonus = "+5 Fishing",                 source = "Rare fish turnin — Stranglethorn Extravaganza" },
+        { name = "High Test Eternium Fishing Line",    bonus = "+5 Fishing (pole enchant)",  source = "Bag of Fishing Treasures — Dalaran daily (WotLK)" },
     },
     
     -- Leveling guide

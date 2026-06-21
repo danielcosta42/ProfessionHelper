@@ -18,7 +18,17 @@
 ## SavedVariables: ProfessionHelperDB
 ## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 
+Locales\ptBR.lua
+Locales\enUS.lua
+Locales\esES.lua
 Locales\Locales.lua
+Core\Namespace.lua
+Core\Logger.lua
+Core\Compat.lua
+Core\Storage.lua
+Core\Events.lua
+Core\Identity.lua
+Core\Config.lua
 Data\Materials.lua
 Data\Alchemy.lua
 Data\Blacksmithing.lua
@@ -40,20 +50,22 @@ Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 Data\Dailies.lua
-TSMIntegration.lua
-BagScanner.lua
-RecipeTracker.lua
-AltManager.lua
-DECalc.lua
-PathCalculator.lua
-FarmTracker.lua
-MapPins.lua
-GatheringGuide.lua
-Core.lua
-CooldownTracker.lua
-UI.lua
-FarmTrackerUI.lua
-CooldownTrackerUI.lua
-RecipeTrackerUI.lua
-AltManagerUI.lua
-DECalcUI.lua
+Features\TSMIntegration.lua
+Features\BagScanner.lua
+Features\RecipeTracker.lua
+Features\AltManager.lua
+Features\DECalc.lua
+Features\PathCalculator.lua
+Features\FarmTracker.lua
+Features\MapPins.lua
+Features\GatheringGuide.lua
+Features\CooldownTracker.lua
+Features\FishingAssist.lua
+Core\Init.lua
+UI\Main.lua
+UI\FarmTrackerUI.lua
+UI\CooldownTrackerUI.lua
+UI\RecipeTrackerUI.lua
+UI\AltManagerUI.lua
+UI\DECalcUI.lua
+UI\FishingAssistUI.lua

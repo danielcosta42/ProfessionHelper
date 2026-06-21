@@ -1,22 +1,21 @@
 -- Profession Helper - Cooldown Tracker
--- Tracks TBC Classic profession daily/weekly cooldowns:
+-- Tracks TBC/WotLK/Cata profession daily/weekly cooldowns:
 --   Alchemy: all Transmute spells share a single 24h slot
 --   Tailoring: Shadowcloth / Spellcloth / Primal Mooncloth each have an 84h (3.5 day) slot
+--
+-- Architecture:
+--   - Uses PH.Identity for character key lookups
+--   - Uses PH.DB      for all SavedVariables access
+--   - Uses PH.Event   for UNIT_SPELLCAST_SUCCEEDED subscription
+--   - Uses PH.Compat  for GetSpellInfo (cross-version wrapper)
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 PH.CooldownTracker = {}
 local CD = PH.CooldownTracker
 
 -------------------------------------------------------------------------------
 -- Cooldown database
--- key        : unique key stored in SavedVariables
--- patterns   : Lua patterns matched against the cast spell name
--- label      : display name
--- category   : profession name (for grouping in UI)
--- cdHours    : cooldown length in hours
--- icon       : Interface path for the icon texture
 -------------------------------------------------------------------------------
 CD.DATABASE = {
     {
@@ -53,7 +52,7 @@ CD.DATABASE = {
     },
 }
 
--- Build reverse-lookup: pattern → def (avoids re-scanning on every spell event)
+-- Reverse-lookup: pattern → def (built once at load time, never rebuilt)
 local patternToDef = {}
 for _, def in ipairs(CD.DATABASE) do
     for _, pat in ipairs(def.patterns) do
@@ -62,6 +61,7 @@ for _, def in ipairs(CD.DATABASE) do
 end
 
 local function FindDef(spellName)
+    if not spellName then return nil end
     for pat, def in pairs(patternToDef) do
         if string.match(spellName, pat) then return def end
     end
@@ -69,63 +69,40 @@ local function FindDef(spellName)
 end
 
 -------------------------------------------------------------------------------
--- Helpers
--------------------------------------------------------------------------------
-
-function CD:GetCharKey()
-    local name  = UnitName("player") or "Unknown"
-    local realm = GetRealmName()     or "Unknown"
-    return name .. "-" .. realm
-end
-
--- Ensure per-character cooldown table exists
-local function EnsureCharTable(charKey)
-    if not ProfessionHelperDB.cooldowns[charKey] then
-        ProfessionHelperDB.cooldowns[charKey] = {}
-    end
-end
-
--------------------------------------------------------------------------------
 -- Core API
 -------------------------------------------------------------------------------
 
-function CD:Initialize()
-    if not ProfessionHelperDB.cooldowns then
-        ProfessionHelperDB.cooldowns = {}
-    end
-    self:RegisterEvents()
-end
-
--- Called when a spell cast succeeds for "player"
+-- Called when a relevant spell cast completes for the current player.
 function CD:RecordCast(spellName)
     local def = FindDef(spellName)
     if not def then return end
 
-    local charKey = self:GetCharKey()
-    EnsureCharTable(charKey)
-
-    ProfessionHelperDB.cooldowns[charKey][def.key] = {
+    local charKey = PH.Identity:GetCharKey()
+    local cdPath  = "cooldowns." .. charKey
+    PH.DB:Ensure(cdPath)
+    PH.DB:Set(cdPath .. "." .. def.key, {
         spellName = spellName,
         ts        = time(),
         cdHours   = def.cdHours,
-    }
+    })
 
-    PH:Print(string.format("|cffffd700[CD]|r %s → ready in %s", def.label, self:FormatRemaining(def.cdHours * 3600)))
+    PH.Logger.Info(string.format(
+        "|cffffd700[CD]|r %s %s %s",
+        def.label, PH.L["CD_READY_IN"], self:FormatRemaining(def.cdHours * 3600)
+    ))
 end
 
--- Returns seconds remaining on a cooldown (0 = ready / no data)
+-- Returns seconds remaining on a cooldown entry (0 = ready / no data).
 function CD:GetRemainingSeconds(charKey, key)
-    local db = ProfessionHelperDB.cooldowns
-    if not db or not db[charKey] or not db[charKey][key] then return 0 end
-    local entry = db[charKey][key]
-    if not entry.ts then return 0 end
+    local entry = PH.DB:Get("cooldowns." .. charKey .. "." .. key)
+    if not entry or not entry.ts then return 0 end
     local elapsed = time() - entry.ts
     return math.max(0, (entry.cdHours * 3600) - elapsed)
 end
 
--- Returns formatted remaining string (coloured)
+-- Returns a colour-coded human-readable remaining-time string.
 function CD:FormatRemaining(seconds)
-    if seconds <= 0 then return "|cff00ff00Ready|r" end
+    if seconds <= 0 then return "|cff00ff00" .. PH.L["CD_READY"] .. "|r" end
     local h = math.floor(seconds / 3600)
     local m = math.floor((seconds % 3600) / 60)
     if h >= 24 then
@@ -139,10 +116,10 @@ function CD:FormatRemaining(seconds)
     end
 end
 
--- Returns all cooldown entries for the current character
+-- Returns all cooldown entries for the current character (used by UI).
 function CD:GetAllForCurrentChar()
-    local charKey = self:GetCharKey()
-    local result = {}
+    local charKey = PH.Identity:GetCharKey()
+    local result  = {}
     for _, def in ipairs(self.DATABASE) do
         local remaining = self:GetRemainingSeconds(charKey, def.key)
         table.insert(result, {
@@ -159,29 +136,30 @@ function CD:GetAllForCurrentChar()
 end
 
 -------------------------------------------------------------------------------
--- Event handling
+-- Initialization
+-- Called from Core/Init.lua after PH.DB and PH.Event are ready.
 -------------------------------------------------------------------------------
 
-function CD:RegisterEvents()
-    if self.eventFrame then return end
-    self.eventFrame = CreateFrame("Frame")
-    self.eventFrame:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED")
-    self.eventFrame:SetScript("OnEvent", function(_, event, ...)
-        if event ~= "UNIT_SPELLCAST_SUCCEEDED" then return end
-        local unit = ...
+function CD:Initialize()
+    PH.DB:Ensure("cooldowns")
+
+    -- Subscribe through the central event bus — no local eventFrame.
+    -- The bus dispatches WoW events as (event, ...), so the first parameter
+    -- is the event name; the real WoW payload starts at `unit`.
+    PH.Event:On("UNIT_SPELLCAST_SUCCEEDED", function(_, unit, arg2, arg3)
         if unit ~= "player" then return end
 
-        -- TBC Classic: older builds send (unit, spellName, rank, lineID, spellID)
-        --              newer builds send  (unit, castGUID, spellID)
-        local arg2 = select(2, ...)
+        -- TBC Classic: (unit, spellName, rank, lineID, spellID)
+        -- WotLK+:      (unit, castGUID, spellID)
         local spellName
-        if type(arg2) == "string" then
+        if type(arg2) == "string" and not arg2:match("^Cast") then
             spellName = arg2
-        else
-            local spellID = select(3, ...)
-            if spellID then spellName = GetSpellInfo(spellID) end
+        elseif arg3 then
+            -- arg3 is spellID on newer API
+            local ok, name = pcall(PH.Compat.GetSpellInfo, arg3)
+            if ok then spellName = name end
         end
 
         if spellName then CD:RecordCast(spellName) end
-    end)
+    end, "CooldownTracker")
 end

@@ -1,8 +1,7 @@
 -- Profession Helper - Recipe Tracker UI
 -- Floating panel that shows missing recipes for a profession
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 local FLAT_BG = {
     bgFile   = "Interface\\Buttons\\WHITE8X8",
@@ -70,7 +69,7 @@ function PH:ShowRecipeTrackerUI(profName)
 
     local titleLbl = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     titleLbl:SetPoint("LEFT", 8, 0)
-    titleLbl:SetText("|cffffd700Missing Recipes|r")
+    titleLbl:SetText("|cffffd700" .. PH.L["RT_TITLE"] .. "|r")
     frame.titleLbl = titleLbl
 
     local closeBtn = CreateFrame("Button", nil, hdr)

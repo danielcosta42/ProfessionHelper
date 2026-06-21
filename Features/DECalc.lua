@@ -5,8 +5,7 @@
 --   Disenchant rates: based on community-verified TBC data (wowhead / tbcdb)
 --   Prospecting rates: Blizzard stated 20% per gem slot, ~2 rolls per 5 ore
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 PH.DECalc = {}
 local DE = PH.DECalc

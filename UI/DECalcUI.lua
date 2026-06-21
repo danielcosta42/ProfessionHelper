@@ -1,8 +1,7 @@
 -- Profession Helper - Disenchant & Prospecting Calculator UI
 -- Floating panel with tab selection for DE vs Prospect mode
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 local FLAT_BG = {
     bgFile   = "Interface\\Buttons\\WHITE8X8",
@@ -73,7 +72,7 @@ function PH:ShowDECalcUI()
 
     local titleLbl = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     titleLbl:SetPoint("LEFT", 8, 0)
-    titleLbl:SetText("|cffffd700DE / Prospect Calculator|r")
+    titleLbl:SetText("|cffffd700" .. PH.L["DE_TITLE"] .. "|r")
 
     local closeBtn = CreateFrame("Button", nil, hdr)
     closeBtn:SetSize(20, 20)

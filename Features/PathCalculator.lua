@@ -1,8 +1,7 @@
 -- Profession Helper - Optimized Path Calculator
 -- Builds the cheapest crafting path considering intermediate items and TSM prices
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 PH.PathCalculator = {}
 

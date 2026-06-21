@@ -1,24 +1,25 @@
 -- Profession Helper - AH Price Integration
--- Supports TSM (3/4/5), Auctionator, and a 24h local price cache
+-- Supports TSM (3/4/5), Auctionator, and a 24h local price cache.
+--
+-- Architecture:
+--   - Uses PH.DB for price cache reads/writes (ProfessionHelperDB.ahPriceCache)
+--   - No direct ProfessionHelperDB access anywhere in this file
 
-ProfessionHelper = ProfessionHelper or {}
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 
 PH.TSM = {}
 
 -- Cache TTL: 24 hours in seconds
 local CACHE_TTL = 86400
 
--- Write a price to the local SavedVariables cache
+-- Write a price to the local SavedVariables cache via PH.DB
 local function WriteToCache(itemName, price, source)
-    if not ProfessionHelperDB or not ProfessionHelperDB.ahPriceCache then return end
-    ProfessionHelperDB.ahPriceCache[itemName] = { price = price, source = source, ts = time() }
+    PH.DB:Set("ahPriceCache." .. itemName, { price = price, source = source, ts = time() })
 end
 
--- Read a cached price. Returns price (copper) or nil if absent / expired.
+-- Read a cached price via PH.DB. Returns price (copper) or nil if absent/expired.
 local function ReadFromCache(itemName)
-    if not ProfessionHelperDB or not ProfessionHelperDB.ahPriceCache then return nil end
-    local entry = ProfessionHelperDB.ahPriceCache[itemName]
+    local entry = PH.DB:Get("ahPriceCache." .. itemName)
     if entry and entry.price and entry.ts and (time() - entry.ts) < CACHE_TTL then
         return entry.price
     end
@@ -250,12 +251,12 @@ end
 -- Open TSM shopping scan with a search string
 function PH.TSM:OpenShoppingScan(searchString)
     if not searchString or searchString == "" then
-        PH:Print(PH.L["TSM_NO_ITEMS"])
+        PH.Logger.Info(PH.L["TSM_NO_ITEMS"])
         return false
     end
 
     ShowCopyPopup(searchString)
-    PH:Print(PH.L["TSM_PASTE_MSG"])
+    PH.Logger.Info(PH.L["TSM_PASTE_MSG"])
     return true
 end
 

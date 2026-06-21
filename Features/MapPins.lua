@@ -2,7 +2,7 @@
 -- Displays POI pins (vendors, quest-givers, fishing spots) on the world map
 -- Uses HereBeDragons-Pins-2.0, same library as GatheringGuide.lua
 
-local PH = ProfessionHelper
+local PH = _G.ProfessionHelper
 PH.MapPins = {}
 local MP = PH.MapPins
 
