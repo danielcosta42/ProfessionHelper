@@ -56,6 +56,7 @@ read_globals = {
 
     -- WoW API: Locale & Game
     "GetLocale",
+    "GetBuildInfo",
     "GetTime",
     "GetRealmName",
     "GetRealZoneText",
@@ -74,6 +75,10 @@ read_globals = {
     "UnitClass",
     "UnitLevel",
     "UnitFactionGroup",
+    "UnitExists",
+    "UnitBuff",
+    "TargetUnit",
+    "InteractUnit",
 
     -- WoW API: Items & Inventory
     "GetItemInfo",
@@ -83,12 +88,14 @@ read_globals = {
     "GetCursorPosition",
     "GetCoinTextureString",
     "GetMoney",
+    "GetInventoryItemLink",
 
     -- WoW API: Containers
     "C_Container",
     "GetContainerNumSlots",
     "GetContainerItemInfo",
     "GetContainerItemLink",
+    "UseContainerItem",
 
     -- WoW API: Skills & Professions
     "GetNumSkillLines",
@@ -114,9 +121,12 @@ read_globals = {
     "ITEM_QUALITY_COLORS",
     "LOOT_ITEM_SELF",
     "LOOT_ITEM_SELF_MULTIPLE",
+    "LOOT_ITEM_PUSHED_SELF_MULTIPLE",
+    "LOOT_ITEM_CREATED_SELF_MULTIPLE",
     "GOLD_AMOUNT",
     "SILVER_AMOUNT",
     "COPPER_AMOUNT",
+    "PROFESSIONS_FISHING",
 
     -- Third-party libraries
     "LibStub",
