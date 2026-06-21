@@ -2,6 +2,14 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.19.0] - 2026-06-21
+
+### Added
+- complete one-key fishing (scanner, counter, focus audio)
+- add /ph debug toggle command
+- one-key fishing modelled on Angleur (override-binding + soft-target)
+
+
 ## [1.18.0] - 2026-06-21
 
 ### Added
