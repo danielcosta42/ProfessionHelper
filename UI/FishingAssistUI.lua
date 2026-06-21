@@ -148,6 +148,11 @@ function PH:ShowFishingAssistUI()
     -- Sync visibility with the FA frame.
     frame:HookScript("OnShow", function() castBtn:Show() end)
     frame:HookScript("OnHide", function() castBtn:Hide() end)
+    -- Re-arm a previously-assigned fishing key whenever the panel opens.
+    frame:HookScript("OnShow", function()
+        local m = PH.FishingAssist
+        if m and m.RearmBinding then m:RearmBinding() end
+    end)
 
     -- ── One-key assignment row ───────────────────────────────────────────
     local keyLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -451,6 +456,40 @@ function PH:ShowFishingAssistUI()
         UpdateScanBtn()
     end)
 
+    -- ── Sound-boost toggle (max SFX volume while fishing) ────────────────
+    local soundBtn = CreateFrame("Button", nil, frame, "BackdropTemplate")
+    soundBtn:SetSize(96, 20)
+    soundBtn:SetPoint("LEFT", scanBtn, "RIGHT", 6, 0)
+    soundBtn:SetBackdrop(FLAT_BG)
+    soundBtn:SetBackdropBorderColor(0.30, 0.30, 0.35, 0.8)
+    local soundHL = soundBtn:CreateTexture(nil, "HIGHLIGHT")
+    soundHL:SetAllPoints()
+    soundHL:SetColorTexture(1, 1, 1, 0.06)
+    local soundLbl = soundBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    soundLbl:SetPoint("CENTER")
+    local function UpdateSoundBtn()
+        local on = PH.Config:Get("fa_soundBoost") == true
+        if on then
+            soundBtn:SetBackdropColor(C.green[1], C.green[2], C.green[3], 0.15)
+            soundLbl:SetText(hx(C.green) .. PH.L["FA_SOUND_BOOST"] .. ": ON|r")
+        else
+            soundBtn:SetBackdropColor(0.12, 0.12, 0.14, 1)
+            soundLbl:SetText(hx(C.muted) .. PH.L["FA_SOUND_BOOST"] .. ": OFF|r")
+        end
+    end
+    frame.UpdateSoundBtn = UpdateSoundBtn
+    UpdateSoundBtn()
+    soundBtn:SetScript("OnClick", function()
+        PH.Config:Set("fa_soundBoost", PH.Config:Get("fa_soundBoost") ~= true)
+        UpdateSoundBtn()
+    end)
+    soundBtn:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(soundBtn, "ANCHOR_RIGHT")
+        GameTooltip:SetText(PH.L["FA_SOUND_BOOST_TIP"], 1, 1, 1, 1, true)
+        GameTooltip:Show()
+    end)
+    soundBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
     -- Keep the scan box in sync with the panel + toggle state.
     frame:HookScript("OnShow", function() if frame.UpdateScanBtn then frame.UpdateScanBtn() end end)
     frame:HookScript("OnHide", function()
@@ -469,11 +508,11 @@ function PH:ShowFishingAssistUI()
         if updateAccum < UPDATE_INTERVAL then return end
         updateAccum = 0
 
-        local m = PH.FishingAssist
-        if m then
-            m:Tick()  -- checks bobber timeout
-            PH:_FA_UpdateDynamic()
-        end
+        -- NOTE: M:Tick() (lure scan + bobber-timeout/audio-restore safety net) is
+        -- driven by an always-on frame in FishingAssist:Initialize, NOT here -- a
+        -- panel OnUpdate stops firing when the panel is hidden, which would strand
+        -- the focus-audio CVars muted. This OnUpdate only refreshes the display.
+        PH:_FA_UpdateDynamic()
     end)
 
     -------------------------------------------------------------------------
@@ -508,7 +547,11 @@ function PH:UpdateFishingAssistUI()
         castBtn:SetBackdropColor(C.castIdle[1], C.castIdle[2], C.castIdle[3], 0.18)
         castBtn:SetBackdropBorderColor(C.castIdle[1], C.castIdle[2], C.castIdle[3], 0.55)
         castBtn:Enable()
-        castLbl:SetText(hx(C.white) .. PH.L["FA_BTN_CAST"] .. "|r")
+        if oneKey and FA:NextActionIsLure() then
+            castLbl:SetText(hx(C.lureFg) .. PH.L["FA_BTN_APPLY_LURE"] .. "|r")
+        else
+            castLbl:SetText(hx(C.white) .. PH.L["FA_BTN_CAST"] .. "|r")
+        end
 
     elseif state == "waiting" then
         -- Bobber in water — the same key reels/loots it. The cast button itself
@@ -532,14 +575,18 @@ function PH:UpdateFishingAssistUI()
 
     if frame.SetKeyLabel then frame.SetKeyLabel() end
 
-    -- Status text
-    local statusMap = {
-        idle    = PH.L["FA_STATUS_IDLE"],
-        casting = PH.L["FA_STATUS_CASTING"],
-        waiting = PH.L["FA_STATUS_WAITING"],
-        looting = PH.L["FA_STATUS_LOOTING"],
-    }
-    frame.statusTxt:SetText(hx(C.muted) .. (statusMap[state] or state) .. "|r")
+    -- Status text — reflects whether the bobber is actually catchable yet.
+    local statusText, statusColor = PH.L["FA_STATUS_IDLE"], C.muted
+    if state == "waiting" then
+        if FA.bobberWithinRange then
+            statusText, statusColor = PH.L["FA_STATUS_BITE_READY"], C.green
+        else
+            statusText = PH.L["FA_STATUS_WAITING"]
+        end
+    elseif state == "looting" then
+        statusText = PH.L["FA_STATUS_LOOTING"]
+    end
+    frame.statusTxt:SetText(hx(statusColor) .. statusText .. "|r")
 
     -- Dynamic refresh (stats + bars)
     self:_FA_UpdateDynamic()

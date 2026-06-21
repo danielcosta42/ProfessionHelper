@@ -59,10 +59,12 @@ read_globals = {
     "C_CVar",
     "GetCVar",
     "SetCVar",
+    "GetCVarDefault",
 
     -- WoW API: Secure key bindings (FishingAssist one-key)
     "SetOverrideBinding",
     "SetOverrideBindingSpell",
+    "SetOverrideBindingClick",
     "ClearOverrideBindings",
 
     -- WoW API: Camera control (FishingAssist bobber scanner)
@@ -115,6 +117,7 @@ read_globals = {
     "GetCoinTextureString",
     "GetMoney",
     "GetInventoryItemLink",
+    "GetWeaponEnchantInfo",
 
     -- WoW API: Containers
     -- (C_Container is declared in `globals` above — it is written by the

@@ -126,6 +126,15 @@ function C.SetCVar(name, value)
     pcall(setter, name, value)
 end
 
+-- The Blizzard default for a CVar (used to safely restore a value that was unset
+-- when we cached it, instead of guessing). Returns nil if unavailable.
+function C.GetCVarDefault(name)
+    local getter = (C_CVar and C_CVar.GetCVarDefault) or GetCVarDefault
+    if not getter then return nil end
+    local ok, v = pcall(getter, name)
+    return ok and v or nil
+end
+
 -- True if this client has the soft-target interact system (Retail and the
 -- Classic Anniversary clients). Used to gate the one-key reel/soft-target path.
 function C.HasSoftInteract()
