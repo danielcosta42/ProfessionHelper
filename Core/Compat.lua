@@ -107,3 +107,27 @@ function C.GetMoney()
     local ok, copper = pcall(GetMoney)
     return ok and copper or 0
 end
+
+-------------------------------------------------------------------------------
+-- CVar access (C_CVar on newer clients, bare globals on older) — used by the
+-- Fishing Assistant to toggle soft-target / auto-loot CVars during fishing.
+-------------------------------------------------------------------------------
+
+function C.GetCVar(name)
+    local getter = (C_CVar and C_CVar.GetCVar) or GetCVar
+    if not getter then return nil end
+    local ok, v = pcall(getter, name)
+    return ok and v or nil
+end
+
+function C.SetCVar(name, value)
+    local setter = (C_CVar and C_CVar.SetCVar) or SetCVar
+    if not setter then return end
+    pcall(setter, name, value)
+end
+
+-- True if this client has the soft-target interact system (Retail and the
+-- Classic Anniversary clients). Used to gate the one-key reel/soft-target path.
+function C.HasSoftInteract()
+    return C.GetCVar("SoftTargetInteract") ~= nil
+end

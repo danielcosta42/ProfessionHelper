@@ -47,7 +47,7 @@ function PH:ShowFishingAssistUI()
     end
 
     local frame = CreateFrame("Frame", "ProfessionHelperFishingAssist", UIParent, "BackdropTemplate")
-    frame:SetSize(280, 240)
+    frame:SetSize(280, 300)
     frame:SetPoint("CENTER", -200, 100)
     frame:SetMovable(true)
     frame:EnableMouse(true)
@@ -148,6 +148,73 @@ function PH:ShowFishingAssistUI()
     -- Sync visibility with the FA frame.
     frame:HookScript("OnShow", function() castBtn:Show() end)
     frame:HookScript("OnHide", function() castBtn:Hide() end)
+
+    -- ── One-key assignment row ───────────────────────────────────────────
+    local keyLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    keyLabel:SetPoint("TOPLEFT", BODY_X, y)
+    keyLabel:SetText(hx(C.muted) .. PH.L["FA_KEY_LABEL"] .. "|r")
+
+    local keyBtn = CreateFrame("Button", nil, frame, "BackdropTemplate")
+    keyBtn:SetSize(160, 18)
+    keyBtn:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -BODY_X, y + 1)
+    keyBtn:SetBackdrop(FLAT_BG)
+    keyBtn:SetBackdropColor(0.12, 0.12, 0.14, 1)
+    keyBtn:SetBackdropBorderColor(0.30, 0.30, 0.35, 0.8)
+    local keyBtnLbl = keyBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    keyBtnLbl:SetPoint("CENTER")
+    frame.keyBtnLbl = keyBtnLbl
+    local keyHL = keyBtn:CreateTexture(nil, "HIGHLIGHT")
+    keyHL:SetAllPoints()
+    keyHL:SetColorTexture(1, 1, 1, 0.06)
+    y = y - 22
+
+    local function SetKeyLabel()
+        local m = PH.FishingAssist
+        local k = m and m:GetOneKey()
+        keyBtnLbl:SetText(hx(k and C.green or C.muted) .. (k or PH.L["FA_KEY_NONE"]) .. "|r")
+    end
+    frame.SetKeyLabel = SetKeyLabel
+
+    -- Modal key-capture overlay
+    local captureFrame = CreateFrame("Frame", nil, UIParent)
+    captureFrame:SetFrameStrata("FULLSCREEN_DIALOG")
+    captureFrame:Hide()
+    local function StopCapture()
+        captureFrame:EnableKeyboard(false)
+        captureFrame:EnableMouse(false)
+        captureFrame:Hide()
+        SetKeyLabel()
+    end
+    local function ApplyKey(key)
+        if key == "ESCAPE" then StopCapture(); return end
+        local prefix = ""
+        if IsShiftKeyDown()   then prefix = "SHIFT-" .. prefix end
+        if IsControlKeyDown() then prefix = "CTRL-"  .. prefix end
+        if IsAltKeyDown()     then prefix = "ALT-"   .. prefix end
+        local m = PH.FishingAssist
+        if m then m:SetOneKey(prefix .. key) end
+        StopCapture()
+    end
+    captureFrame:SetScript("OnKeyDown", function(_, key)
+        if key == "LALT" or key == "RALT" or key == "LCTRL" or key == "RCTRL"
+            or key == "LSHIFT" or key == "RSHIFT" or key == "UNKNOWN" then return end
+        ApplyKey(key)
+    end)
+    captureFrame:SetScript("OnMouseDown", function(_, button)
+        -- Only the extra mouse buttons are safe to bind; left/right/middle cancel.
+        local map = { Button4 = "BUTTON4", Button5 = "BUTTON5" }
+        local b = map[button]
+        if b then ApplyKey(b) else StopCapture() end
+    end)
+    keyBtn:SetScript("OnClick", function()
+        keyBtnLbl:SetText(hx(C.gold) .. PH.L["FA_PRESS_KEY"] .. "|r")
+        captureFrame:SetAllPoints(UIParent)
+        captureFrame:EnableKeyboard(true)
+        captureFrame:EnableMouse(true)
+        captureFrame:SetPropagateKeyboardInput(false)
+        captureFrame:Show()
+    end)
+    SetKeyLabel()
 
     -- ── Bobber timer bar ──────────────────────────────────────────────────
     local timerLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -353,6 +420,44 @@ function PH:ShowFishingAssistUI()
         PH:UpdateFishingAssistUI()
     end)
 
+    -- ── Camera-scan toggle (opt-in fallback that rotates the camera) ──────
+    local scanBtn = CreateFrame("Button", nil, frame, "BackdropTemplate")
+    scanBtn:SetSize(160, 20)
+    scanBtn:SetPoint("TOPLEFT", recastBtn, "BOTTOMLEFT", 0, -6)
+    scanBtn:SetBackdrop(FLAT_BG)
+    scanBtn:SetBackdropBorderColor(0.30, 0.30, 0.35, 0.8)
+    local scanHL = scanBtn:CreateTexture(nil, "HIGHLIGHT")
+    scanHL:SetAllPoints()
+    scanHL:SetColorTexture(1, 1, 1, 0.06)
+    local scanLbl = scanBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    scanLbl:SetPoint("CENTER")
+    frame.scanLbl = scanLbl
+    local function UpdateScanBtn()
+        local on = PH.Config:Get("fa_cameraScan") == true
+        if on then
+            scanBtn:SetBackdropColor(C.green[1], C.green[2], C.green[3], 0.15)
+            scanLbl:SetText(hx(C.green) .. PH.L["FA_CAMERA_SCAN"] .. ": ON|r")
+        else
+            scanBtn:SetBackdropColor(0.12, 0.12, 0.14, 1)
+            scanLbl:SetText(hx(C.muted) .. PH.L["FA_CAMERA_SCAN"] .. ": OFF|r")
+        end
+        local m = PH.FishingAssist
+        if m then m:ShowScanBox(on and frame:IsShown()) end
+    end
+    frame.UpdateScanBtn = UpdateScanBtn
+    UpdateScanBtn()
+    scanBtn:SetScript("OnClick", function()
+        PH.Config:Set("fa_cameraScan", PH.Config:Get("fa_cameraScan") ~= true)
+        UpdateScanBtn()
+    end)
+
+    -- Keep the scan box in sync with the panel + toggle state.
+    frame:HookScript("OnShow", function() if frame.UpdateScanBtn then frame.UpdateScanBtn() end end)
+    frame:HookScript("OnHide", function()
+        local m = PH.FishingAssist
+        if m then m:ShowScanBox(false) end
+    end)
+
     -------------------------------------------------------------------------
     -- OnUpdate — refreshes timer bar, stats, and bobber timeout every frame
     -------------------------------------------------------------------------
@@ -397,32 +502,35 @@ function PH:UpdateFishingAssistUI()
     -- Cast button appearance
     local castBtn = frame.castBtn
     local castLbl = frame.castLbl
+    local oneKey = FA:GetOneKey()
     if state == "idle" then
-        -- Ready: green — player clicks to cast
+        -- Ready: green — press the key (or click) to cast
         castBtn:SetBackdropColor(C.castIdle[1], C.castIdle[2], C.castIdle[3], 0.18)
         castBtn:SetBackdropBorderColor(C.castIdle[1], C.castIdle[2], C.castIdle[3], 0.55)
         castBtn:Enable()
         castLbl:SetText(hx(C.white) .. PH.L["FA_BTN_CAST"] .. "|r")
 
     elseif state == "waiting" then
-        -- Bobber is in water. Auto-interact is running in background.
-        -- Button is disabled — no need to click, addon handles it.
+        -- Bobber in water — the same key reels/loots it. The cast button itself
+        -- can't loot (INTERACTMOUSEOVER is a key binding), so guide the player.
         castBtn:SetBackdropColor(C.castWait[1], C.castWait[2], C.castWait[3], 0.14)
         castBtn:SetBackdropBorderColor(C.castWait[1], C.castWait[2], C.castWait[3], 0.40)
         castBtn:Disable()
-        castLbl:SetText(hx(C.castWait) .. PH.L["FA_BTN_BITE"] .. "|r")
+        if oneKey then
+            castLbl:SetText(hx(C.castWait) .. string.format(PH.L["FA_BTN_REEL"], oneKey) .. "|r")
+        else
+            castLbl:SetText(hx(C.castWait) .. PH.L["FA_BTN_REEL_NOKEY"] .. "|r")
+        end
 
     else
-        -- casting or looting — disabled
+        -- looting — disabled
         castBtn:SetBackdropColor(C.castDis[1], C.castDis[2], C.castDis[3], 0.12)
         castBtn:SetBackdropBorderColor(C.castDis[1], C.castDis[2], C.castDis[3], 0.30)
         castBtn:Disable()
-        if state == "casting" then
-            castLbl:SetText(hx(C.muted) .. PH.L["FA_BTN_CASTING"] .. "|r")
-        else
-            castLbl:SetText(hx(C.muted) .. PH.L["FA_BTN_LOOTING"] .. "|r")
-        end
+        castLbl:SetText(hx(C.muted) .. PH.L["FA_BTN_LOOTING"] .. "|r")
     end
+
+    if frame.SetKeyLabel then frame.SetKeyLabel() end
 
     -- Status text
     local statusMap = {

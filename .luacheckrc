@@ -53,6 +53,32 @@ read_globals = {
     "IsShiftKeyDown",
     "IsControlKeyDown",
     "IsAltKeyDown",
+    "IsKeyDown",
+
+    -- WoW API: CVars
+    "C_CVar",
+    "GetCVar",
+    "SetCVar",
+
+    -- WoW API: Secure key bindings (FishingAssist one-key)
+    "SetOverrideBinding",
+    "SetOverrideBindingSpell",
+    "ClearOverrideBindings",
+
+    -- WoW API: Camera control (FishingAssist bobber scanner)
+    "CenterCamera",
+    "GetCameraZoom",
+    "SetCursor",
+    "MoveViewOutStart",
+    "MoveViewOutStop",
+    "MoveViewUpStart",
+    "MoveViewUpStop",
+    "MoveViewDownStart",
+    "MoveViewDownStop",
+    "MoveViewLeftStart",
+    "MoveViewLeftStop",
+    "MoveViewRightStart",
+    "MoveViewRightStop",
 
     -- WoW API: Locale & Game
     "GetLocale",

@@ -1,21 +1,26 @@
 -- ProfessionHelper - Fishing Assistant (Features/FishingAssist.lua)
--- TRUE one-button fishing for TBC Classic Anniversary.
+-- One-key fishing for Classic Anniversary, modelled on the Angleur addon.
 --
--- How it works:
---   1. Player clicks cast button (SecureActionButtonTemplate UIParent child)
---      → Blizzard secure system casts the Fishing spell (PROFESSIONS_FISHING)
---   2. UNIT_SPELLCAST_CHANNEL_START detected (Fishing is channeled in TBC)
---      → state = "waiting", bobber polling starts
---   3. Addon polls TargetUnit("Fishing Bobber") every 0.4s from OnUpdate
---   4. When bobber is found: InteractUnit("target") → LOOT_OPENED → looting
---   5. LOOT_CLOSED → idle → (optional) auto-recast via SecureActionButton:Click()
+-- The real mechanism (there is NO programmatic cast or interact — both are
+-- produced by the player's hardware keypress firing an override binding that
+-- this insecure state machine re-points between two values while out of combat):
 --
--- Key TBC Classic Anniversary facts (verified from Angleur addon source):
---   • Fishing is a CHANNELED spell. Events: UNIT_SPELLCAST_CHANNEL_START/_STOP.
---     NOT UNIT_SPELLCAST_START/SUCCEEDED (those are for regular casts only).
---   • TargetUnit() and InteractUnit() do NOT need hardware-event in TBC.
---   • SecureActionButtonTemplate:Click() works OOC when button is UIParent child.
---   • PROFESSIONS_FISHING is the Blizzard global for the localized spell name.
+--   1. The user assigns ONE key. While idle, that key is override-bound to cast
+--      Fishing:  SetOverrideBindingSpell(owner, true, key, PROFESSIONS_FISHING)
+--   2. On the fishing channel start we enable Blizzard's soft-target interact
+--      CVars + auto-loot, so the bobber becomes interactable and loots in one
+--      press, and we re-bind the key to the interact command:
+--      SetOverrideBinding(owner, true, key, "INTERACTMOUSEOVER")
+--   3. The bobber is detected as the soft-interact target via
+--      PLAYER_SOFT_INTERACT_CHANGED (GameObject id 35591). If it never becomes
+--      the soft target, an optional camera grid-scan rotates the CAMERA (not the
+--      character) until the bobber slides under a cursor parked in a fixed box.
+--   4. Pressing the same key when the bobber is up fires INTERACTMOUSEOVER and
+--      loots it. Channel stop restores the CVars and re-binds the key to cast.
+--
+-- Honest limit: looting genuinely needs a real keypress (INTERACTMOUSEOVER only
+-- fires from hardware input). This is one-button fishing, not a zero-press bot —
+-- exactly like Angleur.
 
 local PH = _G.ProfessionHelper
 
@@ -26,34 +31,27 @@ local M = PH.FishingAssist
 -- Constants
 -------------------------------------------------------------------------------
 
-local BOBBER_DURATION = 30  -- TBC Classic: bobber lasts ~30s before sinking
+local BOBBER_DURATION = 30  -- Classic: bobber lasts ~30s before sinking
 
--- Fishing spell IDs — used ONLY for UNIT_SPELLCAST_CHANNEL_START/_STOP matching.
--- Copied from Angleur's AngleurVanilla_FishingSpellTable, which is the verified
--- working set for TBC Classic Anniversary (Angleur is the reference fishing addon).
--- NOT used for casting; casting uses the PROFESSIONS_FISHING Blizzard global.
+-- Fishing bobber GameObject id — used to match the soft-interact target GUID.
+local BOBBER_OBJECT_ID = 35591
+
+-- Fishing spell IDs — used ONLY for UNIT_SPELLCAST_CHANNEL_* matching (with a
+-- spell-name fallback below). Not used for casting; casting uses the binding.
 local FISHING_SPELL_IDS = {
-    7620,   -- Fishing
-    7731,   -- Fishing (rank variant — Angleur verified)
-    7732,   -- Fishing (rank variant — Angleur verified)
-    18248,  -- Fishing
-    33095,  -- Fishing
-    51294,  -- Fishing (present in Anniversary build)
-    88868,  -- Fishing (present in Anniversary build)
+    7620, 7731, 7732, 18248, 33095, 51294, 88868,
 }
 
--- Fishing bobber unit names per locale.
--- TBC Anniversary uses English; we include PT/ES for safety.
-local BOBBER_NAMES = {
-    "Fishing Bobber",
-    "Bóia de Pesca",
-    "Flotador de Pesca",
-    "Schwimmer",
-    "Flotteur de pêche",
+-- CVars temporarily applied while fishing: Blizzard soft-target interact (so the
+-- bobber is interactable with the one key) + auto-loot (so it loots in one press).
+-- Values taken verbatim from Angleur. Cached and restored on every channel stop.
+local TEMP_CVARS = {
+    SoftTargetInteract            = "3",
+    SoftTargetInteractRange       = "15",
+    SoftTargetInteractRangeIsHard = "0",
+    autoLootDefault               = "1",
 }
--- Lookup set for bobber unit name matching in TryAutoInteract.
-local _bobberSet = {}
-for _, n in ipairs(BOBBER_NAMES) do _bobberSet[n] = true end
+local _cvarCache = {}
 
 -- Fishing poles — sorted best first (used by EquipBestGear)
 local FISHING_POLES = {
@@ -87,16 +85,23 @@ local LURE_NAMES = {
 -- In-memory state  (never persisted — resets on reload)
 -------------------------------------------------------------------------------
 
-M.state          = "idle"    -- "idle" | "casting" | "waiting" | "looting"
-M.bobberCastTime = 0         -- GetTime() when bobber entered water
-M.sessionStart   = 0
-M.sessionActive  = false
-M.fishCaught     = 0
-M.totalCasts     = 0
-M.lureName       = nil
-M.lureExpiry     = 0         -- GetTime() + remaining seconds
+M.state            = "idle"    -- "idle" | "waiting" | "looting"
+M.bobberCastTime   = 0         -- GetTime() when bobber entered water
+M.sessionStart     = 0
+M.sessionActive    = false
+M.fishCaught       = 0
+M.totalCasts       = 0
+M.lureName         = nil
+M.lureExpiry       = 0
+M.oneKey           = nil       -- the user-assigned key string (override-bound)
+M.bobberWithinRange = false    -- bobber is the current soft-interact target
 
 local _initialized = false
+
+-- Plain (insecure) frame that owns the override bindings. A plain frame is
+-- allowed to own bindings; only the Set/ClearOverrideBinding* calls are
+-- protected (out-of-combat only).
+local bindOwner
 
 -------------------------------------------------------------------------------
 -- Private helpers
@@ -111,13 +116,10 @@ local function IsFishingID(id)
     return false
 end
 
--- PROFESSIONS_FISHING is a Blizzard FrameXML global containing the correct
--- localized fishing spell name for the current client locale.
--- Using this global (rather than a hardcoded string) ensures correct behavior
--- on all server languages. Angleur uses the same global for SetOverrideBindingSpell.
+-- PROFESSIONS_FISHING is the Blizzard global with the localized fishing spell
+-- name; used both as the cast binding and for channel-name matching.
 local FISHING_SPELL_NAME = PROFESSIONS_FISHING or "Fishing"
 
--- Name lookup set for UNIT_SPELLCAST_CHANNEL_START/_STOP event matching.
 local _fishingNames = { [FISHING_SPELL_NAME] = true }
 local function InitFishingNames()
     for _, sid in ipairs(FISHING_SPELL_IDS) do
@@ -129,15 +131,22 @@ local function InitFishingNames()
 end
 
 -- True if a channeled spell is Fishing — matched by spell ID first, then by the
--- localized spell name as a fallback. The name fallback covers Anniversary
--- builds where the live fishing spell ID may not be in FISHING_SPELL_IDS.
+-- localized spell name as a fallback (covers Anniversary spell-ID drift).
 local function IsFishingCast(spellID)
     if IsFishingID(spellID) then return true end
     local name = spellID and GetSpellInfo(spellID)
     return name ~= nil and _fishingNames[name] == true
 end
 
--- C_Timer.After polyfill for Classic/TBC (no C_Timer on those clients).
+-- True if a GUID is a fishing bobber GameObject. GUID format:
+-- GameObject-0-<server>-<instance>-<zoneuid>-<objectid>-<spawnuid>
+local function IsBobberGUID(guid)
+    if type(guid) ~= "string" then return false end
+    local objId = guid:match("^GameObject%-%d+%-%d+%-%d+%-%d+%-(%d+)%-")
+    return tonumber(objId) == BOBBER_OBJECT_ID
+end
+
+-- C_Timer.After polyfill for Classic clients (no C_Timer on those clients).
 local function After(delay, func)
     if C_Timer and C_Timer.After then
         C_Timer.After(delay, func)
@@ -154,9 +163,280 @@ local function After(delay, func)
     end)
 end
 
+-------------------------------------------------------------------------------
+-- Temp CVar manager (soft-target + auto-loot while fishing)
+-------------------------------------------------------------------------------
+
+local function SoftTargetEnabled()
+    return PH.Compat.HasSoftInteract() and PH.Config:Get("fa_softTarget") ~= false
+end
+
+local function ApplyFishingCVars()
+    if not SoftTargetEnabled() then return end
+    local doAutoLoot = PH.Config:Get("fa_autoLoot") ~= false
+    for name, val in pairs(TEMP_CVARS) do
+        if name == "autoLootDefault" and not doAutoLoot then
+            -- leave the user's auto-loot setting alone
+        else
+            if _cvarCache[name] == nil then
+                -- cache the original once; false marks "was empty/unset"
+                _cvarCache[name] = PH.Compat.GetCVar(name) or false
+            end
+            PH.Compat.SetCVar(name, val)
+        end
+    end
+end
+
+local function RestoreFishingCVars()
+    for name in pairs(TEMP_CVARS) do
+        local prev = _cvarCache[name]
+        if prev ~= nil then
+            PH.Compat.SetCVar(name, prev == false and "0" or prev)
+            _cvarCache[name] = nil
+        end
+    end
+end
+
+-------------------------------------------------------------------------------
+-- Override-binding swap (the one-key cast/reel mechanism)
+-------------------------------------------------------------------------------
+
+-- The base key (no modifier prefix) — IsKeyDown wants "E", not "ALT-E".
+local function BaseKey(key)
+    if not key then return nil end
+    return (key:gsub("^.*%-", ""))
+end
+
+-- True if the assigned key is currently held — never rebind a held key
+-- (rebinding mid-press is the documented Angleur "Raft Jump Bug").
+local function KeyHeld()
+    local base = BaseKey(M.oneKey)
+    if not base then return false end
+    local ok, down = pcall(IsKeyDown, base)
+    return ok and down or false
+end
+
+local function BindCast()
+    if not M.oneKey or not bindOwner or InCombatLockdown() then return end
+    if KeyHeld() then return end
+    ClearOverrideBindings(bindOwner)
+    SetOverrideBindingSpell(bindOwner, true, M.oneKey, FISHING_SPELL_NAME)
+end
+
+local function BindReel()
+    if not M.oneKey or not bindOwner or InCombatLockdown() then return end
+    if KeyHeld() then return end
+    ClearOverrideBindings(bindOwner)
+    SetOverrideBinding(bindOwner, true, M.oneKey, "INTERACTMOUSEOVER")
+end
+
+local function ClearBind()
+    if InCombatLockdown() or not bindOwner then return end
+    ClearOverrideBindings(bindOwner)
+end
+
+-- Re-apply the correct binding for the current state.
+local function RefreshBind()
+    if M.state == "waiting" and M.bobberWithinRange then
+        BindReel()
+    else
+        BindCast()
+    end
+end
+
+function M:SetOneKey(key)
+    -- key is a binding string ("F", "BUTTON4", "ALT-E", ...) or nil to clear
+    self.oneKey = (key ~= "" and key) or nil
+    PH.Config:Set("fa_oneKey", self.oneKey)
+    if bindOwner and not InCombatLockdown() then
+        ClearOverrideBindings(bindOwner)
+        RefreshBind()
+    end
+    PH.Event:Fire("PH_FA_UPDATED")
+end
+
+function M:GetOneKey()
+    return self.oneKey
+end
+
+-------------------------------------------------------------------------------
+-- Camera bobber scanner (opt-in fallback)
+-- Rotates the CAMERA (not the character) in a serpentine sweep so the bobber
+-- slides under a cursor parked in a fixed on-screen box. When the cursor turns
+-- into the interact cursor over the bobber, CURSOR_CHANGED fires and
+-- SetCursor(nil) returns true, so the scan stops with the cursor on the bobber.
+-------------------------------------------------------------------------------
+
+local SCAN = {
+    H_SPEED = 0.4, V_SPEED = 0.3, H_DIST = 0.25, V_DIST = 0.25,
+    V_OFFSET = 0.25, WAIT_TIME = 1, V_LINES = 14, ZFACTOR_STR = 1.3,
+    TIMEOUT = 15,
+}
+
+local scanFrame
+local scanBox
+local _scanActive     = false
+local _scanMouseInside = false
+local _scanLegs, _scanLegIdx, _scanLegElapsed, _scanElapsed
+local _camZoomCache
+
+local function ScanStopAllMovement()
+    MoveViewRightStop(); MoveViewLeftStop()
+    MoveViewUpStop();    MoveViewDownStop()
+    MoveViewOutStop()
+end
+
+local function StopScan(recenter)
+    if not _scanActive then return end
+    _scanActive = false
+    ScanStopAllMovement()
+    if scanFrame then
+        scanFrame:SetScript("OnUpdate", nil)
+        scanFrame:SetScript("OnEvent", nil)
+        scanFrame:UnregisterAllEvents()
+    end
+    if _camZoomCache ~= nil then
+        PH.Compat.SetCVar("cameraDistanceMaxZoomFactor", _camZoomCache)
+        _camZoomCache = nil
+    end
+    if recenter then CenterCamera() end
+end
+M._StopScan = StopScan
+
+local function StartScanLeg(i)
+    _scanLegIdx     = i
+    _scanLegElapsed = 0
+    local leg = _scanLegs and _scanLegs[i]
+    if not leg then StopScan(true); return end
+    if leg.start then leg.start() end
+end
+
+local function EnsureScanFrame()
+    if scanFrame then return end
+    scanFrame = CreateFrame("Frame")
+    scanFrame:Hide()
+end
+
+-- The fixed on-screen box the player parks the cursor in. Created lazily.
+local function EnsureScanBox()
+    if scanBox then return end
+    scanBox = CreateFrame("Frame", "PHFishingScanBox", UIParent)
+    scanBox:SetSize(40, 40)
+    scanBox:SetPoint("CENTER", UIParent, "CENTER", 0, 150)
+    scanBox:SetFrameStrata("FULLSCREEN_DIALOG")
+    scanBox:SetPropagateMouseMotion(true)
+    scanBox:SetPropagateMouseClicks(true)
+    local tex = scanBox:CreateTexture(nil, "OVERLAY")
+    tex:SetAllPoints()
+    tex:SetColorTexture(0.9, 0.2, 0.2, 0.35)
+    scanBox.tex = tex
+    local hint = scanBox:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    hint:SetPoint("BOTTOM", scanBox, "TOP", 0, 6)
+    hint:SetText(PH.L["FA_SCAN_BOX_HINT"])
+    scanBox:SetScript("OnEnter", function()
+        _scanMouseInside = true
+        tex:SetColorTexture(0.2, 0.9, 0.3, 0.35)
+    end)
+    scanBox:SetScript("OnLeave", function()
+        _scanMouseInside = false
+        tex:SetColorTexture(0.9, 0.2, 0.2, 0.35)
+        if _scanActive then StopScan(true) end
+    end)
+    scanBox:Hide()
+end
+
+function M:ShowScanBox(show)
+    EnsureScanBox()
+    if show then scanBox:Show() else scanBox:Hide() end
+end
+
+local function StartScan()
+    if _scanActive then return end
+    if not PH.Config:Get("fa_cameraScan") then return end
+    EnsureScanFrame()
+    EnsureScanBox()
+    scanBox:Show()
+    if not _scanMouseInside then
+        PH.Logger.Info("|cffffcc00" .. PH.L["FA_SCAN_NEEDMOUSE"] .. "|r")
+        return
+    end
+
+    CenterCamera()
+    _camZoomCache = PH.Compat.GetCVar("cameraDistanceMaxZoomFactor")
+    local maxZoom = tonumber(_camZoomCache) or 1.9
+    local zoomFactor   = (maxZoom + SCAN.ZFACTOR_STR) / (SCAN.ZFACTOR_STR + 1)
+    local zoomFactor_H = zoomFactor * 0.8
+    local hTime    = (SCAN.H_DIST / SCAN.H_SPEED) / zoomFactor_H
+    local vTime    = (SCAN.V_DIST / SCAN.V_SPEED)
+    local lines    = SCAN.V_LINES
+    local lineTime = vTime / lines
+    local setupVSpeed = SCAN.V_SPEED * ((SCAN.V_OFFSET / SCAN.V_SPEED) / hTime) * zoomFactor
+
+    _scanLegs = {}
+    -- 1) zoom out
+    table.insert(_scanLegs, {
+        start = function() MoveViewOutStart(16) end,
+        stop  = function() MoveViewOutStop() end,
+        duration = SCAN.WAIT_TIME,
+    })
+    -- 2) move to the start corner (pitch down a bit + half a row to the right)
+    table.insert(_scanLegs, {
+        start = function() MoveViewUpStart(setupVSpeed); MoveViewRightStart(SCAN.H_SPEED) end,
+        stop  = function() MoveViewUpStop(); MoveViewRightStop() end,
+        duration = hTime / 2,
+    })
+    -- 3) serpentine rows
+    local goLeft = true
+    for r = 1, lines do
+        local left = goLeft
+        table.insert(_scanLegs, {
+            start = function()
+                if left then MoveViewLeftStart(SCAN.H_SPEED) else MoveViewRightStart(SCAN.H_SPEED) end
+            end,
+            stop = function()
+                if left then MoveViewLeftStop() else MoveViewRightStop() end
+            end,
+            duration = hTime,
+        })
+        if r < lines then
+            table.insert(_scanLegs, {
+                start = function() MoveViewUpStart(SCAN.V_SPEED) end,
+                stop  = function() MoveViewUpStop() end,
+                duration = lineTime,
+            })
+        end
+        goLeft = not goLeft
+    end
+
+    _scanActive  = true
+    _scanElapsed = 0
+    scanFrame:RegisterEvent("CURSOR_CHANGED")
+    scanFrame:SetScript("OnEvent", function()
+        -- Cursor changed to the interact cursor over the bobber -> stop here,
+        -- leaving the cursor on the bobber so the one key can loot it.
+        if SetCursor(nil) == true then StopScan(false) end
+    end)
+    scanFrame:SetScript("OnUpdate", function(_, dt)
+        _scanElapsed = _scanElapsed + dt
+        if _scanElapsed > SCAN.TIMEOUT then StopScan(true); return end
+        if not _scanMouseInside then StopScan(true); return end
+        local leg = _scanLegs[_scanLegIdx]
+        if not leg then StopScan(true); return end
+        _scanLegElapsed = _scanLegElapsed + dt
+        if _scanLegElapsed >= leg.duration then
+            if leg.stop then leg.stop() end
+            StartScanLeg(_scanLegIdx + 1)
+        end
+    end)
+    StartScanLeg(1)
+end
+
+-------------------------------------------------------------------------------
+-- Gear helpers
+-------------------------------------------------------------------------------
+
 -- Scan all bags for the first item matching a name list (best-first order).
--- Container reads go through PH.Compat so this works on Cata clients too,
--- where the bare GetContainer* globals were moved into C_Container.
+-- Container reads go through PH.Compat so this works on Cata clients too.
 local function FindInBags(itemList)
     for _, gear in ipairs(itemList) do
         for bag = 0, 4 do
@@ -177,17 +457,14 @@ local function FindInBags(itemList)
     return nil, nil
 end
 
--- Returns the name of the item in a specific inventory slot (nil = empty).
 local function GetInventorySlotName(invSlot)
     local link = GetInventoryItemLink("player", invSlot)
     if not link then return nil end
-    local name = GetItemInfo(link)
-    return name
+    return (GetItemInfo(link))
 end
 
--- PHFishingAssistCastBtn is a SecureActionButtonTemplate UIParent child.
--- btn:Click() from Lua works out-of-combat (fishing is always OOC).
--- The spell attribute is set at button creation and never needs updating here.
+-- PHFishingAssistCastBtn is a SecureActionButtonTemplate UIParent child;
+-- btn:Click() casts from Lua out of combat. Used for the auto-recast option.
 local function AutoRecast()
     if M.state ~= "idle" then return end
     if InCombatLockdown() then return end
@@ -203,67 +480,65 @@ function M:Initialize()
     if _initialized then return end
     _initialized = true
 
-    -- Build fishing name lookup set on login (spell data fully loaded then).
+    bindOwner = CreateFrame("Frame", "PHFishingBindOwner", UIParent)
+
+    -- Restore the saved one-key binding.
+    self.oneKey = PH.Config:Get("fa_oneKey")
+
     PH.Event:On("PLAYER_ENTERING_WORLD", function()
         InitFishingNames()
+        if self.oneKey and not InCombatLockdown() then BindCast() end
     end, "FishingAssist")
 
-    -- ── UNIT_SPELLCAST_CHANNEL_START ──────────────────────────────────────────────
-    -- In TBC Classic, Fishing is a CHANNELED spell (not a regular cast).
-    -- CHANNEL_START fires when the bobber enters water — state → "waiting".
-    -- TBC BCC Anniversary signature: (unit, castGUID, spellID)
-    -- Verified by Angleur (AngleurTBC.lua checks arg5=spellID for this event).
-    PH.Event:On("UNIT_SPELLCAST_CHANNEL_START", function(event, unit, castGUID, spellID)
+    -- Fishing is a CHANNELED spell. CHANNEL_START fires when the bobber lands.
+    -- Bus dispatches WoW events as (event, ...); payload is (unit, castGUID, spellID).
+    PH.Event:On("UNIT_SPELLCAST_CHANNEL_START", function(_, unit, _castGUID, spellID)
         if unit ~= "player" then return end
-        if M.state ~= "idle" then return end
+        if self.state ~= "idle" then return end
         if IsFishingCast(tonumber(spellID)) then
-            M:_OnChannelStart()
+            self:_OnChannelStart()
         end
     end, "FishingAssist")
 
-    -- ── UNIT_SPELLCAST_CHANNEL_STOP ───────────────────────────────────────────────
-    -- Fires when the channel ends. Two cases:
-    --   (a) Fish reeled in — LOOT_CLOSED already set state "idle". No-op.
-    --   (b) Bobber sank without bite — state still "waiting"; reset to idle.
-    PH.Event:On("UNIT_SPELLCAST_CHANNEL_STOP", function(event, unit, castGUID, spellID)
+    PH.Event:On("UNIT_SPELLCAST_CHANNEL_STOP", function(_, unit, _castGUID, spellID)
         if unit ~= "player" then return end
         if not IsFishingCast(tonumber(spellID)) then return end
-        if M.state == "waiting" then
-            M.state = "idle"
-            PH.Event:Fire("PH_FA_UPDATED")
-            if PH.Config:Get("fa_autoRecast") then
-                After(0.4, AutoRecast)
+        self:_OnChannelStop()
+    end, "FishingAssist")
+
+    PH.Event:On("UNIT_SPELLCAST_FAILED", function(_, unit, _castGUID, spellID)
+        if unit ~= "player" then return end
+        if not IsFishingCast(tonumber(spellID)) then return end
+        self:_OnChannelStop()
+    end, "FishingAssist")
+
+    -- Soft-interact target change — tells us when the bobber is catchable.
+    if PH.Compat.HasSoftInteract() then
+        PH.Event:On("PLAYER_SOFT_INTERACT_CHANGED", function(_, a1, a2)
+            local guid = a2 or a1  -- current soft-interact target GUID
+            self.bobberWithinRange = IsBobberGUID(guid)
+            if self.state == "waiting" then
+                RefreshBind()
             end
-        end
+        end, "FishingAssist")
+    end
+
+    -- Combat safety: release bindings in combat, restore them after.
+    PH.Event:On("PLAYER_REGEN_DISABLED", function() ClearBind() end, "FishingAssist")
+    PH.Event:On("PLAYER_REGEN_ENABLED",  function() RefreshBind() end, "FishingAssist")
+
+    -- Never leave the soft-target/auto-loot CVars changed on logout.
+    PH.Event:On("PLAYER_LOGOUT", function() RestoreFishingCVars() end, "FishingAssist")
+
+    -- Loot window (for stats only — the keypress does the looting).
+    PH.Event:On("LOOT_OPENED", function() self:_OnLootOpened() end, "FishingAssist")
+    PH.Event:On("LOOT_CLOSED", function() self:_OnLootClosed() end, "FishingAssist")
+
+    -- Track lure buff changes.
+    PH.Event:On("UNIT_AURA", function(_, unit)
+        if unit == "player" then self:ScanLureBuff() end
     end, "FishingAssist")
 
-    -- ── UNIT_SPELLCAST_FAILED ─────────────────────────────────────────────────────
-    -- Fires if the cast was rejected before the channel could start
-    -- (no fishing rod equipped, not near water, already casting, etc.)
-    -- TBC BCC Anniversary signature: (unit, castGUID, spellID)
-    PH.Event:On("UNIT_SPELLCAST_FAILED", function(event, unit, castGUID, spellID)
-        if unit ~= "player" then return end
-        if not IsFishingCast(tonumber(spellID)) then return end
-        M.state = "idle"
-        PH.Event:Fire("PH_FA_UPDATED")
-    end, "FishingAssist")
-
-    -- Loot window opened → fish bit and player (or auto-interact) clicked bobber
-    PH.Event:On("LOOT_OPENED", function()
-        M:_OnLootOpened()
-    end, "FishingAssist")
-
-    -- Loot window closed → ready to cast again
-    PH.Event:On("LOOT_CLOSED", function()
-        M:_OnLootClosed()
-    end, "FishingAssist")
-
-    -- Track lure buff changes
-    PH.Event:On("UNIT_AURA", function(event, unit)
-        if unit == "player" then M:ScanLureBuff() end
-    end, "FishingAssist")
-
-    -- Initial lure scan
     self:ScanLureBuff()
 end
 
@@ -272,16 +547,42 @@ end
 -------------------------------------------------------------------------------
 
 function M:_OnChannelStart()
-    self.state          = "waiting"
-    self.bobberCastTime = GetTime()
-    self._castStartTime = nil
-    self._lastInteractTry = nil  -- allow immediate first attempt
-    self.totalCasts     = self.totalCasts + 1
+    self.state           = "waiting"
+    self.bobberCastTime  = GetTime()
+    self.bobberWithinRange = false
+    self.totalCasts      = self.totalCasts + 1
     if not self.sessionActive then
         self.sessionActive = true
         self.sessionStart  = GetTime()
     end
+
+    ApplyFishingCVars()
+    BindCast()  -- no bobber yet; a press recasts until the bobber is detected
+
+    -- If the bobber doesn't become the soft target shortly, try the camera scan.
+    if PH.Config:Get("fa_cameraScan") then
+        After(0.25, function()
+            if self.state == "waiting" and not self.bobberWithinRange then
+                StartScan()
+            end
+        end)
+    end
+
     PH.Event:Fire("PH_FA_UPDATED")
+end
+
+function M:_OnChannelStop()
+    RestoreFishingCVars()
+    StopScan(true)
+    self.bobberWithinRange = false
+    if self.state ~= "looting" then
+        self.state = "idle"
+    end
+    BindCast()
+    PH.Event:Fire("PH_FA_UPDATED")
+    if self.state == "idle" and PH.Config:Get("fa_autoRecast") then
+        After(0.4, AutoRecast)
+    end
 end
 
 function M:_OnLootOpened()
@@ -295,80 +596,31 @@ end
 function M:_OnLootClosed()
     if self.state == "looting" then
         self.state = "idle"
+        BindCast()
         PH.Event:Fire("PH_FA_UPDATED")
         if PH.Config:Get("fa_autoRecast") then
-            -- SecureActionButton:Click() from a delayed timer works in TBC
-            -- Classic out-of-combat. AutoRecast() checks state + lockdown.
             After(0.4, AutoRecast)
         end
     end
 end
 
 -------------------------------------------------------------------------------
--- Tick  (called every ~0.1s by the UI OnUpdate)
+-- Tick  (called every ~0.1s by the UI OnUpdate) — bobber-timeout safety net
 -------------------------------------------------------------------------------
 
 function M:Tick()
-    local now = GetTime()
-
-    -- ── Auto-interact with bobber ────────────────────────────────────────
-    -- In TBC Classic, TargetUnit() and InteractUnit() do NOT require a
-    -- hardware-event context (that restriction was added in Cata+).
-    -- We can safely poll for the bobber unit from OnUpdate.
-    if self.state == "waiting" then
-        self:TryAutoInteract()
-    end
-
-    -- ── Bobber timeout (safety net) ──────────────────────────────────────
     if self.state == "waiting" and self.bobberCastTime > 0 then
-        if now - self.bobberCastTime > BOBBER_DURATION + 5 then
+        if GetTime() - self.bobberCastTime > BOBBER_DURATION + 5 then
+            StopScan(true)
+            RestoreFishingCVars()
             self.state = "idle"
+            self.bobberWithinRange = false
+            BindCast()
             PH.Logger.Info("|cffffcc00" .. PH.L["FA_BOBBER_TIMEOUT"] .. "|r")
             PH.Event:Fire("PH_FA_UPDATED")
             if PH.Config:Get("fa_autoRecast") then
                 After(0.5, AutoRecast)
             end
-        end
-    end
-
-    -- ── Stuck-cast safety ────────────────────────────────────────────────
-    -- In TBC Classic, Fishing is channeled — CHANNEL_STOP is the authoritative
-    -- reset event. The bobber timeout above covers the edge case where CHANNEL_STOP
-    -- never fires (e.g. server disconnect, client bug).
-end
-
--------------------------------------------------------------------------------
--- Auto-Interact  (polls from Tick while state == "waiting")
--------------------------------------------------------------------------------
-
-function M:TryAutoInteract()
-    -- Rate-limit: attempt every 0.4 seconds
-    local now = GetTime()
-    if self._lastInteractTry and (now - self._lastInteractTry) < 0.4 then return end
-    self._lastInteractTry = now
-
-    -- ── Primary: target the bobber by its unit name ──────────────────────
-    -- Fishing bobbers in TBC Classic are critter-type units (like totems),
-    -- so TargetUnit(name) works from any non-combat Lua context.
-    for _, bn in ipairs(BOBBER_NAMES) do
-        TargetUnit(bn)
-        if UnitExists("target") then
-            local tName = UnitName("target") or ""
-            if _bobberSet[tName] then
-                InteractUnit("target")
-                -- Give the loot window time to open before retrying
-                self._lastInteractTry = now + 1.5
-                return
-            end
-        end
-    end
-
-    -- ── Fallback: if player is hovering the bobber with their mouse ──────
-    if UnitExists("mouseover") then
-        local mName = UnitName("mouseover") or ""
-        if _bobberSet[mName] then
-            InteractUnit("mouseover")
-            self._lastInteractTry = now + 1.5
         end
     end
 end
@@ -379,8 +631,6 @@ end
 
 function M:ScanLureBuff()
     for i = 1, 40 do
-        -- UnitBuff signature: (unit, index[, filter])
-        -- Returns: name, icon, count, debuffType, duration, expirationTime, ...
         local name, _, _, _, _, expirationTime = UnitBuff("player", i)
         if not name then break end
         if LURE_NAMES[name] then
@@ -405,11 +655,6 @@ end
 function M:EquipBestGear()
     if InCombatLockdown() then return end
 
-    -- Both UseContainerItem calls must be direct (no After() delay) because
-    -- in TBC Classic, equipping items via UseContainerItem requires a hardware-
-    -- event context. Any timer callback (After/OnUpdate) breaks that chain.
-
-    -- Equip best fishing pole (main hand = inv slot 16)
     local currentPole = GetInventorySlotName(16)
     local hasPole = false
     if currentPole then
@@ -425,7 +670,6 @@ function M:EquipBestGear()
         end
     end
 
-    -- Equip best fishing hat (head = inv slot 1)
     local currentHat = GetInventorySlotName(1)
     local hasHat = false
     if currentHat then
@@ -468,7 +712,6 @@ function M:GetBobberRemaining()
     return math.max(0, BOBBER_DURATION - (GetTime() - self.bobberCastTime))
 end
 
--- Full bobber lifetime in seconds (used by the UI timer bar to scale fill).
 function M:GetBobberDuration()
     return BOBBER_DURATION
 end

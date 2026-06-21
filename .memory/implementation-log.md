@@ -6,6 +6,37 @@ O entry mais recente fica no topo.
 
 ---
 
+## 2026-06-20 — One-key fishing (técnica do Angleur) + fix de release/CI (sessão 7)
+
+### O que mudou
+
+**Release/CI (bloqueios resolvidos):**
+- `ProfessionHelper.toc` — interface da Era `11503`→`11508` e BCC `20504`→`20505` (2.5.5, build vivo do TBC Anniversary). A `11503` foi aposentada pela CurseForge e quebrava o packager (`-g classic`).
+- `.github/workflows/publish.yml` — `-g classic -g bcc -g wrath -g cata` → `-g classic -g bcc` (Wrath/Cata não têm realms vivos).
+- `.luacheckrc` — **o lint do CI roda `luacheck . --config .luacheckrc` e o luacheck retorna exit 1 com QUALQUER warning.** Completado o allowlist (LOOT_ITEM_PUSHED/CREATED_SELF, e as novas APIs de fishing); `C_Container` removido de `read_globals` (estava em `globals` também → warning "read-only"). **Regra: validar `luacheck . --config .luacheckrc` com exit 0 antes de pushar.**
+
+**One-key fishing (reescrita do FishingAssist, modelado no addon Angleur):**
+O auto-interact antigo (`TargetUnit("Fishing Bobber")`+`InteractUnit`) era impossível — bóia não é unidade alvejável. Substituído pelo mecanismo real do Angleur:
+- `Features/FishingAssist.lua` reescrito: tecla única do usuário com **override-binding swap** — ocioso `SetOverrideBindingSpell(owner, key, "Fishing")`, pescando+bóia `SetOverrideBinding(owner, key, "INTERACTMOUSEOVER")`. CVars temporários no cast (`SoftTargetInteract=3`, `SoftTargetInteractRange=15`, `SoftTargetInteractRangeIsHard=0`, `autoLootDefault=1`) restaurados no channel stop / logout. Bóia detectada via `PLAYER_SOFT_INTERACT_CHANGED` (GameObject 35591). Segurança em combate (clear/rebind em REGEN_DISABLED/ENABLED), guard de tecla-segurada. **Scanner de câmera** opt-in (default OFF): gira a câmera (`MoveView*Start/Stop`) varrendo até a bóia cair sob o cursor parado numa caixa (`CURSOR_CHANGED`+`SetCursor(nil)`), com timeout de 15s.
+- `Core/Compat.lua` — `C.GetCVar`/`C.SetCVar`/`C.HasSoftInteract`.
+- `UI/FishingAssistUI.lua` — atribuição de tecla (captura modal), label honesto "Pressione [tecla] para recolher", toggle do scanner de câmera; removido o estado morto "casting".
+- Locales (3) — chaves `FA_KEY_*`/`FA_BTN_REEL*`/`FA_CAMERA_SCAN`/`FA_SCAN_*`.
+
+### Limite honesto
+
+Lootar a bóia **exige um toque real de tecla** (`INTERACTMOUSEOVER` só dispara de input de hardware). É pesca de UM botão, não bot zero-toque — igual ao Angleur. Cast e busca da bóia são automáticos; o toque de recolher é input real.
+
+### Verificação
+
+`luacheck . --config .luacheckrc` → **exit 0** (0/0, 51 arquivos). **Runtime precisa de teste in-client** (override bindings + CVars de soft-target não são testáveis fora do jogo).
+
+### Itens abertos
+
+- Validar in-client: soft-target pega a bóia? `INTERACTMOUSEOVER` recolhe? Scanner de câmera acha a bóia?
+- Docs (`docs/API-REFERENCE.md`) do FishingAssist precisam refletir a nova API (`SetOneKey`/`GetOneKey`/`ShowScanBox`).
+
+---
+
 ## 2026-06-20 — Feedback de usuários: descoberta de features, i18n, release fix (sessão 6)
 
 ### O que mudou
