@@ -128,6 +128,15 @@ local function InitFishingNames()
     end
 end
 
+-- True if a channeled spell is Fishing — matched by spell ID first, then by the
+-- localized spell name as a fallback. The name fallback covers Anniversary
+-- builds where the live fishing spell ID may not be in FISHING_SPELL_IDS.
+local function IsFishingCast(spellID)
+    if IsFishingID(spellID) then return true end
+    local name = spellID and GetSpellInfo(spellID)
+    return name ~= nil and _fishingNames[name] == true
+end
+
 -- C_Timer.After polyfill for Classic/TBC (no C_Timer on those clients).
 local function After(delay, func)
     if C_Timer and C_Timer.After then
@@ -207,7 +216,7 @@ function M:Initialize()
     PH.Event:On("UNIT_SPELLCAST_CHANNEL_START", function(event, unit, castGUID, spellID)
         if unit ~= "player" then return end
         if M.state ~= "idle" then return end
-        if IsFishingID(tonumber(spellID)) then
+        if IsFishingCast(tonumber(spellID)) then
             M:_OnChannelStart()
         end
     end, "FishingAssist")
@@ -218,7 +227,7 @@ function M:Initialize()
     --   (b) Bobber sank without bite — state still "waiting"; reset to idle.
     PH.Event:On("UNIT_SPELLCAST_CHANNEL_STOP", function(event, unit, castGUID, spellID)
         if unit ~= "player" then return end
-        if not IsFishingID(tonumber(spellID)) then return end
+        if not IsFishingCast(tonumber(spellID)) then return end
         if M.state == "waiting" then
             M.state = "idle"
             PH.Event:Fire("PH_FA_UPDATED")
@@ -234,7 +243,7 @@ function M:Initialize()
     -- TBC BCC Anniversary signature: (unit, castGUID, spellID)
     PH.Event:On("UNIT_SPELLCAST_FAILED", function(event, unit, castGUID, spellID)
         if unit ~= "player" then return end
-        if not IsFishingID(tonumber(spellID)) then return end
+        if not IsFishingCast(tonumber(spellID)) then return end
         M.state = "idle"
         PH.Event:Fire("PH_FA_UPDATED")
     end, "FishingAssist")

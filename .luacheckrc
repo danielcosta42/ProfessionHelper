@@ -91,7 +91,8 @@ read_globals = {
     "GetInventoryItemLink",
 
     -- WoW API: Containers
-    "C_Container",
+    -- (C_Container is declared in `globals` above — it is written by the
+    --  pre-Cata polyfill in Core/Compat.lua, so it must not be read-only here)
     "GetContainerNumSlots",
     "GetContainerItemInfo",
     "GetContainerItemLink",
@@ -121,7 +122,9 @@ read_globals = {
     "ITEM_QUALITY_COLORS",
     "LOOT_ITEM_SELF",
     "LOOT_ITEM_SELF_MULTIPLE",
+    "LOOT_ITEM_PUSHED_SELF",
     "LOOT_ITEM_PUSHED_SELF_MULTIPLE",
+    "LOOT_ITEM_CREATED_SELF",
     "LOOT_ITEM_CREATED_SELF_MULTIPLE",
     "GOLD_AMOUNT",
     "SILVER_AMOUNT",
