@@ -2,6 +2,19 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.18.0] - 2026-06-21
+
+### Added
+- modular 5-layer architecture (Core/Features/UI) with discoverable tools
+
+### Fixed
+- update TOC interface versions to current live game flavors
+- replace invalid \u escapes that broke file loading on Lua 5.1
+
+### Other
+- Add support for Inscription and Archaeology professions; update Tailoring and Locales
+
+
 ## [1.17.1] - 2026-04-26
 
 ### Fixed
