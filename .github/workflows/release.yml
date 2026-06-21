@@ -71,7 +71,7 @@ jobs:
       - name: Update TOC and Core version
         run: |
           sed -i "s/^## Version: .*/## Version: ${{ steps.version.outputs.next }}/" ProfessionHelper.toc
-          sed -i "s/PH\.version = \".*\"/PH.version = \"${{ steps.version.outputs.next }}\"/" Core.lua
+          sed -i "s/PH\.version = \".*\"/PH.version = \"${{ steps.version.outputs.next }}\"/" Core/Namespace.lua
 
       - name: Generate changelog entry
         run: |
@@ -136,7 +136,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add ProfessionHelper.toc Core.lua CHANGELOG.md
+          git add ProfessionHelper.toc Core/Namespace.lua CHANGELOG.md
           git diff --cached --quiet && echo "No changes" && exit 0
           git commit -m "chore: bump version to ${{ steps.version.outputs.next }} [skip ci]"
           git push origin main
