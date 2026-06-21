@@ -283,6 +283,11 @@ function PH:HandleSlashCommand(msg)
     elseif cmd == "fish" or cmd == "fishing" then
         self:ShowFishingAssistUI()
 
+    elseif cmd == "debug" then
+        local on = PH.Config:Get("debug") ~= true
+        PH.Config:Set("debug", on)
+        PH.Logger.Info("Debug " .. (on and "|cff00ff00ON|r" or "|cffff0000OFF|r"))
+
     elseif cmd == "help" then
         PH.Logger.Info(self.L["CMD_HELP_HEADER"])
         PH.Logger.Info(self.L["CMD_HELP_MAIN"])
