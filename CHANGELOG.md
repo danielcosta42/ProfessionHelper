@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.21.1] - 2026-06-22
+
+### Fixed
+- correct recipe sources across Blacksmithing, Cooking, Enchanting, Engineering
+
+
 ## [1.21.0] - 2026-06-22
 
 ### Added
