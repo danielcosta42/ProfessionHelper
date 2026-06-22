@@ -334,6 +334,50 @@ function PH:RefreshMainWindow()
 end
 
 -------------------------------------------------------------------------------
+-- Window layout persistence + UI scale (shared by every panel)
+-- Each movable panel calls PH:PersistFrameLayout(frame, key) once after it sets
+-- up dragging; we then restore its saved position on creation, apply the global
+-- UI scale, and re-save the position whenever the user finishes dragging it.
+-------------------------------------------------------------------------------
+
+PH._layoutFrames = PH._layoutFrames or {}
+
+function PH:PersistFrameLayout(frame, key)
+    if not frame or not key then return end
+    -- Restore a previously saved position (relative to UIParent).
+    local saved = PH.DB and PH.DB:Get("uiLayout." .. key)
+    if saved and saved.point then
+        frame:ClearAllPoints()
+        frame:SetPoint(saved.point, UIParent, saved.relPoint or saved.point,
+                       saved.x or 0, saved.y or 0)
+    end
+    frame:SetScale(PH.Config:Get("windowScale") or 1.0)
+    -- Persist the position after each drag (runs after StopMovingOrSizing).
+    frame:HookScript("OnDragStop", function(self)
+        local point, _, relPoint, x, y = self:GetPoint()
+        if point then
+            PH.DB:Set("uiLayout." .. key, {
+                point = point, relPoint = relPoint, x = x, y = y,
+            })
+        end
+    end)
+    self._layoutFrames[key] = frame
+end
+
+-- Re-apply the global UI scale to every registered panel (live, e.g. when the
+-- options slider changes it). Clamped to a sane range.
+function PH:ApplyWindowScale(scale)
+    if scale then
+        scale = math.max(0.5, math.min(2.0, scale))
+        PH.Config:Set("windowScale", scale)
+    end
+    scale = PH.Config:Get("windowScale") or 1.0
+    for _, f in pairs(self._layoutFrames) do
+        if f and f.SetScale then f:SetScale(scale) end
+    end
+end
+
+-------------------------------------------------------------------------------
 -- Skill-change handler
 -- Fires when a profession skill level changes (events or polling).
 -- Notifies the player when a guide step advances.

@@ -59,6 +59,7 @@ function PH:ShowFishingAssistUI()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop",  frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "fishing")
 
     -- Drop shadow
     local shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")

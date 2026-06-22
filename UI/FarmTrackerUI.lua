@@ -36,6 +36,7 @@ function PH:ShowFarmTrackerUI()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "farm")
 
     -- Shadow
     local shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")

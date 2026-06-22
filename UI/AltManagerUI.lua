@@ -49,6 +49,7 @@ function PH:ShowAltManagerUI()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop",  frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "alt")
 
     -- Header
     local hdr = CreateFrame("Frame", nil, frame, "BackdropTemplate")

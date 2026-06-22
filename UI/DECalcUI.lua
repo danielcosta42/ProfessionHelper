@@ -61,6 +61,7 @@ function PH:ShowDECalcUI()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop",  frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "decalc")
 
     -- Header
     local hdr = CreateFrame("Frame", nil, frame, "BackdropTemplate")

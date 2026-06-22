@@ -40,6 +40,7 @@ function PH:ShowCooldownUI()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop",  frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "cooldown")
 
     -- Header bar
     local hdr = CreateFrame("Frame", nil, frame, "BackdropTemplate")

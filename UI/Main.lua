@@ -289,6 +289,7 @@ function PH:CreateMainWindow()
     frame:RegisterForDrag("LeftButton")
     frame:SetScript("OnDragStart", frame.StartMoving)
     frame:SetScript("OnDragStop", frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "main")
 
     -- Shadow
     local shadow = CreateFrame("Frame", nil, frame, "BackdropTemplate")
