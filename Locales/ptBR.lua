@@ -501,7 +501,6 @@ ProfessionHelper._Locales["ptBR"] = {
     ["OPT_TITLE"]          = "Opções do Profession Helper",
     ["OPT_UI_SCALE"]       = "Escala da interface",
     ["OPT_FOCUS_VOL"]      = "Volume foco da pesca",
-    ["OPT_AUTOTRACK"]      = "Rastrear materiais",
     ["OPT_FARMTIPS"]       = "Mostrar dicas de farm",
     ["OPT_DEBUG"]          = "Mensagens de debug",
     ["OPT_RESET_POS"]      = "Resetar posições das janelas",

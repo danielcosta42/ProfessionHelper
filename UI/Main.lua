@@ -1294,7 +1294,7 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
     end
 
     -- Tip
-    if step.tip and step.tip ~= "" and not isComplete then
+    if step.tip and step.tip ~= "" and not isComplete and PH.Config:Get("showFarmingTips") ~= false then
         local tl = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         tl:SetPoint("TOPLEFT", 12, iy)
         tl:SetPoint("RIGHT", card, "RIGHT", -12, 0)
@@ -2322,7 +2322,7 @@ function PH:CreateGatheringStepCard(parent, y, step, totalSteps, currentSkill, p
     iy = iy - math.max(18, rn:GetStringHeight() + 6)
 
     -- Leveling tip
-    if step.tip then
+    if step.tip and PH.Config:Get("showFarmingTips") ~= false then
         local tip = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         tip:SetPoint("TOPLEFT", 12, iy)
         tip:SetPoint("RIGHT", card, "RIGHT", -12, 0)

@@ -501,7 +501,6 @@ ProfessionHelper._Locales["enUS"] = {
     ["OPT_TITLE"]          = "Profession Helper Options",
     ["OPT_UI_SCALE"]       = "UI scale",
     ["OPT_FOCUS_VOL"]      = "Fishing focus volume",
-    ["OPT_AUTOTRACK"]      = "Auto-track materials",
     ["OPT_FARMTIPS"]       = "Show farming tips",
     ["OPT_DEBUG"]          = "Debug messages",
     ["OPT_RESET_POS"]      = "Reset window positions",

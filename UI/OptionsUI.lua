@@ -31,7 +31,7 @@ function PH:ShowOptionsUI()
     end
 
     local frame = CreateFrame("Frame", "PHOptionsFrame", UIParent, "BackdropTemplate")
-    frame:SetSize(300, 200)
+    frame:SetSize(300, 224)
     frame:SetPoint("CENTER", UIParent, "CENTER", 0, 60)
     frame:SetMovable(true)
     frame:EnableMouse(true)
@@ -147,11 +147,12 @@ function PH:ShowOptionsUI()
         function(v) PH.Config:Set("fa_focusVolume", v) end,
         0.2, 1.0, 0.1, function(v) return string.format("%d%%", math.floor(v * 100 + 0.5)) end)
 
-    makeToggle(-94, PH.L["OPT_DEBUG"], "debug")
+    makeToggle(-94,  PH.L["OPT_FARMTIPS"], "showFarmingTips")
+    makeToggle(-118, PH.L["OPT_DEBUG"],    "debug")
 
     -- Reset window positions
     local reset = flatBtn(frame, 276, 22)
-    reset:SetPoint("TOPLEFT", 12, -122)
+    reset:SetPoint("TOPLEFT", 12, -146)
     reset:SetBackdropColor(0.30, 0.12, 0.12, 0.9)
     reset:SetBackdropBorderColor(0.6, 0.25, 0.25, 0.8)
     reset.text:SetText("|cffff6666" .. PH.L["OPT_RESET_POS"] .. "|r")

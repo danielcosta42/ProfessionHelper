@@ -21,7 +21,6 @@ local ROOT_DEFAULTS = {
     minimapButtonPosition = 45,
     windowScale           = 1.0,
     selectedProfession    = nil,
-    autoTrackMaterials    = true,
     showFarmingTips       = true,
     debug                 = false,
 }
