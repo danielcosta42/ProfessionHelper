@@ -456,6 +456,15 @@ ProfessionHelper._Locales["esES"] = {
     ["CD_TITLE"]            = "Cooldowns de Profesión",
     ["CD_READY"]           = "Listo",
     ["CD_READY_IN"]        = "listo en",
+    ["CD_READY_NOTIFY"]    = "¡El cooldown de %s está listo!",
+
+    -- Specialization Guide (SPEC_)
+    ["TAB_SPEC"]           = "Especialización",
+    ["SPEC_NO_SPECS"]      = "Esta profesión no tiene especializaciones.",
+    ["SPEC_HOW_TO_GET"]    = "Cómo obtener:",
+    ["SPEC_UNIQUE"]        = "Recetas exclusivas:",
+    ["SPEC_COST"]          = "Coste de la misión:",
+    ["SPEC_RECOMMENDATION"] = "Recomendación:",
 
     -- Tool panel titles (also used as the header toolbar tooltips)
     ["RT_TITLE"]           = "Recetas Faltantes",

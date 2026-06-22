@@ -50,6 +50,7 @@ Data\FishingCooking.lua
 Data\HerbalismAlchemy.lua
 Data\SkinningLeatherworking.lua
 Data\Dailies.lua
+Data\Specializations.lua
 Features\TSMIntegration.lua
 Features\BagScanner.lua
 Features\RecipeTracker.lua
@@ -61,6 +62,7 @@ Features\MapPins.lua
 Features\GatheringGuide.lua
 Features\CooldownTracker.lua
 Features\FishingAssist.lua
+Features\RepTracker.lua
 Core\Init.lua
 UI\Main.lua
 UI\FarmTrackerUI.lua

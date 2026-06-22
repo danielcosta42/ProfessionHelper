@@ -84,12 +84,36 @@ function CD:RecordCast(spellName)
         spellName = spellName,
         ts        = time(),
         cdHours   = def.cdHours,
+        notified  = false,
     })
 
     PH.Logger.Info(string.format(
         "|cffffd700[CD]|r %s %s %s",
         def.label, PH.L["CD_READY_IN"], self:FormatRemaining(def.cdHours * 3600)
     ))
+end
+
+-- Checks all cooldowns for the current character and fires a chat notification
+-- the first time each one is found to have expired.  Safe to call repeatedly.
+function CD:CheckAndNotify()
+    if not PH.Identity or not PH.Identity:GetCharKey() then return end
+    local charKey = PH.Identity:GetCharKey()
+    for _, def in ipairs(self.DATABASE) do
+        local entry = PH.DB:Get("cooldowns." .. charKey .. "." .. def.key)
+        if entry and entry.ts and not entry.notified then
+            local remaining = self:GetRemainingSeconds(charKey, def.key)
+            if remaining == 0 then
+                PH.Logger.Info(string.format(
+                    "|cffffd700[CD]|r " .. PH.L["CD_READY_NOTIFY"],
+                    "|cff00ff00" .. def.label .. "|r"
+                ))
+                entry.notified = true
+                PH.DB:Set("cooldowns." .. charKey .. "." .. def.key, entry)
+                -- Refresh the cooldown panel if it's open
+                if PH.UpdateCooldownUI then PH:UpdateCooldownUI() end
+            end
+        end
+    end
 end
 
 -- Returns seconds remaining on a cooldown entry (0 = ready / no data).

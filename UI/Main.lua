@@ -434,13 +434,16 @@ function PH:CreateMainWindow()
         return tab
     end
 
-    local tabSteps    = MakeTab(tabBar, PH.L["TAB_LEVELING"],  "steps",    nil, 0)
-    local tabShopping = MakeTab(tabBar, PH.L["TAB_SHOPPING"],   "shopping", tabSteps)
-    local tabDailies  = MakeTab(tabBar, PH.L["TAB_DAILIES"],    "dailies",  tabShopping)
+    local tabSteps    = MakeTab(tabBar, PH.L["TAB_LEVELING"],       "steps",    nil, 0)
+    local tabShopping = MakeTab(tabBar, PH.L["TAB_SHOPPING"],        "shopping", tabSteps)
+    local tabDailies  = MakeTab(tabBar, PH.L["TAB_DAILIES"],         "dailies",  tabShopping)
+    local tabSpec     = MakeTab(tabBar, PH.L["TAB_SPEC"],            "spec",     tabDailies)
     frame.tabSteps    = tabSteps
     frame.tabShopping = tabShopping
     frame.tabDailies  = tabDailies
+    frame.tabSpec     = tabSpec
     tabDailies:Hide()
+    tabSpec:Hide()
 
     -- Scroll area
     local scrollFrame, scrollChild = CreateScrollFrame(contentArea, "PHContentScroll")
@@ -686,7 +689,7 @@ function PH:UpdateTabVisuals()
     if not frame then return end
     local active = self.craftingTab or "steps"
 
-    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping, frame.tabDailies }) do
+    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping, frame.tabDailies, frame.tabSpec }) do
         if not tab:IsShown() then -- skip hidden tabs (e.g. Dailies on non-daily professions)
         elseif tab.tabKey == active then
             MakeFlat(tab, { T.accent[1], T.accent[2], T.accent[3], 0.18 }, { T.accent[1], T.accent[2], T.accent[3], 0.5 })
@@ -728,6 +731,7 @@ function PH:UpdateContentPanel()
     local isCrafting = (profData.type ~= "gathering")
     local isCombo = (profData.type == "combo")
     local hasDailies = (profData.name == "Cooking" or profData.name == "Fishing" or profData.name == "Fishing & Cooking")
+    local hasSpecs = (PH.Specializations and PH.Specializations[profData.name] ~= nil)
     if isCrafting then
         frame.tabBar:Show()
         frame.contentScroll:SetPoint("TOPLEFT", 8, -(T.tabH + 12))
@@ -736,6 +740,12 @@ function PH:UpdateContentPanel()
         else
             frame.tabDailies:Hide()
             if self.craftingTab == "dailies" then self.craftingTab = "steps" end
+        end
+        if hasSpecs then
+            frame.tabSpec:Show()
+        else
+            frame.tabSpec:Hide()
+            if self.craftingTab == "spec" then self.craftingTab = "steps" end
         end
         self:UpdateTabVisuals()
     else
@@ -841,6 +851,8 @@ function PH:UpdateContentPanel()
     -- Dispatch
     if profData.type == "gathering" then
         y = self:CreateGatheringContent(scrollChild, profData, currentSkill, y)
+    elseif self.craftingTab == "spec" then
+        y = self:CreateSpecContent(scrollChild, profData, y)
     elseif self.craftingTab == "dailies" then
         y = self:CreateDailiesContent(scrollChild, profData, y)
     elseif isCombo then
@@ -1290,6 +1302,29 @@ function PH:CreateFocusedCard(parent, y, step, totalSteps, currentSkill, comboSk
             end)
             mapBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
             iy = iy - 24
+        end
+
+        -- Rep gate badge (shown when the source requires a faction standing)
+        if PH.RepTracker then
+            local reqFaction, reqRank = PH.RepTracker:ParseRepRequirement(filteredSource)
+            if reqFaction and reqRank then
+                local curRank    = PH.RepTracker:GetFactionStanding(reqFaction) or 0
+                local hasFaction = curRank >= reqRank
+                local curName    = PH.RepTracker:StandingName(curRank)
+                local reqName    = PH.RepTracker:StandingName(reqRank)
+                local badge = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                badge:SetPoint("TOPLEFT", 12, iy)
+                badge:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+                badge:SetJustifyH("LEFT")
+                if hasFaction then
+                    badge:SetText("|cff00ff00[Rep OK]|r " .. hexc(T.textMuted) .. reqFaction .. " — " ..
+                        hexc(T.green) .. curName .. "|r" .. hexc(T.textMuted) .. " (need " .. reqName .. ")|r")
+                else
+                    badge:SetText("|cffff4444[Rep needed]|r " .. hexc(T.textMuted) .. reqFaction .. " — " ..
+                        "|cffff4444" .. curName .. "|r" .. hexc(T.textMuted) .. " (need " .. reqName .. ")|r")
+                end
+                iy = iy - math.max(14, badge:GetStringHeight() + 4)
+            end
         end
     end
 
@@ -1966,6 +2001,153 @@ function PH:CreateDailiesContent(parent, profData, yOffset)
         end
 
         y = y - 12  -- spacing between sets (for combo)
+    end
+
+    return y
+end
+
+-------------------------------------------------------------------------------
+-- Specialization Guide content
+-------------------------------------------------------------------------------
+function PH:CreateSpecContent(parent, profData, yOffset)
+    local y = yOffset
+    local specData = PH.Specializations and PH.Specializations[profData.name]
+
+    if not specData then
+        local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        msg:SetPoint("TOP", 0, y - 20)
+        msg:SetJustifyH("CENTER")
+        msg:SetText(hexc(T.textMuted) .. PH.L["SPEC_NO_SPECS"] .. "|r")
+        return y - 60
+    end
+
+    -- Overview banner
+    local bannerCard = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+    bannerCard:SetPoint("TOPLEFT", 0, y)
+    bannerCard:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+    MakePanel(bannerCard, { 0.10, 0.08, 0.14, 0.95 })
+
+    local bannerText = bannerCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    bannerText:SetPoint("TOPLEFT", 12, -10)
+    bannerText:SetPoint("BOTTOMRIGHT", -12, 8)
+    bannerText:SetJustifyH("LEFT")
+    bannerText:SetJustifyV("TOP")
+    bannerText:SetText(hexc(T.gold) .. "[!] |r" .. hexc(T.textSecondary) .. specData.description .. "|r")
+    bannerCard:SetHeight(bannerText:GetStringHeight() + 26)
+    y = y - bannerCard:GetHeight() - 8
+
+    -- One card per specialization
+    for _, spec in ipairs(specData.specs) do
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        card:SetPoint("TOPLEFT", 0, y)
+        card:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+        MakePanel(card, T.bgCard)
+
+        local cy = -10
+
+        -- Spec icon + name header
+        local specIcon = card:CreateTexture(nil, "ARTWORK")
+        specIcon:SetSize(28, 28)
+        specIcon:SetPoint("TOPLEFT", 10, cy)
+        specIcon:SetTexture(spec.icon or "Interface\\Icons\\INV_Misc_QuestionMark")
+        specIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+        local specName = card:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        specName:SetPoint("TOPLEFT", specIcon, "TOPRIGHT", 8, -2)
+        specName:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        specName:SetJustifyH("LEFT")
+        specName:SetText(hexc(T.accent) .. spec.name .. "|r")
+        cy = cy - 32
+
+        -- Description
+        local descLbl = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        descLbl:SetPoint("TOPLEFT", 12, cy)
+        descLbl:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        descLbl:SetJustifyH("LEFT")
+        descLbl:SetText(hexc(T.white) .. spec.description .. "|r")
+        local descH = descLbl:GetStringHeight() or 13
+        cy = cy - math.max(16, descH + 6)
+
+        -- Unique recipes
+        if spec.uniqueRecipes and #spec.uniqueRecipes > 0 then
+            local uLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            uLabel:SetPoint("TOPLEFT", 12, cy)
+            uLabel:SetText(hexc(T.gold) .. PH.L["SPEC_UNIQUE"] .. "|r")
+            cy = cy - 16
+
+            for _, recipe in ipairs(spec.uniqueRecipes) do
+                local rRow = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+                rRow:SetPoint("TOPLEFT", 20, cy)
+                rRow:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+                rRow:SetJustifyH("LEFT")
+                rRow:SetText(hexc(T.textMuted) .. "• |r" .. hexc(T.textSecondary) .. recipe .. "|r")
+                local rh = rRow:GetStringHeight() or 13
+                cy = cy - math.max(15, rh + 2)
+            end
+            cy = cy - 4
+        end
+
+        -- Separator
+        local sep1 = card:CreateTexture(nil, "ARTWORK")
+        sep1:SetPoint("TOPLEFT", 12, cy)
+        sep1:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        sep1:SetHeight(1)
+        sep1:SetColorTexture(rgba(T.border))
+        cy = cy - 10
+
+        -- How to get
+        local htgLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        htgLabel:SetPoint("TOPLEFT", 12, cy)
+        htgLabel:SetText(hexc(T.accent) .. PH.L["SPEC_HOW_TO_GET"] .. "|r")
+        cy = cy - 16
+
+        local htgText = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        htgText:SetPoint("TOPLEFT", 20, cy)
+        htgText:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        htgText:SetJustifyH("LEFT")
+        htgText:SetText(hexc(T.textSecondary) .. spec.howToGet .. "|r")
+        local htgH = htgText:GetStringHeight() or 13
+        cy = cy - math.max(16, htgH + 4)
+
+        -- Cost
+        local costLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        costLabel:SetPoint("TOPLEFT", 12, cy)
+        costLabel:SetText(hexc(T.accent) .. PH.L["SPEC_COST"] .. "|r")
+        cy = cy - 16
+
+        local costText = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        costText:SetPoint("TOPLEFT", 20, cy)
+        costText:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        costText:SetJustifyH("LEFT")
+        costText:SetText(hexc(T.textSecondary) .. spec.cost .. "|r")
+        local costH = costText:GetStringHeight() or 13
+        cy = cy - math.max(16, costH + 4)
+
+        -- Separator
+        local sep2 = card:CreateTexture(nil, "ARTWORK")
+        sep2:SetPoint("TOPLEFT", 12, cy)
+        sep2:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        sep2:SetHeight(1)
+        sep2:SetColorTexture(rgba(T.border))
+        cy = cy - 10
+
+        -- Recommendation
+        local recLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        recLabel:SetPoint("TOPLEFT", 12, cy)
+        recLabel:SetText(hexc(T.gold) .. PH.L["SPEC_RECOMMENDATION"] .. "|r")
+        cy = cy - 16
+
+        local recText = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        recText:SetPoint("TOPLEFT", 20, cy)
+        recText:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        recText:SetJustifyH("LEFT")
+        recText:SetText(hexc(T.white) .. spec.recommendation .. "|r")
+        local recH = recText:GetStringHeight() or 13
+        cy = cy - math.max(16, recH + 4)
+
+        cy = cy - 8
+        card:SetHeight(math.abs(cy) + 4)
+        y = y - card:GetHeight() - 8
     end
 
     return y

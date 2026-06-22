@@ -138,6 +138,9 @@ read_globals = {
     "GetTradeSkillInfo",
     "GetSpellInfo",
 
+    -- WoW API: Reputation / Factions
+    "GetFactionInfoByID",
+
     -- WoW API: Map
     "C_Map",
 

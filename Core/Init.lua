@@ -581,7 +581,11 @@ end
 -- Phase 2: PLAYER_LOGIN — UnitName / UnitClass / UnitLevel are reliable here
 local function OnPlayerLogin()
     PH.Identity:Initialize()
-    if PH.AltManager then PH.AltManager:SaveCurrentChar() end
+    if PH.AltManager      then PH.AltManager:SaveCurrentChar()      end
+    if PH.RepTracker      then PH.RepTracker:BuildIndex()            end
+
+    -- Check cooldowns that may have expired while offline
+    if PH.CooldownTracker then PH.CooldownTracker:CheckAndNotify()   end
 
     -- Restore the last selected profession (if it still exists on this client)
     local saved = PH.Config:Get("selectedProfession")
@@ -589,6 +593,16 @@ local function OnPlayerLogin()
         PH.selectedProfession = saved
     end
 end
+
+-- Periodic cooldown-expiry check (every 60 s while logged in)
+local _cdCheckElapsed = 0
+local _cdCheckFrame   = CreateFrame("Frame")
+_cdCheckFrame:SetScript("OnUpdate", function(_, elapsed)
+    _cdCheckElapsed = _cdCheckElapsed + elapsed
+    if _cdCheckElapsed < 60 then return end
+    _cdCheckElapsed = 0
+    if PH.CooldownTracker then PH.CooldownTracker:CheckAndNotify() end
+end)
 
 -- Subscribe skill-change WoW events through the central bus
 local function OnSkillEvent()
