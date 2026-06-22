@@ -2,6 +2,13 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.20.0] - 2026-06-22
+
+### Added
+- options panel (/ph options) with scale, fishing focus volume, debug
+- persist panel positions across reloads + UI scale infra
+
+
 ## [1.19.0] - 2026-06-21
 
 ### Added
