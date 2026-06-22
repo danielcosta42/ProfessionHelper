@@ -45,9 +45,9 @@ ProfessionHelper.Blacksmithing = {
         { name = "Fel Iron Plate Boots", creates = 1, materials = { { name = "Fel Iron Bar", count = 6 } }, orange = 315, yellow = 325, green = 335, grey = 345, source = "Trainer (Outland)" },
         { name = "Lesser Rune of Warding", creates = 1, materials = { { name = "Adamantite Bar", count = 1 } }, orange = 325, yellow = 328, green = 330, grey = 340, source = "Trainer (Outland)" },
         { name = "Adamantite Weightstone", creates = 1, materials = { { name = "Adamantite Bar", count = 1 }, { name = "Netherweave Cloth", count = 2 } }, orange = 350, yellow = 350, green = 355, grey = 360, source = "Vendor: Fedryen Swiftspear (Zangarmarsh) — Cenarion Expedition Honored" },
-        { name = "Adamantite Cleaver", creates = 1, materials = { { name = "Adamantite Bar", count = 8 }, { name = "Fel Iron Bar", count = 2 } }, orange = 330, yellow = 340, green = 350, grey = 360, source = "Trainer (Outland)" },
-        { name = "Felsteel Gloves", creates = 1, materials = { { name = "Felsteel Bar", count = 6 } }, orange = 360, yellow = 370, green = 375, grey = 380, source = "Trainer (Outland)" },
-        { name = "Felsteel Helm", creates = 1, materials = { { name = "Felsteel Bar", count = 8 } }, orange = 365, yellow = 375, green = 380, grey = 385, source = "Trainer (Outland)" },
+        { name = "Adamantite Cleaver", creates = 1, materials = { { name = "Adamantite Bar", count = 8 }, { name = "Fel Iron Bar", count = 2 } }, orange = 330, yellow = 340, green = 350, grey = 360, source = "Vendor: Aaron Hollman (Shattrath, Lower City) / Rohok (Thrallmar, Horde) / Humphry (Honor Hold, Alliance) — limited supply" },
+        { name = "Felsteel Gloves", creates = 1, materials = { { name = "Felsteel Bar", count = 6 } }, orange = 360, yellow = 370, green = 375, grey = 380, source = "Plans: Drop — Auchenai Crypts (Auchenai Monks) / BoE World Drop" },
+        { name = "Felsteel Helm", creates = 1, materials = { { name = "Felsteel Bar", count = 8 } }, orange = 365, yellow = 375, green = 380, grey = 385, source = "Plans: Drop — Shadow Labyrinth / BoE World Drop" },
     },
 
     levelingGuide = {
@@ -244,7 +244,7 @@ ProfessionHelper.Blacksmithing = {
             recipe = "Adamantite Cleaver",
             count = 10,
             materials = { { name = "Adamantite Bar", count = 80 }, { name = "Fel Iron Bar", count = 20 } },
-            source = "Trainer (Outland)",
+            source = "Vendor: Aaron Hollman (Shattrath, Lower City) / Rohok (Thrallmar, Horde) / Humphry (Honor Hold, Alliance)",
             tip = ProfessionHelper.L["BLACKSMITHING_TIP_340_350"],
         },
         {
@@ -252,7 +252,7 @@ ProfessionHelper.Blacksmithing = {
             recipe = "Felsteel Gloves",
             count = 10,
             materials = { { name = "Felsteel Bar", count = 60 } },
-            source = "Trainer (Outland)",
+            source = "Plans: Auchenai Crypts drop / BoE World Drop",
             tip = ProfessionHelper.L["BLACKSMITHING_TIP_350_360"],
         },
         {
@@ -260,7 +260,7 @@ ProfessionHelper.Blacksmithing = {
             recipe = "Felsteel Helm",
             count = 18,
             materials = { { name = "Felsteel Bar", count = 144 } },
-            source = "Trainer (Outland)",
+            source = "Plans: Shadow Labyrinth drop / BoE World Drop",
             tip = ProfessionHelper.L["BLACKSMITHING_TIP_360_375"],
         },
         -- ==================== GRAND MASTER / WRATH (375-450) ====================

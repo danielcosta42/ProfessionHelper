@@ -158,7 +158,7 @@ ProfessionHelper.Engineering = {
             creates = 1,
             materials = { { name = "Delicate Copper Wire", count = 3 }, { name = "Essence of Fire", count = 2 } },
             orange = 275, yellow = 275, green = 280, grey = 285,
-            source = "Vendor: Viggz Shinesparked (Shattrath) / Xizzer Fizzbolt (Winterspring)",
+            source = "Vendor: Viggz Shinesparked (Shattrath, Lower City)",
         },
         {
             name = "Masterwork Target Dummy",
@@ -450,7 +450,7 @@ ProfessionHelper.Engineering = {
                 { name = "Delicate Copper Wire", count = 21 },
                 { name = "Essence of Fire", count = 14 },
             },
-            source = "Vendor: Viggz Shinesparked (Shattrath) / Xizzer Fizzbolt (Winterspring)",
+            source = "Vendor: Viggz Shinesparked (Shattrath, Lower City)",
         },
         {
             range = {280, 300},
