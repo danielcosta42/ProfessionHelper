@@ -23,7 +23,7 @@ CD.DATABASE = {
         patterns = { "^Transmute:" },
         label    = "Transmute",
         category = "Alchemy",
-        cdHours  = 24,
+        cdHours  = 20,
         icon     = "Interface\\Icons\\inv_potion_59",
     },
     {
