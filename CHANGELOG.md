@@ -2,6 +2,15 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.21.0] - 2026-06-22
+
+### Added
+- focus-audio re-syncs to mid-cast volume changes
+
+### Fixed
+- wire up showFarmingTips, drop dead autoTrackMaterials setting
+
+
 ## [1.20.0] - 2026-06-22
 
 ### Added
