@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.23.0] - 2026-06-22
+
+### Added
+- primal farming guide, pre-raid BiS checklist, cross-alt material pooling
+
+
 ## [1.22.0] - 2026-06-22
 
 ### Added
