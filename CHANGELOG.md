@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.23.1] - 2026-06-22
+
+### Fixed
+- correct Transmute cooldown from 24h to 20h
+
+
 ## [1.23.0] - 2026-06-22
 
 ### Added
