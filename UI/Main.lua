@@ -365,6 +365,7 @@ function PH:CreateMainWindow()
         { icon = "Interface\\Icons\\INV_Misc_GroupNeedMore",  tip = PH.L["AM_TITLE"], cb = function() PH:ShowAltManagerUI() end },
         { icon = "Interface\\Icons\\INV_Enchant_Disenchant",  tip = PH.L["DE_TITLE"], cb = function() PH:ShowDECalcUI() end },
         { icon = "Interface\\Icons\\INV_Misc_Coin_01",        tip = PH.L["FT_TITLE"], cb = function() PH:ShowFarmTrackerUI() end },
+        { icon = "Interface\\Icons\\inv_elemental_primal_fire", tip = PH.L["PRIM_TITLE"], cb = function() PH:ShowPrimalsUI() end },
     }
     local toolSize, toolGap = 26, 4
     for i, tool in ipairs(toolButtons) do
@@ -438,12 +439,15 @@ function PH:CreateMainWindow()
     local tabShopping = MakeTab(tabBar, PH.L["TAB_SHOPPING"],        "shopping", tabSteps)
     local tabDailies  = MakeTab(tabBar, PH.L["TAB_DAILIES"],         "dailies",  tabShopping)
     local tabSpec     = MakeTab(tabBar, PH.L["TAB_SPEC"],            "spec",     tabDailies)
+    local tabBiS      = MakeTab(tabBar, PH.L["TAB_BIS"],             "bis",      tabSpec)
     frame.tabSteps    = tabSteps
     frame.tabShopping = tabShopping
     frame.tabDailies  = tabDailies
     frame.tabSpec     = tabSpec
+    frame.tabBiS      = tabBiS
     tabDailies:Hide()
     tabSpec:Hide()
+    tabBiS:Hide()
 
     -- Scroll area
     local scrollFrame, scrollChild = CreateScrollFrame(contentArea, "PHContentScroll")
@@ -689,7 +693,7 @@ function PH:UpdateTabVisuals()
     if not frame then return end
     local active = self.craftingTab or "steps"
 
-    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping, frame.tabDailies, frame.tabSpec }) do
+    for _, tab in ipairs({ frame.tabSteps, frame.tabShopping, frame.tabDailies, frame.tabSpec, frame.tabBiS }) do
         if not tab:IsShown() then -- skip hidden tabs (e.g. Dailies on non-daily professions)
         elseif tab.tabKey == active then
             MakeFlat(tab, { T.accent[1], T.accent[2], T.accent[3], 0.18 }, { T.accent[1], T.accent[2], T.accent[3], 0.5 })
@@ -746,6 +750,13 @@ function PH:UpdateContentPanel()
         else
             frame.tabSpec:Hide()
             if self.craftingTab == "spec" then self.craftingTab = "steps" end
+        end
+        local hasBiS = (PH.BiS and PH.BiS[profData.name] ~= nil)
+        if hasBiS then
+            frame.tabBiS:Show()
+        else
+            frame.tabBiS:Hide()
+            if self.craftingTab == "bis" then self.craftingTab = "steps" end
         end
         self:UpdateTabVisuals()
     else
@@ -853,6 +864,8 @@ function PH:UpdateContentPanel()
         y = self:CreateGatheringContent(scrollChild, profData, currentSkill, y)
     elseif self.craftingTab == "spec" then
         y = self:CreateSpecContent(scrollChild, profData, y)
+    elseif self.craftingTab == "bis" then
+        y = self:CreateBiSContent(scrollChild, profData, y)
     elseif self.craftingTab == "dailies" then
         y = self:CreateDailiesContent(scrollChild, profData, y)
     elseif isCombo then
@@ -1521,6 +1534,8 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
         return yOffset - 20
     end
 
+    -- Alt inventory pool (one call per render, shared across all rows)
+    local altCounts = PH.BagScanner and PH.BagScanner:GetAllAltCounts() or {}
     local y = yOffset
 
     -- Cost header
@@ -1589,14 +1604,16 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
 
             local q = row:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
             q:SetPoint("LEFT", row, "RIGHT", -170, 0)
+            local altCount  = altCounts[item.name] or 0
+            local altNote   = altCount > 0 and ("|cff88aaff +" .. altCount .. "alt|r") or ""
             if item.inInventory and item.inInventory > 0 then
                 if item.count > 0 then
-                    q:SetText(hexc(T.white) .. item.count .. "|r" .. hexc(T.textMuted) .. " (" .. item.inInventory .. " inv)|r")
+                    q:SetText(hexc(T.white) .. item.count .. "|r" .. hexc(T.textMuted) .. " (" .. item.inInventory .. "inv)|r" .. altNote)
                 else
-                    q:SetText(hexc(T.green) .. "0|r" .. hexc(T.textMuted) .. " (" .. item.inInventory .. " inv)|r")
+                    q:SetText(hexc(T.green) .. "0|r" .. hexc(T.textMuted) .. " (" .. item.inInventory .. "inv)|r" .. altNote)
                 end
             else
-                q:SetText(hexc(T.white) .. item.count .. "|r")
+                q:SetText(hexc(T.white) .. item.count .. "|r" .. altNote)
             end
 
             if item.unitPrice and item.unitPrice > 0 then
@@ -1639,8 +1656,10 @@ function PH:CreateShoppingContent(parent, profData, currentSkill, yOffset, combo
             it:SetPoint("RIGHT", parent, "RIGHT", -8, 0)
             it:SetJustifyH("LEFT")
             local pr = (item.unitPrice and item.unitPrice > 0) and ("  " .. PH.TSM:FormatMoney(item.unitPrice) .. " " .. PH.L["MAT_EACH"]) or ""
-            local invNote = (item.inInventory and item.inInventory > 0) and (hexc(T.textMuted) .. " (" .. item.inInventory .. " inv)|r") or ""
-            it:SetText(hexc(T.green) .. "[V]|r " .. hexc(T.textPrimary) .. item.name .. "|r x" .. item.count .. invNote .. pr)
+            local invNote = (item.inInventory and item.inInventory > 0) and (hexc(T.textMuted) .. " (" .. item.inInventory .. "inv)|r") or ""
+            local vAlt = altCounts[item.name] or 0
+            local vAltNote = vAlt > 0 and ("|cff88aaff +" .. vAlt .. "alt|r") or ""
+            it:SetText(hexc(T.green) .. "[V]|r " .. hexc(T.textPrimary) .. item.name .. "|r x" .. item.count .. invNote .. vAltNote .. pr)
             y = y - 16
         end
     end
@@ -2151,6 +2170,277 @@ function PH:CreateSpecContent(parent, profData, yOffset)
     end
 
     return y
+end
+
+-------------------------------------------------------------------------------
+-- Pre-Raid BiS Checklist content
+-------------------------------------------------------------------------------
+function PH:CreateBiSContent(parent, profData, yOffset)
+    local y = yOffset
+    local bisData = PH.BiS and PH.BiS[profData.name]
+
+    if not bisData then
+        local msg = parent:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        msg:SetPoint("TOP", 0, y - 20)
+        msg:SetJustifyH("CENTER")
+        msg:SetText(hexc(T.textMuted) .. PH.L["BIS_NO_DATA"] .. "|r")
+        return y - 60
+    end
+
+    -- Overview note banner
+    if bisData.note then
+        local bannerCard = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        bannerCard:SetPoint("TOPLEFT", 0, y)
+        bannerCard:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+        MakePanel(bannerCard, { 0.10, 0.08, 0.14, 0.95 })
+        local bannerText = bannerCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        bannerText:SetPoint("TOPLEFT", 12, -10)
+        bannerText:SetPoint("BOTTOMRIGHT", -12, 8)
+        bannerText:SetJustifyH("LEFT")
+        bannerText:SetJustifyV("TOP")
+        bannerText:SetText(hexc(T.gold) .. PH.L["BIS_HEADER_NOTE"] .. " |r" .. hexc(T.textSecondary) .. bisData.note .. "|r")
+        bannerCard:SetHeight(bannerText:GetStringHeight() + 26)
+        y = y - bannerCard:GetHeight() - 8
+    end
+
+    -- One card per item
+    for _, item in ipairs(bisData.items) do
+        local card = CreateFrame("Frame", nil, parent, "BackdropTemplate")
+        card:SetPoint("TOPLEFT", 0, y)
+        card:SetPoint("RIGHT", parent, "RIGHT", 0, 0)
+        MakePanel(card, T.bgCard)
+
+        local cy = -10
+
+        -- Item name (main title)
+        local nameLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        nameLabel:SetPoint("TOPLEFT", 12, cy)
+        nameLabel:SetPoint("RIGHT", card, "RIGHT", -80, 0)
+        nameLabel:SetJustifyH("LEFT")
+        nameLabel:SetText(hexc(T.accent) .. item.name .. "|r")
+
+        -- Skill requirement badge (top right)
+        local skillBadge = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        skillBadge:SetPoint("RIGHT", card, "RIGHT", -12, -cy - 8)
+        skillBadge:SetText(hexc(T.textMuted) .. PH.L["BIS_SKILL_REQ"] .. " |r" .. hexc(T.gold) .. (item.skillReq or "?") .. "|r")
+        cy = cy - 20
+
+        -- Slot + Spec required row
+        local slotLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        slotLabel:SetPoint("TOPLEFT", 12, cy)
+        slotLabel:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        slotLabel:SetJustifyH("LEFT")
+        local specStr = (item.spec and item.spec ~= "any") and item.spec or PH.L["BIS_SPEC_ANY"]
+        slotLabel:SetText(
+            hexc(T.textMuted) .. PH.L["BIS_SLOT"] .. " |r" .. hexc(T.white) .. (item.slot or "?") ..
+            "  |r" .. hexc(T.textMuted) .. PH.L["BIS_SPEC_REQ"] .. " |r" .. hexc(T.green) .. specStr .. "|r"
+        )
+        cy = cy - 16
+
+        -- Classes/specs row
+        if item.classes and #item.classes > 0 then
+            local classLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            classLabel:SetPoint("TOPLEFT", 12, cy)
+            classLabel:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+            classLabel:SetJustifyH("LEFT")
+            local classStr = table.concat(item.classes, ", ")
+            if item.specs and #item.specs > 0 then
+                classStr = classStr .. "  (" .. table.concat(item.specs, ", ") .. ")"
+            end
+            classLabel:SetText(hexc(T.textMuted) .. PH.L["BIS_CLASSES"] .. " |r" .. hexc(T.textSecondary) .. classStr .. "|r")
+            cy = cy - 16
+        end
+
+        -- Separator
+        local sep = card:CreateTexture(nil, "ARTWORK")
+        sep:SetPoint("TOPLEFT", 12, cy - 2)
+        sep:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+        sep:SetHeight(1)
+        sep:SetColorTexture(rgba(T.border))
+        cy = cy - 10
+
+        -- Note / why it's good
+        if item.note and item.note ~= "" then
+            local noteLabel = card:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            noteLabel:SetPoint("TOPLEFT", 12, cy)
+            noteLabel:SetPoint("RIGHT", card, "RIGHT", -12, 0)
+            noteLabel:SetJustifyH("LEFT")
+            noteLabel:SetText(hexc(T.textSecondary) .. item.note .. "|r")
+            local nh = noteLabel:GetStringHeight() or 13
+            cy = cy - math.max(16, nh + 4)
+        end
+
+        cy = cy - 8
+        card:SetHeight(math.abs(cy) + 4)
+        y = y - card:GetHeight() - 6
+    end
+
+    return y
+end
+
+-------------------------------------------------------------------------------
+-- Primal Farming Guide UI (floating panel)
+-------------------------------------------------------------------------------
+function PH:ShowPrimalsUI()
+    if self.PrimalsFrame then
+        if self.PrimalsFrame:IsShown() then
+            self.PrimalsFrame:Hide()
+        else
+            self.PrimalsFrame:Show()
+        end
+        return
+    end
+    self:CreatePrimalsPanel()
+    self.PrimalsFrame:Show()
+end
+
+function PH:CreatePrimalsPanel()
+    local FLAT_BG = {
+        bgFile   = "Interface\\Buttons\\WHITE8X8",
+        edgeFile = "Interface\\Buttons\\WHITE8X8",
+        edgeSize = 1,
+    }
+
+    local frame = CreateFrame("Frame", "PHPrimalsFrame", UIParent, "BackdropTemplate")
+    frame:SetSize(330, 440)
+    frame:SetPoint("CENTER", UIParent, "CENTER", -240, 0)
+    frame:SetMovable(true)
+    frame:EnableMouse(true)
+    frame:SetClampedToScreen(true)
+    frame:SetFrameStrata("HIGH")
+    frame:SetBackdrop(FLAT_BG)
+    frame:SetBackdropColor(0.06, 0.06, 0.08, 0.97)
+    frame:SetBackdropBorderColor(0.18, 0.18, 0.22, 1)
+    frame:RegisterForDrag("LeftButton")
+    frame:SetScript("OnDragStart", frame.StartMoving)
+    frame:SetScript("OnDragStop",  frame.StopMovingOrSizing)
+    PH:PersistFrameLayout(frame, "primals")
+    self.PrimalsFrame = frame
+
+    -- Header
+    local hdr = CreateFrame("Frame", nil, frame, "BackdropTemplate")
+    hdr:SetHeight(24)
+    hdr:SetPoint("TOPLEFT",  1, -1)
+    hdr:SetPoint("TOPRIGHT", -1, -1)
+    hdr:SetBackdrop({ bgFile = "Interface\\Buttons\\WHITE8X8" })
+    hdr:SetBackdropColor(0.08, 0.08, 0.11, 1)
+
+    local titleLbl = hdr:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    titleLbl:SetPoint("LEFT", 8, 0)
+    titleLbl:SetText("|cff00ccff" .. PH.L["PRIM_TITLE"] .. "|r")
+
+    local closeBtn = CreateFrame("Button", nil, hdr)
+    closeBtn:SetSize(20, 20)
+    closeBtn:SetPoint("RIGHT", -2, 0)
+    local closeLbl = closeBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    closeLbl:SetAllPoints()
+    closeLbl:SetJustifyH("CENTER")
+    closeLbl:SetText("|cffff4444x|r")
+    closeBtn:SetScript("OnClick", function() frame:Hide() end)
+
+    -- Scroll frame
+    local scrollFrame = CreateFrame("ScrollFrame", nil, frame, "UIPanelScrollFrameTemplate")
+    scrollFrame:SetPoint("TOPLEFT",     1, -26)
+    scrollFrame:SetPoint("BOTTOMRIGHT", -20, 2)
+
+    local scrollChild = CreateFrame("Frame", nil, scrollFrame)
+    scrollChild:SetWidth(scrollFrame:GetWidth() - 6)
+    scrollChild:SetHeight(1)
+    scrollFrame:SetScrollChild(scrollChild)
+
+    if not PH.Primals or #PH.Primals == 0 then
+        local msg = scrollChild:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        msg:SetPoint("TOPLEFT", 8, -16)
+        msg:SetText(hexc(T.textMuted) .. "No primal data found.|r")
+        scrollChild:SetHeight(60)
+        return
+    end
+
+    local rankColors = { "|cffffd700", "|cffbbbbbb", "|cffcd7f32" }
+
+    local y = -6
+    for _, primal in ipairs(PH.Primals) do
+        -- Primal header card
+        local hdrCard = CreateFrame("Frame", nil, scrollChild, "BackdropTemplate")
+        hdrCard:SetPoint("TOPLEFT", 0, y)
+        hdrCard:SetPoint("RIGHT", scrollChild, "RIGHT", 0, 0)
+        hdrCard:SetHeight(36)
+        MakePanel(hdrCard, { 0.10, 0.10, 0.18, 0.97 })
+
+        local ico = hdrCard:CreateTexture(nil, "ARTWORK")
+        ico:SetSize(22, 22)
+        ico:SetPoint("LEFT", 8, 0)
+        ico:SetTexture(primal.icon or "Interface\\Icons\\INV_Misc_QuestionMark")
+        ico:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+        local nameL = hdrCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+        nameL:SetPoint("LEFT", ico, "RIGHT", 6, 2)
+        nameL:SetText("|cff00ccff" .. primal.name .. "|r  " .. hexc(T.textMuted) .. "(" .. primal.mote .. ")|r")
+
+        if primal.usedBy and #primal.usedBy > 0 then
+            local usedL = hdrCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            usedL:SetPoint("LEFT", ico, "RIGHT", 6, -10)
+            usedL:SetText(hexc(T.textMuted) .. PH.L["PRIM_USED_BY"] .. " |r" .. hexc(T.textSecondary) .. table.concat(primal.usedBy, ", ") .. "|r")
+        end
+        y = y - 40
+
+        -- Herbalism tip
+        if primal.gatherNote then
+            local gnCard = CreateFrame("Frame", nil, scrollChild, "BackdropTemplate")
+            gnCard:SetPoint("TOPLEFT", 2, y)
+            gnCard:SetPoint("RIGHT", scrollChild, "RIGHT", -2, 0)
+            MakePanel(gnCard, { 0.06, 0.14, 0.06, 0.97 })
+            local gnText = gnCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            gnText:SetPoint("TOPLEFT", 8, -8)
+            gnText:SetPoint("BOTTOMRIGHT", -8, 6)
+            gnText:SetJustifyH("LEFT")
+            gnText:SetJustifyV("TOP")
+            gnText:SetText(hexc(T.green) .. PH.L["PRIM_GATHER_TIP"] .. " |r" .. hexc(T.textSecondary) .. primal.gatherNote .. "|r")
+            gnCard:SetHeight(gnText:GetStringHeight() + 22)
+            y = y - gnCard:GetHeight() - 4
+        end
+
+        -- Farming spots
+        for _, spot in ipairs(primal.spots or {}) do
+            local spotCard = CreateFrame("Frame", nil, scrollChild, "BackdropTemplate")
+            spotCard:SetPoint("TOPLEFT", 4, y)
+            spotCard:SetPoint("RIGHT", scrollChild, "RIGHT", -4, 0)
+            MakePanel(spotCard, T.bgCard)
+
+            local sy = -8
+            local rankColor = rankColors[spot.rank] or "|cffffffff"
+            local zoneL = spotCard:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+            zoneL:SetPoint("TOPLEFT", 10, sy)
+            zoneL:SetPoint("RIGHT", spotCard, "RIGHT", -10, 0)
+            zoneL:SetJustifyH("LEFT")
+            zoneL:SetText(rankColor .. "#" .. spot.rank .. " |r" .. hexc(T.white) .. spot.zone .. " \226\128\148 " .. spot.subzone .. "|r")
+            sy = sy - 16
+
+            local mobL = spotCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            mobL:SetPoint("TOPLEFT", 10, sy)
+            mobL:SetPoint("RIGHT", spotCard, "RIGHT", -10, 0)
+            mobL:SetJustifyH("LEFT")
+            local coordStr = spot.coords and string.format("  " .. hexc(T.textMuted) .. "(%.0f, %.0f)", spot.coords.x, spot.coords.y) or ""
+            mobL:SetText(hexc(T.accent) .. spot.mobs .. coordStr .. "|r")
+            sy = sy - 16
+
+            local notesL = spotCard:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+            notesL:SetPoint("TOPLEFT", 10, sy)
+            notesL:SetPoint("RIGHT", spotCard, "RIGHT", -10, 0)
+            notesL:SetJustifyH("LEFT")
+            notesL:SetText(hexc(T.textSecondary) .. spot.notes .. "|r")
+            local nh = notesL:GetStringHeight() or 13
+            sy = sy - math.max(16, nh + 4)
+
+            sy = sy - 6
+            spotCard:SetHeight(math.abs(sy) + 4)
+            y = y - spotCard:GetHeight() - 4
+        end
+
+        y = y - 10
+    end
+
+    scrollChild:SetHeight(math.abs(y) + 20)
 end
 
 -------------------------------------------------------------------------------

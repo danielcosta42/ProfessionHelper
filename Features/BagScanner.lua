@@ -112,6 +112,49 @@ function BS:GetAllCounts()
     return PH.DB:Get("inventory." .. charKey) or {}
 end
 
+-- Returns a flat { [itemName] = count } table summing inventory across all known
+-- alts on the current realm, excluding the current character.
+function BS:GetAllAltCounts()
+    local realmKey  = PH.Identity:GetRealmKey()
+    local myCharKey = PH.Identity:GetCharKey()
+    local charData  = PH.DB:Get("characters." .. realmKey)
+    if not charData then return {} end
+
+    local totals = {}
+    for charName in pairs(charData) do
+        local altKey = charName .. "-" .. realmKey
+        if altKey ~= myCharKey then
+            local inv = PH.DB:Get("inventory." .. altKey) or {}
+            for itemName, count in pairs(inv) do
+                -- skip sub-tables like _bags and _bank
+                if type(count) == "number" then
+                    totals[itemName] = (totals[itemName] or 0) + count
+                end
+            end
+        end
+    end
+    return totals
+end
+
+-- Returns total count of itemName across all known alts (excluding current char).
+function BS:GetAltCount(itemName)
+    if not itemName then return 0 end
+    local realmKey  = PH.Identity:GetRealmKey()
+    local myCharKey = PH.Identity:GetCharKey()
+    local charData  = PH.DB:Get("characters." .. realmKey)
+    if not charData then return 0 end
+
+    local total = 0
+    for charName in pairs(charData) do
+        local altKey = charName .. "-" .. realmKey
+        if altKey ~= myCharKey then
+            local count = PH.DB:Get("inventory." .. altKey .. "." .. itemName) or 0
+            total = total + count
+        end
+    end
+    return total
+end
+
 -------------------------------------------------------------------------------
 -- Initialization
 -- Called from Core/Init.lua after PH.DB and PH.Event are ready.

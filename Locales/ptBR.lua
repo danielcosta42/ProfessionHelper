@@ -301,6 +301,10 @@ ProfessionHelper._Locales["ptBR"] = {
     ["TSM_BTN_TOOLTIP"] = "Gera string de busca para colar na AH.",
     ["TSM_NO_ITEMS"] = "Nenhum item para buscar na AH.",
     ["TSM_PASTE_MSG"] = "Cole no campo de busca do TSM Shopping na Auction House.",
+    ["SHOPPING_ALTS_HAVE"]    = "%d nos alts",
+    ["SHOPPING_COVERED_ALTS"] = "Coberto pelos alts",
+    ["SHOPPING_ALT_POOL"]     = "Inventário dos alts:",
+    ["SHOPPING_ALT_NONE"]     = "Nenhum inventário de alt encontrado para esses materiais.",
 
     -- Gold Farming Guide
     ["GOLD_FARM_GUIDE_TITLE"] = "Guia de Farm de Gold",
@@ -457,6 +461,22 @@ ProfessionHelper._Locales["ptBR"] = {
     ["CD_READY"]           = "Pronto",
     ["CD_READY_IN"]        = "pronto em",
     ["CD_READY_NOTIFY"]    = "Cooldown de %s está pronto!",
+
+    -- Pre-Raid BiS Checklist (BIS_)
+    ["TAB_BIS"]            = "Pré-Raid BiS",
+    ["BIS_NO_DATA"]        = "Nenhum item craftável BiS listado para esta profissão.",
+    ["BIS_SLOT"]           = "Slot:",
+    ["BIS_CLASSES"]        = "Para:",
+    ["BIS_SPEC_REQ"]       = "Espec.:",
+    ["BIS_SKILL_REQ"]      = "Skill:",
+    ["BIS_SPEC_ANY"]       = "Qualquer especialização",
+    ["BIS_HEADER_NOTE"]    = "Nota:",
+
+    -- Primal Farming Guide (PRIM_)
+    ["PRIM_TITLE"]         = "Guia de Farm de Primais",
+    ["PRIM_SPOTS"]         = "Spots de farm:",
+    ["PRIM_USED_BY"]       = "Usado em:",
+    ["PRIM_GATHER_TIP"]    = "Dica de herbalism:",
 
     -- Specialization Guide (SPEC_)
     ["TAB_SPEC"]           = "Especialização",

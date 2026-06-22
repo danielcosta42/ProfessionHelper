@@ -301,6 +301,10 @@ ProfessionHelper._Locales["esES"] = {
     ["TSM_BTN_TOOLTIP"] = "Genera cadena de búsqueda para pegar en la CA.",
     ["TSM_NO_ITEMS"] = "No hay objetos para buscar en la CA.",
     ["TSM_PASTE_MSG"] = "Pega en el campo de búsqueda de TSM Shopping en la Casa de Subastas.",
+    ["SHOPPING_ALTS_HAVE"]    = "%d en alts",
+    ["SHOPPING_COVERED_ALTS"] = "Cubierto por alts",
+    ["SHOPPING_ALT_POOL"]     = "Inventario de alts:",
+    ["SHOPPING_ALT_NONE"]     = "No se encontró inventario de alts para estos materiales.",
 
     -- Gold Farming Guide
     ["GOLD_FARM_GUIDE_TITLE"] = "Guía de Farmeo de Oro",
@@ -457,6 +461,22 @@ ProfessionHelper._Locales["esES"] = {
     ["CD_READY"]           = "Listo",
     ["CD_READY_IN"]        = "listo en",
     ["CD_READY_NOTIFY"]    = "¡El cooldown de %s está listo!",
+
+    -- Pre-Raid BiS Checklist (BIS_)
+    ["TAB_BIS"]            = "Pre-Raid BiS",
+    ["BIS_NO_DATA"]        = "No hay objetos BiS crafteables listados para esta profesión.",
+    ["BIS_SLOT"]           = "Ranura:",
+    ["BIS_CLASSES"]        = "Para:",
+    ["BIS_SPEC_REQ"]       = "Espec.:",
+    ["BIS_SKILL_REQ"]      = "Habilidad:",
+    ["BIS_SPEC_ANY"]       = "Cualquier especialización",
+    ["BIS_HEADER_NOTE"]    = "Nota:",
+
+    -- Primal Farming Guide (PRIM_)
+    ["PRIM_TITLE"]         = "Guía de Farmeo de Primales",
+    ["PRIM_SPOTS"]         = "Zonas de farmeo:",
+    ["PRIM_USED_BY"]       = "Usado en:",
+    ["PRIM_GATHER_TIP"]    = "Consejo de herborista:",
 
     -- Specialization Guide (SPEC_)
     ["TAB_SPEC"]           = "Especialización",
