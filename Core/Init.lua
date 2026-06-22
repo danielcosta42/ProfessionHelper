@@ -283,6 +283,9 @@ function PH:HandleSlashCommand(msg)
     elseif cmd == "fish" or cmd == "fishing" then
         self:ShowFishingAssistUI()
 
+    elseif cmd == "options" or cmd == "config" or cmd == "settings" then
+        self:ShowOptionsUI()
+
     elseif cmd == "debug" then
         local on = PH.Config:Get("debug") ~= true
         PH.Config:Set("debug", on)
@@ -304,6 +307,7 @@ function PH:HandleSlashCommand(msg)
         PH.Logger.Info(self.L["CMD_HELP_ALTS"])
         PH.Logger.Info(self.L["CMD_HELP_DE"])
         PH.Logger.Info(self.L["FA_CMD_HELP"])
+        PH.Logger.Info(self.L["CMD_HELP_OPTIONS"])
         PH.Logger.Info(self.L["CMD_HELP_HELP"])
     else
         PH.Logger.Info(self.L["CMD_UNKNOWN"])
@@ -374,6 +378,18 @@ function PH:ApplyWindowScale(scale)
     scale = PH.Config:Get("windowScale") or 1.0
     for _, f in pairs(self._layoutFrames) do
         if f and f.SetScale then f:SetScale(scale) end
+    end
+end
+
+-- Forget all saved panel positions and re-center any open panels. The coded
+-- default position of each panel is restored on the next /reload.
+function PH:ResetFrameLayouts()
+    if PH.DB then PH.DB:Set("uiLayout", nil) end
+    for _, f in pairs(self._layoutFrames) do
+        if f and f.ClearAllPoints then
+            f:ClearAllPoints()
+            f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+        end
     end
 end
 

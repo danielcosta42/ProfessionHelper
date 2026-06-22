@@ -69,3 +69,4 @@ UI\RecipeTrackerUI.lua
 UI\AltManagerUI.lua
 UI\DECalcUI.lua
 UI\FishingAssistUI.lua
+UI\OptionsUI.lua

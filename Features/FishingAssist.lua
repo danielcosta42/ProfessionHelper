@@ -257,8 +257,15 @@ local function ApplySoundBoost()
         end
         PH.DB:Set(SOUND_CACHE_KEY, cache)
     end
+    -- Master + SFX follow the user-tunable focus volume (Options panel); the rest
+    -- (mute the other channels, enable the channels) use the fixed recipe values.
+    local vol = tostring(PH.Config:Get("fa_focusVolume") or 1.0)
     for name, val in pairs(SOUND_BOOST_CVARS) do
-        PH.Compat.SetCVar(name, val)
+        if name == "Sound_MasterVolume" or name == "Sound_SFXVolume" then
+            PH.Compat.SetCVar(name, vol)
+        else
+            PH.Compat.SetCVar(name, val)
+        end
     end
 end
 

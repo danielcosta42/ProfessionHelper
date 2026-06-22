@@ -40,6 +40,7 @@ read_globals = {
     "GameFontNormalHuge",
     "GameFontHighlight",
     "GameFontHighlightSmall",
+    "GameFontDisableSmall",
     "ChatFontNormal",
     "BackdropTemplateMixin",
     "STANDARD_TEXT_FONT",
