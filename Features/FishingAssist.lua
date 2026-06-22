@@ -246,6 +246,18 @@ local SOUND_BOOST_CVARS = {
 -- the cache lets RestoreSoundBoost() recover it on the next login (see Initialize).
 local SOUND_CACHE_KEY = "faSoundCache"
 
+-- True only while WE are writing the focus-audio CVars. The CVAR_UPDATE handler
+-- uses it to tell our own writes apart from the player changing a slider mid-cast
+-- (without it, our own SetCVar would be mistaken for a user change and the boosted
+-- value would be cached as the "original" -> the stuck-muted bug). Cleared on the
+-- next frame because CVAR_UPDATE can fire a frame after the SetCVar.
+local _soundApplying = false
+local function withSoundWrite(fn)
+    _soundApplying = true
+    fn()
+    After(0, function() _soundApplying = false end)
+end
+
 local function ApplySoundBoost()
     if PH.Config:Get("fa_soundBoost") ~= true then return end
     -- Cache the originals exactly once. The guard also stops us from re-caching
@@ -260,13 +272,46 @@ local function ApplySoundBoost()
     -- Master + SFX follow the user-tunable focus volume (Options panel); the rest
     -- (mute the other channels, enable the channels) use the fixed recipe values.
     local vol = tostring(PH.Config:Get("fa_focusVolume") or 1.0)
-    for name, val in pairs(SOUND_BOOST_CVARS) do
-        if name == "Sound_MasterVolume" or name == "Sound_SFXVolume" then
-            PH.Compat.SetCVar(name, vol)
-        else
-            PH.Compat.SetCVar(name, val)
+    withSoundWrite(function()
+        for name, val in pairs(SOUND_BOOST_CVARS) do
+            if name == "Sound_MasterVolume" or name == "Sound_SFXVolume" then
+                PH.Compat.SetCVar(name, vol)
+            else
+                PH.Compat.SetCVar(name, val)
+            end
         end
-    end
+    end)
+end
+
+-- Re-sync: if the player changes one of the boosted channels mid-cast, remember
+-- the new value so RestoreSoundBoost gives THAT back, not the pre-fishing value.
+local function OnSoundCvarChanged(_, cvarName, value)
+    if _soundApplying then return end                       -- our own write
+    if not cvarName or SOUND_BOOST_CVARS[cvarName] == nil then return end
+    local cache = PH.DB and PH.DB:Get(SOUND_CACHE_KEY)
+    if not cache or cache[cvarName] == nil then return end  -- not currently boosting
+    cache[cvarName] = value
+    PH.DB:Set(SOUND_CACHE_KEY, cache)
+end
+
+local function RestoreSoundBoost()
+    local cache = PH.DB and PH.DB:Get(SOUND_CACHE_KEY)
+    if not cache then return end
+    withSoundWrite(function()
+        for name in pairs(SOUND_BOOST_CVARS) do
+            local prev = cache[name]
+            if prev ~= nil then
+                -- prev == false marks "was unset when cached" -> restore the CVar's
+                -- real Blizzard default (e.g. "0" for Sound_EnableSoundWhenGameIsInBG),
+                -- NOT a blanket "1" which would max volumes / force background audio on.
+                if prev == false then
+                    prev = PH.Compat.GetCVarDefault(name)
+                end
+                if prev ~= nil then PH.Compat.SetCVar(name, prev) end
+            end
+        end
+    end)
+    PH.DB:Set(SOUND_CACHE_KEY, nil)
 end
 
 local function RestoreSoundBoost()
@@ -749,6 +794,9 @@ function M:Initialize()
 
     -- Never leave the soft-target/auto-loot CVars changed on logout.
     PH.Event:On("PLAYER_LOGOUT", function() RestoreFishingCVars(); RestoreSoundBoost() end, "FishingAssist")
+
+    -- Keep the focus-audio cache in sync if the player changes a volume mid-cast.
+    PH.Event:On("CVAR_UPDATE", OnSoundCvarChanged, "FishingAssist")
 
     -- Loot window (for stats only — the keypress does the looting).
     PH.Event:On("LOOT_OPENED", function() self:_OnLootOpened() end, "FishingAssist")
