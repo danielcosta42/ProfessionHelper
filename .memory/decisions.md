@@ -168,3 +168,33 @@ Criar `PH.Logger` com 4 níveis: `Info`, `Warn`, `Error`, `Debug`.
 - (+) Mensagens de erro e aviso têm formatação visual diferente
 - (+) Fácil de estender com timestamps ou log para arquivo no futuro
 - (-) Todos os callers anteriores de `PH:Print()` precisaram ser atualizados (feito na v2)
+
+---
+
+## ADR-0008 — Marketplace de crafters: transporte via scan de chat + GUILD, NÃO via CHANNEL
+
+**Status:** Aceito (design; ver `docs/MARKETPLACE-DESIGN.md`)
+
+**Context:**  
+Proposta de um "mercado de crafters" in-game (ofertas, pedidos abertos, rede de criadores)
+que funcione junto com o addon PartyLens (mesmo autor), ambos standalone mas se enriquecendo.
+Verificação empírica no cliente TBC 2.5.5 Anniversary:
+`C_ChatInfo.SendAddonMessage(prefix, msg, "CHANNEL", n)` retorna **`4` (InvalidChatType)** —
+o chatType `CHANNEL` foi desabilitado no patch 1.13.3 e o bloqueio vale neste cliente.
+**Não existe broadcast oculto realm-wide.** (A malha oculta do PartyLens, que usa esse caminho,
+nunca entregou nada — falha silenciosa, sem erro.)
+
+**Decision:**  
+Arquitetura transport-agnostic com um único board alimentado por 4 fontes (`source` tag):
+`scan` (parse passivo de Trade/LFG via `CHAT_MSG_CHANNEL` — realm-wide, zero cold-start, a
+espinha dorsal), `guild` (addon msg estruturada sobre `GUILD`), `hub` (SAY/YELL ~40yd nos AH),
+`self` (alts locais). Handshake `ChehulNet` (prefixo compartilhado com PartyLens) sobre
+GUILD/WHISPER para enriquecimento cruzado. Sem auto-post/auto-whisper (só 1-clique).
+
+**Consequences:**
+- (+) MVP (Phase 1) útil solo, sem network effect, sem risco de ToS (só recebe)
+- (+) Reaproveita RecipeTracker/BagScanner/CooldownTracker/TSM/AltManager (supply-side já existe)
+- (+) Sinergia com PartyLens sem dependência rígida (convenção → micro-lib depois)
+- (-) Sem alcance realm-wide oculto; rede estruturada limitada a guild/grupo/whisper/proximidade
+- (-) Precisa de map craft-output nome↔itemID novo (Phase 2) e libs embarcadas (LibSerialize/LibDeflate/CTL)
+- (-) `C_ChatInfo` precisa entrar no `.luacheckrc read_globals`
