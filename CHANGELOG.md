@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.27.1] - 2026-07-05
+
+### Fixed
+- marketplace crash when a craftOutputs entry isn't a number
+
+
 ## [1.27.0] - 2026-07-05
 
 ### Added
