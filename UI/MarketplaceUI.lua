@@ -29,9 +29,10 @@ local FLAT = {
 }
 
 local TABS = {
-    { key = "opps",   labelKey = "MP_TAB_OPPS" },
-    { key = "orders", labelKey = "MP_TAB_ORDERS" },
-    { key = "offers", labelKey = "MP_TAB_OFFERS" },
+    { key = "opps",     labelKey = "MP_TAB_OPPS" },
+    { key = "orders",   labelKey = "MP_TAB_ORDERS" },
+    { key = "offers",   labelKey = "MP_TAB_OFFERS" },
+    { key = "crafters", labelKey = "MP_TAB_CRAFTERS" },
 }
 
 -- Crafting professions offered as filter chips.
@@ -300,7 +301,8 @@ local function LayoutFullWidth(panel)
         tile:ClearAllPoints()
         tile:SetPoint("TOPLEFT", PAD + (i - 1) * (tw + gap), -34)
     end
-    local tabw = math.floor((W - 2 * PAD - 2 * gap) / 3)
+    local nTabs = #panel.tabButtons
+    local tabw = math.floor((W - 2 * PAD - (nTabs - 1) * gap) / nTabs)
     for i, btn in ipairs(panel.tabButtons) do
         btn:SetWidth(tabw)
         btn:ClearAllPoints()
@@ -324,6 +326,7 @@ end
 -- Does an entry belong to the active profession filter?
 local function ProfMatches(e, filter)
     if not filter then return true end
+    if e.isCrafter then return e.profs ~= nil and e.profs:find(filter, 1, true) ~= nil end
     if e.prof then return e.prof == filter end
     if e.canCraft then
         for _, m in ipairs(e.canCraft) do
@@ -367,6 +370,8 @@ function PH:UpdateMarketPanel()
         source, showWhisper, emptyKey = orders, true, "MP_EMPTY_ORDERS"
     elseif panel.mode == "offers" then
         source, showWhisper, emptyKey = offers, false, "MP_EMPTY_OFFERS"
+    elseif panel.mode == "crafters" then
+        source, showWhisper, emptyKey = MP:GetCrafters(), true, "MP_EMPTY_CRAFTERS"
     else
         source, showWhisper, emptyKey = opps, true, "MP_EMPTY_OPPS"
     end
@@ -403,19 +408,29 @@ function PH:UpdateMarketPanel()
             row:SetPoint("RIGHT", child, "RIGHT", 0, 0)
             row.bg:SetColorTexture(C.bgRow[1], C.bgRow[2], C.bgRow[3], C.bgRow[4])
 
-            row.icon:SetTexture(ItemIconFor(e.itemID, e.name))
-            row.link = ItemLinkFor(e.itemID, e.name)
-
-            local nameCol = (panel.mode == "offers" or e.canCraft) and C.green or C.white
             local line
-            if panel.mode == "offers" then
+            if panel.mode == "crafters" then
+                row.icon:SetTexture("Interface\\Icons\\INV_Misc_GroupLooking")
+                row.link = nil
+                local cc = (PH.AltManager and PH.AltManager.CLASS_COLORS
+                    and PH.AltManager.CLASS_COLORS[e.class]) or "cccccc"
+                local lvl = e.level and ("  " .. C.grey .. "Lv" .. e.level .. "|r") or ""
+                line = string.format("|cff%s%s|r%s  %s%s|r",
+                    cc, e.name, lvl, C.faint, e.profs or "")
+            elseif panel.mode == "offers" then
+                row.icon:SetTexture(ItemIconFor(e.itemID, e.name))
+                row.link = ItemLinkFor(e.itemID, e.name)
                 line = string.format("%s%s|r  %s%s|r%s%s|r",
-                    nameCol, e.name, C.grey, table.concat(e.chars, ", "),
+                    C.green, e.name, C.grey, table.concat(e.chars, ", "),
                     C.faint, FormatPrice(e.price))
             else
+                row.icon:SetTexture(ItemIconFor(e.itemID, e.name))
+                row.link = ItemLinkFor(e.itemID, e.name)
+                local nameCol = e.canCraft and C.green or C.white
                 local tag = e.canCraft and (" " .. C.green .. "\226\153\166|r") or ""
-                line = string.format("%s%s|r%s  %s%s|r%s%s|r",
-                    nameCol, e.name or "?", tag, C.grey, e.who or "?",
+                local netMark = (e.source == "net") and ("|cff35a5ff\226\128\162|r ") or ""
+                line = string.format("%s%s%s|r%s  %s%s|r%s%s|r",
+                    netMark, nameCol, e.name or "?", tag, C.grey, e.who or "?",
                     C.faint, FormatPrice(e.price))
             end
             row.text:SetText(line)

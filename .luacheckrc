@@ -157,6 +157,9 @@ read_globals = {
     "IsInRaid",
     "Ambiguate",
     "strsplit",
+    "JoinPermanentChannel",
+    "GetChannelName",
+    "WorldFrame",
 
     -- WoW API: Timers
     "C_Timer",

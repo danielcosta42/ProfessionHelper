@@ -18,6 +18,7 @@
 ## SavedVariables: ProfessionHelperDB
 ## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 
+Libs\LibChehulMesh.lua
 Locales\ptBR.lua
 Locales\enUS.lua
 Locales\esES.lua
