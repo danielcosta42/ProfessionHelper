@@ -1,6 +1,6 @@
 # ProfessionHelper — Architectural Decision Records
 
-_Last updated: 2026-04-26_
+_Last updated: 2026-07-05_
 
 ---
 
@@ -198,3 +198,41 @@ GUILD/WHISPER para enriquecimento cruzado. Sem auto-post/auto-whisper (só 1-cli
 - (-) Sem alcance realm-wide oculto; rede estruturada limitada a guild/grupo/whisper/proximidade
 - (-) Precisa de map craft-output nome↔itemID novo (Phase 2) e libs embarcadas (LibSerialize/LibDeflate/CTL)
 - (-) `C_ChatInfo` precisa entrar no `.luacheckrc read_globals`
+
+---
+
+## ADR-0009 — Rotas de gather: seed real do Wowhead (via GatherMate2_Data) + waypoints redesenhados
+
+**Status:** Aceito (implementado — v1.28.0)
+
+**Context:**  
+Os waypoints de gather eram loops circulares hand-drawn (`ZONE_ROUTES`, ~8 pontos/zona) —
+imprecisos e visualmente feios (quadrados brancos; depois dots com "borda" que na verdade era
+um círculo preto PREENCHIDO maior que o dot → tudo lia como bolinha escura). O usuário pediu
+precisão real e visual estilo Zygor "com a nossa cara" (teal).
+
+**Decision:**  
+1. **Seed real, baked-in.** `Data/GatherSeed.lua` é gerado a partir do `GatherMate2_Data` (BCC,
+   dados do Wowhead) que o usuário tem instalado. Formato de coord do GatherMate2:
+   `coord = floor(x*10000)*1000000 + floor(y*10000)*100 + level`; zonas keyed por **uiMapID**
+   (mesmo espaço do `C_Map.GetBestMapForUnit`, então seed + coleta ao vivo fazem merge direto).
+   Filtrado a nível 0 (superfície), grid-downsample ~0.02 → ~16k nós, ~114KB. Regenerar via
+   `scratchpad/gen_seed.py` (Python; parser linha-a-linha do `.lua` do GatherMate2).
+2. **Seed separado do DB do usuário** (`PH.GatherSeed`, in-memory, read-only). `GatherData:GetNodes`
+   faz union seed + nós crowd-sourced (dedup por célula 0.001). Seed não incha SavedVariables e
+   sempre vem fresco no update.
+3. **Rota de nós evenly-spaced:** `BuildNodeRoute` faz thinning espacial (min gap 0.045, máx 50 WP)
+   e depois nearest-neighbor — dots não empilham em clusters densos. Zona é elegível se tem ≥6 nós
+   (seed OU ao vivo) OU rota hardcoded (fallback). Cobre MUITO mais zonas que os loops antigos.
+4. **Visual:** textura própria `Media/route-dot.tga` (círculo AA branco 64×64, tintável) referenciada
+   COM extensão `.tga` (convenção LibSharedMedia, carrega em Classic/TBC). Dot = fill teal/gold +
+   rim escuro suave (não mais blob preto). Trilha = dots pequenos evenly-spaced (spacing 0.02 mapa /
+   0.008 minimapa), não mais smear denso de `dist*300`.
+
+**Consequences:**
+- (+) Rotas precisas desde o 1º login, sem depender de coletar; melhora com o uso (mesh).
+- (+) Standalone — não requer GatherMate2 em runtime (só foi a fonte do seed offline).
+- (-) +114KB no addon; seed só cobre herb/ore (skinning/fishing seguem sem seed).
+- (-) Assume que uiMapIDs do GatherMate2_Data == C_Map do cliente 2.5.5 (verdade: GatherMate2 roda
+  neste cliente). Se a textura `.tga` não carregar em algum cliente, dots somem (baixo risco).
+- Regeneração do seed é offline (Python), não parte do build de CI.
