@@ -2,6 +2,15 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.29.0] - 2026-07-05
+
+### Added
+- extend the gather-route model to Skinning & Fishing
+
+### Fixed
+- Zygor-style gather routes — 2-opt loops, yard-spaced glowing ribbon
+
+
 ## [1.28.0] - 2026-07-05
 
 ### Added
