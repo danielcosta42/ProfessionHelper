@@ -284,3 +284,30 @@ pedido de "todas as profissões no mesmo modelo e qualidade". Auditoria dos 18 a
 - **Adiado (conteúdo não-TBC, invisível no 2.5.5):** farmingLocations hardcoded EN dos tiers 375–525
   (Wrath/Cata, inalcançável no cap 375) + Inscription/Archaeology (minVersion 30000/40000, não carregam
   no TBC). Fazer só se rodar clients Wrath/Cata.
+
+---
+
+## ADR-0011 — Rotas cientes de caverna (entrance marker + rota interna) (v1.31.0)
+
+**Status:** Aceito.
+
+**Context:** "dá pra saber se o node está numa caverna?" Limite da engine: mapa é 2D, **sem Z/altura**.
+Mas cavernas **com mapa próprio** (uiMapType Micro/Dungeon) são detectáveis: `GetBestMapForUnit`
+retorna o mapID da caverna, então o nó já é gravado sob o mapa da caverna (não polui a superfície).
+
+**Decision:**
+- **(b) Rota interna:** em `UpdateRouteForStep`, se o player está num mapa Micro/Dungeon com ≥4 nós do
+  tipo, plota a rota daquele mapa com `PlotRouteOnWorldMap(..., 0)` — showFlag **0** = só no mapa da
+  caverna (flag < SHOW_PARENT nunca projeta no pai). routeZone = "cave:"..id.
+- **(a) Marcador de porta:** `PlotCaveEntranceMarkers(zoneMapID, ntype)` varre `gatherNodes` por mapas
+  Micro/Dungeon dentro da zona (`C_Map.GetMapRectOnMap(caveID, zoneMapID)` → centro do rect = porta) e
+  põe um marcador **âmbar** (COL_CAVE) com tooltip. Centro é independente da ordem dos eixos do rect.
+- APIs confirmadas via HBD/GatherMate2 no 2.5.5: `GetMapRectOnMap` (retorna minX,maxX,minY,maxY),
+  `GetMapInfo().mapType/.parentMapID`, `Enum.UIMapType.Micro/Dungeon`. `Enum` add ao `.luacheckrc`.
+
+**Consequences:**
+- (+) Rotas limpas: nós de caverna não caem na superfície; porta marcada; waypoints ao entrar.
+- (-) Só cavernas com mapa próprio. Cavernas que compartilham o mapa da zona projetam na superfície
+  (sem como distinguir — 2D). Dados de caverna são crowd-source (sem seed) → marcadores surgem com uso.
+- (-) Não testável ao vivo (precisa coletar em caverna). Auto-advance pode não rodar em micro-map (HBD
+  pode não ter world coords) — a rota mostra mesmo assim.
