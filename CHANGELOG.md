@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.27.0] - 2026-07-05
+
+### Added
+- marketplace fill analysis, cooldowns, post-order, alerts + icon fixes
+
+
 ## [1.26.0] - 2026-07-05
 
 ### Added
