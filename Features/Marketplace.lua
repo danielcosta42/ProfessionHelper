@@ -182,29 +182,17 @@ end
 -- Peer mesh: gossip ORDERS + read the ChehulNet crafter directory
 -------------------------------------------------------------------------------
 
-local function SendAddon(prefix, payload, dist, target)
-    local fn = (C_ChatInfo and C_ChatInfo.SendAddonMessage) or SendAddonMessage
-    if not fn then return false end
-    local ok, r = pcall(fn, prefix, payload, dist, target)
-    if not ok then return false end
-    if type(r) == "number" then return r == 0 end
-    return r ~= false and r ~= nil
-end
-
--- Broadcast a payload over every delivering hidden bus.
+-- Broadcast a payload to ProfessionHelper peers over the shared mesh: guild +
+-- group + SAY proximity (hidden, immediate) AND the realm-wide dedicated channel
+-- (flushed on the user's next click). One transport for the whole Chehul family.
 function MP:Broadcast(payload)
-    local sent = false
-    if IsInGuild and IsInGuild() then
-        if SendAddon(MP.NET_PREFIX, payload, "GUILD") then sent = true end
-    end
-    if IsInGroup and IsInGroup() then
-        local dist = (IsInRaid and IsInRaid()) and "RAID" or "PARTY"
-        if SendAddon(MP.NET_PREFIX, payload, dist) then sent = true end
-    end
-    if SendAddon(MP.NET_PREFIX, payload, "SAY") then sent = true end
-    self.netStats.sent = self.netStats.sent + 1
-    if sent then self.netStats.ok = self.netStats.ok + 1 end
-    return sent
+    local Mesh = _G.ChehulMesh
+    if not Mesh then return false end
+    Mesh:Guild(MP.NET_PREFIX, payload)
+    Mesh:Group(MP.NET_PREFIX, payload)
+    Mesh:Proximity(MP.NET_PREFIX, payload)
+    Mesh:Realm(MP.NET_PREFIX, payload) -- realm-wide
+    return true
 end
 
 -- Flush one queued order per tick (throttle-safe).
@@ -216,9 +204,10 @@ function MP:FlushQueue()
     self:Broadcast(table.concat({ MP.NET_PROTO, "O", tostring(item.itemID or 0), item.name, item.who }, "|"))
 end
 
-function MP:OnNet(prefix, text, _, sender)
-    if prefix ~= MP.NET_PREFIX or not sender or type(text) ~= "string" then return end
-    local proto, op, itemID, name, requester = strsplit("|", text)
+-- Registered with ChehulMesh; called as handler(payload, sender, dist).
+function MP:OnNet(payload, sender)
+    if not sender or type(payload) ~= "string" then return end
+    local proto, op, itemID, name, requester = strsplit("|", payload)
     if proto ~= MP.NET_PROTO then return end
     local short = Short(sender)
     if short == PH.Identity:GetCharName() then return end -- ignore my own gossip
@@ -326,7 +315,7 @@ function MP:Initialize()
     self.netListings = {}
     self.sendQueue = {}
     self._broadcasted = {}
-    self.netStats = { sent = 0, ok = 0, recv = 0 }
+    self.netStats = { recv = 0 }
     self._indexDirty = true
 
     if PH.Config:Get("marketplace_scan") ~= false then
@@ -336,12 +325,12 @@ function MP:Initialize()
         end, "Marketplace")
     end
 
-    -- Peer gossip: register the prefix, listen, and flush the send queue.
-    local reg = (C_ChatInfo and C_ChatInfo.RegisterAddonMessagePrefix) or RegisterAddonMessagePrefix
-    if reg then pcall(reg, MP.NET_PREFIX) end
-    PH.Event:On("CHAT_MSG_ADDON", function(_, prefix, text, channel, sender)
-        self:OnNet(prefix, text, channel, sender)
-    end, "Marketplace")
+    -- Peer gossip over the shared mesh (guild/group/proximity + realm-wide).
+    if _G.ChehulMesh then
+        _G.ChehulMesh:Register(MP.NET_PREFIX, function(payload, sender)
+            self:OnNet(payload, sender)
+        end)
+    end
     if C_Timer and C_Timer.NewTicker then
         C_Timer.NewTicker(MP.FLUSH_EVERY, function() self:FlushQueue() end)
     end
