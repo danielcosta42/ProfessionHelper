@@ -61,6 +61,7 @@ end
 
 -- Resolve an item's icon + a tooltip-able link from an itemID (preferred) or name.
 local function ItemIconFor(itemID, name)
+    if itemID and GetItemInfo then GetItemInfo(itemID) end -- prime the cache (async load)
     local ic = GetItemIcon and GetItemIcon(itemID or name)
     return ic or "Interface\\Icons\\INV_Misc_QuestionMark"
 end
@@ -74,6 +75,13 @@ local function ItemLinkFor(itemID, name)
         return link
     end
     return nil
+end
+
+local function MoneyStr(copper)
+    if PH.TSM and PH.TSM.FormatMoney then
+        return PH.TSM:FormatMoney(math.abs(copper))
+    end
+    return string.format("%dg", math.floor(math.abs(copper) / 10000))
 end
 
 -------------------------------------------------------------------------------
@@ -169,11 +177,32 @@ local function GetRow(panel, n)
 
         row:SetScript("OnEnter", function(self)
             self.bg:SetColorTexture(C.bgRowHi[1], C.bgRowHi[2], C.bgRowHi[3], C.bgRowHi[4])
-            if self.link then
-                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-                GameTooltip:SetHyperlink(self.link)
-                GameTooltip:Show()
+            local f = self.fill
+            if not self.link and not f then return end
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            if self.link then GameTooltip:SetHyperlink(self.link) end
+            if f then
+                GameTooltip:AddLine(" ")
+                for _, m in ipairs(f.materials or {}) do
+                    local need = m.count or 1
+                    local have = ((PH.BagScanner and PH.BagScanner:GetCount(m.name)) or 0)
+                        + ((PH.BagScanner and PH.BagScanner.GetAltCount and PH.BagScanner:GetAltCount(m.name)) or 0)
+                    local ok = have >= need
+                    GameTooltip:AddDoubleLine(m.name, have .. " / " .. need,
+                        0.8, 0.8, 0.8, ok and 0.3 or 1, ok and 0.85 or 0.5, ok and 0.45 or 0.2)
+                end
+                if f.matsCost and f.matsCost > 0 then
+                    GameTooltip:AddDoubleLine(PH.L["MP_TT_MATSCOST"] or "Mats cost",
+                        MoneyStr(f.matsCost), 0.55, 0.55, 0.6, 0.9, 0.9, 0.9)
+                end
+                if f.profit then
+                    local up = f.profit >= 0
+                    GameTooltip:AddDoubleLine(PH.L["MP_TT_PROFIT"] or "Profit",
+                        (up and "+" or "-") .. MoneyStr(f.profit),
+                        0.55, 0.55, 0.6, up and 0.3 or 1, up and 0.85 or 0.33, up and 0.45 or 0.33)
+                end
             end
+            GameTooltip:Show()
         end)
         row:SetScript("OnLeave", function(self)
             self.bg:SetColorTexture(C.bgRow[1], C.bgRow[2], C.bgRow[3], C.bgRow[4])
@@ -282,8 +311,68 @@ function PH:BuildMarketPanel(panel)
     footer:SetJustifyH("LEFT")
     panel.footer = footer
 
+    -- Post your own order: shift-click an item (or type a name) into the box + Post.
+    local postBtn = CreateFrame("Button", nil, panel, "BackdropTemplate")
+    postBtn:SetSize(52, 22)
+    postBtn:SetPoint("TOPRIGHT", -PAD, -104)
+    Flat(postBtn, C.bgChipOn)
+    postBtn:SetBackdropBorderColor(0, 0, 0, 0)
+    local pl = postBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    pl:SetPoint("CENTER")
+    pl:SetText(C.white .. (PH.L["MP_POST_BTN"] or "Post") .. "|r")
+    local phl = postBtn:CreateTexture(nil, "HIGHLIGHT")
+    phl:SetAllPoints()
+    phl:SetColorTexture(1, 1, 1, 0.12)
+
+    local eb = CreateFrame("EditBox", nil, panel, "BackdropTemplate")
+    eb:SetSize(180, 22)
+    eb:SetPoint("RIGHT", postBtn, "LEFT", -4, 0)
+    Flat(eb, { 0.05, 0.05, 0.07, 1 })
+    eb:SetFontObject("GameFontNormalSmall")
+    eb:SetTextColor(0.9, 0.9, 0.9)
+    eb:SetAutoFocus(false)
+    eb:SetTextInsets(6, 6, 0, 0)
+    local ph = eb:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    ph:SetPoint("LEFT", 6, 0)
+    ph:SetText(C.faint .. (PH.L["MP_POST_TIP"] or "shift-click an item...") .. "|r")
+
+    local function DoPost()
+        local text = eb:GetText() or ""
+        local id = tonumber(text:match("|Hitem:(%d+):"))
+        local name = text:match("|h%[(.-)%]|h")
+        if not name then
+            name = text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", "")
+        end
+        name = (name or ""):gsub("^%s+", ""):gsub("%s+$", "")
+        if name ~= "" and PH.Marketplace then
+            PH.Marketplace:PostOrder(id, name)
+            eb:SetText("")
+            eb:ClearFocus()
+            panel.mode = "orders"
+            PH:UpdateMarketPanel()
+        end
+    end
+    eb:SetScript("OnEnterPressed", DoPost)
+    eb:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+    eb:SetScript("OnEditFocusGained", function() ph:Hide() end)
+    eb:SetScript("OnTextChanged", function(self)
+        if (self:GetText() or "") == "" then ph:Show() else ph:Hide() end
+    end)
+    postBtn:SetScript("OnClick", DoPost)
+
     PH.Event:On("PH_MARKET_UPDATED", function()
         if PH.marketPanel and PH.marketPanel:IsShown() then PH:UpdateMarketPanel() end
+    end, "MarketPanel")
+
+    -- Item data arrives asynchronously; refresh (throttled) so icons/names fill in.
+    PH.Event:On("GET_ITEM_INFO_RECEIVED", function()
+        if panel._refreshing or not (PH.marketPanel and PH.marketPanel:IsShown()) then return end
+        panel._refreshing = true
+        if C_Timer and C_Timer.After then
+            C_Timer.After(0.5, function() panel._refreshing = nil; PH:UpdateMarketPanel() end)
+        else
+            panel._refreshing = nil
+        end
     end, "MarketPanel")
 end
 
@@ -315,6 +404,27 @@ local function FormatPrice(price)
         return "  " .. PH.TSM:FormatMoney(price)
     end
     return ""
+end
+
+-- Inline textures (render reliably; the ✓/⚠ glyphs are missing in the WoW font).
+local READY_ICON   = "|TInterface\\RaidFrame\\ReadyCheck-Ready:12:12|t"
+local MISSING_ICON = "|TInterface\\RaidFrame\\ReadyCheck-NotReady:12:12|t"
+
+-- Compact craftability tag: mats-have (ready/missing) + profit arrow + amount.
+local function FillTag(fill)
+    if not fill then return "" end
+    local mats = fill.haveAll and READY_ICON or MISSING_ICON
+    if not fill.profit then return "  " .. mats end
+    local arrow = (fill.profit >= 0) and (C.green .. "\226\150\178|r") or ("|cffff5555\226\150\188|r")
+    return "  " .. mats .. " " .. arrow .. MoneyStr(fill.profit)
+end
+
+-- Cooldown tag for cooldown-gated craftables (transmute, cloths): ready or Xh.
+local function CdTag(cd)
+    if not cd then return "" end
+    if cd.ready then return "  " .. C.green .. "CD|r" end
+    local hrs = math.max(1, math.floor((cd.remaining or 0) / 3600))
+    return "  |cff888888CD " .. hrs .. "h|r"
 end
 
 local function CountKeys(t)
@@ -393,6 +503,7 @@ function PH:UpdateMarketPanel()
         row.wbtn:Hide()
         row.icon:SetTexture(nil)
         row.link = nil
+        row.fill = nil
         row:ClearAllPoints()
         row:SetPoint("TOPLEFT", 0, 0)
         row:SetPoint("RIGHT", child, "RIGHT", 0, 0)
@@ -412,6 +523,7 @@ function PH:UpdateMarketPanel()
             if panel.mode == "crafters" then
                 row.icon:SetTexture("Interface\\Icons\\INV_Misc_GroupLooking")
                 row.link = nil
+                row.fill = nil
                 local cc = (PH.AltManager and PH.AltManager.CLASS_COLORS
                     and PH.AltManager.CLASS_COLORS[e.class]) or "cccccc"
                 local lvl = e.level and ("  " .. C.grey .. "Lv" .. e.level .. "|r") or ""
@@ -420,17 +532,18 @@ function PH:UpdateMarketPanel()
             elseif panel.mode == "offers" then
                 row.icon:SetTexture(ItemIconFor(e.itemID, e.name))
                 row.link = ItemLinkFor(e.itemID, e.name)
-                line = string.format("%s%s|r  %s%s|r%s%s|r",
-                    C.green, e.name, C.grey, table.concat(e.chars, ", "),
-                    C.faint, FormatPrice(e.price))
+                row.fill = e.fill
+                line = string.format("%s%s|r%s%s  %s%s|r%s%s|r",
+                    C.green, e.name, FillTag(e.fill), CdTag(e.cd), C.grey,
+                    table.concat(e.chars, ", "), C.faint, FormatPrice(e.price))
             else
                 row.icon:SetTexture(ItemIconFor(e.itemID, e.name))
                 row.link = ItemLinkFor(e.itemID, e.name)
+                row.fill = e.fill
                 local nameCol = e.canCraft and C.green or C.white
-                local tag = e.canCraft and (" " .. C.green .. "\226\153\166|r") or ""
                 local netMark = (e.source == "net") and ("|cff35a5ff\226\128\162|r ") or ""
                 line = string.format("%s%s%s|r%s  %s%s|r%s%s|r",
-                    netMark, nameCol, e.name or "?", tag, C.grey, e.who or "?",
+                    netMark, nameCol, e.name or "?", FillTag(e.fill), C.grey, e.who or "?",
                     C.faint, FormatPrice(e.price))
             end
             row.text:SetText(line)

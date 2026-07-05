@@ -58,6 +58,12 @@ function RT:ScanOpenTradeSkill()
         local skillName, skillType = GetTradeSkillInfo(i)
         if skillName and skillType ~= "header" then
             PH.DB:Set(basePath .. "." .. skillName, true)
+            -- Capture the crafted item's id (for marketplace icons + exact matching).
+            local link = GetTradeSkillItemLink and GetTradeSkillItemLink(i)
+            local itemID = link and tonumber(link:match("item:(%d+)"))
+            if itemID then
+                PH.DB:Set("craftOutputs." .. skillName, itemID)
+            end
             count = count + 1
         end
     end

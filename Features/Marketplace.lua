@@ -106,6 +106,109 @@ function MP:WhoCanCraft(name)
     return self:GetCraftableIndex()[name:lower()]
 end
 
+-- The recipe (with its material list) for a crafted item name in a profession.
+function MP:GetRecipe(name, prof)
+    if not name or not prof then return nil end
+    local data = PH:GetProfessionData(prof)
+    if not data or not data.recipes then return nil end
+    local lower = name:lower()
+    for _, r in ipairs(data.recipes) do
+        if r.name and r.name:lower() == lower then return r end
+    end
+    return nil
+end
+
+-- Fill analysis for a craftable order/offer: do I hold the mats (bags + alts),
+-- what do they cost (TSM), and what's the profit vs the crafted item's price?
+-- Returns nil when the recipe/materials aren't known.
+function MP:AnalyzeFill(name, prof)
+    if not name or not prof then return nil end
+    self._fillCache = self._fillCache or {}
+    local ck = name:lower() .. "@" .. prof
+    local cached = self._fillCache[ck]
+    if cached ~= nil then
+        return cached or nil -- cached `false` means "no known recipe"
+    end
+    local recipe = self:GetRecipe(name, prof)
+    if not recipe or not recipe.materials then
+        self._fillCache[ck] = false
+        return nil
+    end
+    local haveAll, matsCost, missing = true, 0, {}
+    for _, m in ipairs(recipe.materials) do
+        local need = m.count or 1
+        local have = (PH.BagScanner and PH.BagScanner:GetCount(m.name)) or 0
+        if PH.BagScanner and PH.BagScanner.GetAltCount then
+            have = have + (PH.BagScanner:GetAltCount(m.name) or 0)
+        end
+        if have < need then
+            haveAll = false
+            missing[#missing + 1] = { name = m.name, need = need - have }
+        end
+        local price = (PH.TSM and PH.TSM:GetItemPrice(m.name)) or 0
+        matsCost = matsCost + price * need
+    end
+    local revenue = (PH.TSM and PH.TSM:GetItemPrice(name)) or nil
+    local result = {
+        haveAll = haveAll, missing = missing, matsCost = matsCost, revenue = revenue,
+        profit = revenue and (revenue - matsCost) or nil, materials = recipe.materials,
+    }
+    self._fillCache[ck] = result
+    return result
+end
+
+-- Crafted-item id for a recipe/item name, captured from the trade skill scan
+-- (RecipeTracker). Lets the UI resolve a real icon + tooltip for craftables.
+function MP:OutputItemID(name)
+    if not name then return nil end
+    return PH.DB:Get("craftOutputs." .. name)
+end
+
+-- Cooldown state for a cooldown-gated recipe (transmute, cloths), or nil.
+function MP:CooldownFor(recipeName)
+    local CD = PH.CooldownTracker
+    if not CD or not CD.DATABASE or not recipeName then return nil end
+    for _, def in ipairs(CD.DATABASE) do
+        for _, pat in ipairs(def.patterns or {}) do
+            if recipeName:match(pat) then
+                local all = (CD.GetAllForCurrentChar and CD:GetAllForCurrentChar()) or {}
+                for _, c in ipairs(all) do
+                    if c.key == def.key then
+                        return { label = def.label, ready = c.ready, remaining = c.remaining }
+                    end
+                end
+                return { label = def.label, ready = true }
+            end
+        end
+    end
+    return nil
+end
+
+-- Sound + chat alert when a fresh order arrives that I can fill RIGHT NOW
+-- (know the recipe AND hold the mats). Debounced; opt-out via marketplace_alert.
+function MP:MaybeAlert(name)
+    if PH.Config:Get("marketplace_alert") == false then return end
+    local can = self:WhoCanCraft(name)
+    if not can then return end
+    local fill = self:AnalyzeFill(name, can[1].prof)
+    if not fill or not fill.haveAll then return end
+    local now = time()
+    if self._lastAlert and (now - self._lastAlert) < 10 then return end
+    self._lastAlert = now
+    if PlaySound then
+        pcall(PlaySound, (SOUNDKIT and SOUNDKIT.READY_CHECK) or 8960, "Master")
+    end
+    PH.Logger.Info("|cff30a5ff[Market]|r "
+        .. string.format(PH.L["MP_ALERT"] or "You can fill an order for %s", name))
+end
+
+-- Post my own order (I want this item crafted): shows locally + gossips to peers.
+function MP:PostOrder(itemID, name)
+    if not name or name == "" then return end
+    local id = (itemID and itemID ~= 0) and itemID or nil
+    self:AddListing("order", PH.Identity:GetCharName(), id, name, PH.L["MP_MY_ORDER"] or "my order")
+end
+
 -------------------------------------------------------------------------------
 -- Listings: local scanned (self.listings) + peer-gossiped (self.netListings)
 -------------------------------------------------------------------------------
@@ -113,11 +216,15 @@ end
 function MP:AddListing(kind, who, itemID, name, note)
     if not who or not name then return end
     local id = kind .. ":" .. who .. ":" .. tostring(itemID or name)
+    local isNew = self.listings[id] == nil
     self.listings[id] = { kind = kind, who = who, itemID = itemID, name = name, note = note, ts = time() }
     -- Gossip my freshly-scanned ORDERS to ProfessionHelper peers (once each).
     if kind == "order" and not self._broadcasted[id] then
         self._broadcasted[id] = true
         self.sendQueue[#self.sendQueue + 1] = { itemID = itemID or 0, name = name, who = who }
+    end
+    if kind == "order" and isNew and who ~= PH.Identity:GetCharName() then
+        self:MaybeAlert(name)
     end
     PH.Event:Fire("PH_MARKET_UPDATED")
 end
@@ -125,10 +232,12 @@ end
 function MP:AddNetOrder(who, itemID, name, heardFrom)
     if not who or not name then return end
     local id = "net:" .. who .. ":" .. tostring((itemID ~= 0 and itemID) or name)
+    local isNew = self.netListings[id] == nil
     self.netListings[id] = {
         kind = "order", who = who, itemID = (itemID ~= 0) and itemID or nil,
         name = name, source = "net", heardFrom = heardFrom, ts = time(),
     }
+    if isNew then self:MaybeAlert(name) end
     PH.Event:Fire("PH_MARKET_UPDATED")
 end
 
@@ -256,10 +365,13 @@ function MP:GetOrders()
         local key = (l.who or "") .. ":" .. tostring(l.itemID or l.name)
         if seen[key] then return end
         seen[key] = true
+        local canCraft = self:WhoCanCraft(l.name)
         out[#out + 1] = {
-            who = l.who, name = l.name, itemID = l.itemID, note = l.note, ts = l.ts,
+            who = l.who, name = l.name, itemID = l.itemID or self:OutputItemID(l.name),
+            note = l.note, ts = l.ts,
             source = isNet and "net" or "scan", heardFrom = l.heardFrom,
-            canCraft = self:WhoCanCraft(l.name), price = PriceOf(l.name),
+            canCraft = canCraft, price = PriceOf(l.name),
+            fill = canCraft and self:AnalyzeFill(l.name, canCraft[1].prof) or nil,
         }
     end
     for _, l in pairs(self.listings) do if l.kind == "order" then add(l, false) end end
@@ -273,6 +385,15 @@ function MP:GetOpportunities()
     for _, o in ipairs(self:GetOrders()) do
         if o.canCraft then out[#out + 1] = o end
     end
+    -- Most profitable first, then newest.
+    table.sort(out, function(a, b)
+        local pa = a.fill and a.fill.profit
+        local pb = b.fill and b.fill.profit
+        if pa ~= nil and pb ~= nil then return pa > pb end
+        if pa ~= nil then return true end
+        if pb ~= nil then return false end
+        return (a.ts or 0) > (b.ts or 0)
+    end)
     return out
 end
 
@@ -285,9 +406,21 @@ function MP:GetMyOffers()
         for _, m in ipairs(makers) do
             if not seen[m.char] then seen[m.char] = true; chars[#chars + 1] = m.char end
         end
-        out[#out + 1] = { name = name, chars = chars, prof = makers[1].prof, price = PriceOf(name) }
+        out[#out + 1] = {
+            name = name, chars = chars, prof = makers[1].prof, price = PriceOf(name),
+            itemID = self:OutputItemID(name), cd = self:CooldownFor(name),
+            fill = self:AnalyzeFill(name, makers[1].prof),
+        }
     end
-    table.sort(out, function(a, b) return a.name < b.name end)
+    -- Most profitable craftables first (those with a known profit), then by name.
+    table.sort(out, function(a, b)
+        local pa = a.fill and a.fill.profit
+        local pb = b.fill and b.fill.profit
+        if pa ~= nil and pb ~= nil then return pa > pb end
+        if pa ~= nil then return true end
+        if pb ~= nil then return false end
+        return a.name < b.name
+    end)
     return out
 end
 
@@ -335,6 +468,13 @@ function MP:Initialize()
         C_Timer.NewTicker(MP.FLUSH_EVERY, function() self:FlushQueue() end)
     end
 
-    PH.Event:On("PH_RECIPE_SCANNED", function() self._indexDirty = true end, "Marketplace")
-    PH.Event:On("PH_CHAR_UPDATED", function() self._indexDirty = true end, "Marketplace")
+    -- Recipes/alts change -> rebuild the craftable index and drop fill analyses.
+    -- Bag scan -> mats-on-hand changed, so drop the fill cache (index is unaffected).
+    local function invalidate()
+        self._indexDirty = true
+        self._fillCache = nil
+    end
+    PH.Event:On("PH_RECIPE_SCANNED", invalidate, "Marketplace")
+    PH.Event:On("PH_CHAR_UPDATED", invalidate, "Marketplace")
+    PH.Event:On("PH_BAG_SCANNED", function() self._fillCache = nil end, "Marketplace")
 end

@@ -136,6 +136,7 @@ read_globals = {
     "GetTradeSkillLine",
     "GetNumTradeSkills",
     "GetTradeSkillInfo",
+    "GetTradeSkillItemLink",
     "GetSpellInfo",
 
     -- WoW API: Reputation / Factions
