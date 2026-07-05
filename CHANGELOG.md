@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.24.0] - 2026-07-05
+
+### Added
+- in-window crafter marketplace + ChehulNet cross-addon presence mesh
+
+
 ## [1.23.1] - 2026-06-22
 
 ### Fixed
