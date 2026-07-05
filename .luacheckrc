@@ -146,6 +146,17 @@ read_globals = {
 
     -- WoW API: Chat & Social
     "SendChatMessage",
+    "ChatFrame_OpenChat",
+
+    -- WoW API: Addon comms (ChehulNet cross-addon presence mesh)
+    "C_ChatInfo",
+    "SendAddonMessage",
+    "RegisterAddonMessagePrefix",
+    "IsInGuild",
+    "IsInGroup",
+    "IsInRaid",
+    "Ambiguate",
+    "strsplit",
 
     -- WoW API: Timers
     "C_Timer",

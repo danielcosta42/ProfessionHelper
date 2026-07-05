@@ -277,6 +277,14 @@ function PH:HandleSlashCommand(msg)
     elseif cmd == "alts" then
         self:ShowAltManagerUI()
 
+    elseif cmd == "market" or cmd == "marketplace" then
+        if not (self.MainFrame and self.MainFrame:IsShown()) then
+            self:ToggleMainWindow()
+        end
+        if self.MainFrame and self.MainFrame.selectMarket then
+            self.MainFrame.selectMarket()
+        end
+
     elseif cmd == "de" or cmd == "prospect" then
         self:ShowDECalcUI()
 
@@ -305,6 +313,7 @@ function PH:HandleSlashCommand(msg)
         PH.Logger.Info(self.L["CMD_HELP_CD"])
         PH.Logger.Info(self.L["CMD_HELP_RECIPES"])
         PH.Logger.Info(self.L["CMD_HELP_ALTS"])
+        PH.Logger.Info(self.L["CMD_HELP_MARKET"])
         PH.Logger.Info(self.L["CMD_HELP_DE"])
         PH.Logger.Info(self.L["FA_CMD_HELP"])
         PH.Logger.Info(self.L["CMD_HELP_OPTIONS"])
@@ -566,6 +575,7 @@ local function OnAddonLoaded()
     if PH.RecipeTracker   then PH.RecipeTracker:Initialize()    end
     if PH.AltManager      then PH.AltManager:Initialize()       end
     if PH.FishingAssist   then PH.FishingAssist:Initialize()    end
+    if PH.Marketplace     then PH.Marketplace:Initialize()      end
 
     -- 4. Minimap button
     PH:CreateMinimapButton()

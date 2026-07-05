@@ -467,6 +467,16 @@ function PH:CreateMainWindow()
     frame.homePanel = homePanel
     PH:BuildHomePanel(homePanel)
 
+    -- Marketplace panel (in-window; sibling of homePanel, shown via the sidebar
+    -- button just below Home). Built once here; refreshed by PH:UpdateMarketPanel.
+    local marketPanel = CreateFrame("Frame", nil, contentArea, "BackdropTemplate")
+    marketPanel:SetPoint("TOPLEFT", 1, -1)
+    marketPanel:SetPoint("BOTTOMRIGHT", -1, 1)
+    MakeFlat(marketPanel, T.bgContent)
+    marketPanel:Hide()
+    frame.marketPanel = marketPanel
+    PH:BuildMarketPanel(marketPanel)
+
     -- Sidebar scroll (mousewheel only, no scrollbar)
     local sideScroll = CreateFrame("ScrollFrame", nil, sidebar)
     sideScroll:SetAllPoints()
@@ -522,12 +532,57 @@ function PH:CreateMainWindow()
     homeBtn:SetScript("OnClick", function()
         for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
         homeSel:Show()
+        if frame.marketSel then frame.marketSel:Hide() end
         PH.selectedProfession = nil
+        PH.marketOpen = false
         PH.Config:Set("selectedProfession", nil)
         PH.viewedStepIndex = nil
         PH.gatherViewStep = nil
         PH:UpdateContentPanel()
     end)
+
+    yOff = yOff - (iconSize + iconPad + 8)
+
+    -- Marketplace button (right below Home)
+    local marketBtn = CreateFrame("Button", nil, sideChild)
+    marketBtn:SetSize(iconSize + 4, iconSize + 4)
+    marketBtn:SetPoint("TOP", 0, yOff)
+
+    local marketIco = marketBtn:CreateTexture(nil, "ARTWORK")
+    marketIco:SetSize(iconSize, iconSize)
+    marketIco:SetPoint("CENTER")
+    marketIco:SetTexture("Interface\\Icons\\INV_Misc_Coin_01")
+    marketIco:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+
+    local marketHL = marketBtn:CreateTexture(nil, "HIGHLIGHT")
+    marketHL:SetAllPoints()
+    marketHL:SetColorTexture(T.gold[1], T.gold[2], T.gold[3], 0.20)
+
+    local marketSel = marketBtn:CreateTexture(nil, "OVERLAY")
+    marketSel:SetSize(3, iconSize)
+    marketSel:SetPoint("LEFT", marketBtn, "LEFT", -2, 0)
+    marketSel:SetColorTexture(T.gold[1], T.gold[2], T.gold[3])
+    marketSel:Hide()
+    frame.marketSel = marketSel
+
+    marketBtn:SetScript("OnEnter", function(self)
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:AddLine(hexc(T.gold) .. (PH.L["MP_TITLE"] or "Marketplace") .. "|r")
+        GameTooltip:AddLine(PH.L["MP_SUBTITLE"] or "", T.textSecondary[1], T.textSecondary[2], T.textSecondary[3])
+        GameTooltip:Show()
+    end)
+    marketBtn:SetScript("OnLeave", function() GameTooltip:Hide() end)
+
+    local function selectMarket()
+        for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
+        frame.homeSel:Hide()
+        marketSel:Show()
+        PH.selectedProfession = nil
+        PH.marketOpen = true
+        PH:UpdateContentPanel()
+    end
+    marketBtn:SetScript("OnClick", selectMarket)
+    frame.selectMarket = selectMarket
 
     yOff = yOff - (iconSize + iconPad + 8)
 
@@ -652,8 +707,10 @@ function PH:CreateMainWindow()
             btn:SetScript("OnClick", function(self)
                 for _, b in ipairs(profButtons) do b.selectedBar:Hide() end
                 frame.homeSel:Hide()
+                if frame.marketSel then frame.marketSel:Hide() end
                 self.selectedBar:Show()
                 PH.selectedProfession = self.professionName
+                PH.marketOpen = false
                 PH.Config:Set("selectedProfession", self.professionName)
                 PH.viewedStepIndex = nil
                 PH.gatherViewStep = nil
@@ -716,6 +773,19 @@ function PH:UpdateContentPanel()
     local scrollChild = frame.contentChild
     for _, child in pairs({ scrollChild:GetChildren() }) do child:Hide() end
     for _, region in pairs({ scrollChild:GetRegions() }) do region:Hide() end
+
+    -- Marketplace section (in-window; sidebar button below Home).
+    if self.marketOpen then
+        frame.homePanel:Hide()
+        frame.contentScroll:Hide()
+        frame.tabBar:Hide()
+        if frame.marketPanel then
+            frame.marketPanel:Show()
+            self:UpdateMarketPanel()
+        end
+        return
+    end
+    if frame.marketPanel then frame.marketPanel:Hide() end
 
     if not self.selectedProfession then
         frame.homePanel:Show()
