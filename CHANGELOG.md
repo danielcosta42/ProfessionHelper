@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.26.0] - 2026-07-05
+
+### Added
+- marketplace listings go realm-wide over the shared mesh
+
+
 ## [1.25.0] - 2026-07-05
 
 ### Added
