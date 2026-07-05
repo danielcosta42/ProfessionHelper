@@ -1063,4 +1063,8 @@ ProfessionHelper._Locales["ptBR"] = {
     ["SYN_SKIN_LW_B"] = "A sinergia mais direta do jogo: cada mob abatido gera leather diretamente para LW. Zero custo de materials.",
     ["SYN_SKIN_LW_T"] = "Sholazar Basin (mobs de bestias) é perfeito para Arctic Fur WotLK. Nagrand é o melhor para TBC.",
     ["SYN_SKIN_ENC_B"] = "Skin grandes volumes para LW → craft itens baratos → desencante para materials de Enchanting. Cadeia de ouro.",
+
+    -- Gathering: cave entrance marker
+    ["GATHER_CAVE_TITLE"] = "Caverna",
+    ["GATHER_CAVE_DESC"] = "Há nós lá dentro — entre na caverna para ver a rota.",
 }

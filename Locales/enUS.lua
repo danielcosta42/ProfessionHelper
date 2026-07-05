@@ -1063,4 +1063,8 @@ ProfessionHelper._Locales["enUS"] = {
     ["SYN_SKIN_LW_B"] = "The most direct synergy in the game: every slain mob yields leather straight to Leatherworking. Zero material cost.",
     ["SYN_SKIN_LW_T"] = "Sholazar Basin (beast mobs) is perfect for WotLK Arctic Fur. Nagrand is best for TBC.",
     ["SYN_SKIN_ENC_B"] = "Skin in bulk for Leatherworking → craft cheap items → disenchant for Enchanting materials. A golden chain.",
+
+    -- Gathering: cave entrance marker
+    ["GATHER_CAVE_TITLE"] = "Cave",
+    ["GATHER_CAVE_DESC"] = "There are nodes inside — enter the cave to see the route.",
 }

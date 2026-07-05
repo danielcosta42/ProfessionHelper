@@ -1063,4 +1063,8 @@ ProfessionHelper._Locales["esES"] = {
     ["SYN_SKIN_LW_B"] = "La sinergia más directa del juego: cada criatura abatida da cuero directo a la Peletería. Coste cero de materiales.",
     ["SYN_SKIN_LW_T"] = "La Cuenca de Sholazar (criaturas bestia) es perfecta para el pelaje ártico de WotLK. Nagrand es la mejor para TBC.",
     ["SYN_SKIN_ENC_B"] = "Desuella en grandes cantidades para Peletería → fabrica objetos baratos → desencántalos para materiales de Encantamiento. Cadena de oro.",
+
+    -- Gathering: cave entrance marker
+    ["GATHER_CAVE_TITLE"] = "Cueva",
+    ["GATHER_CAVE_DESC"] = "Hay nodos dentro: entra en la cueva para ver la ruta.",
 }

@@ -144,6 +144,7 @@ read_globals = {
 
     -- WoW API: Map
     "C_Map",
+    "Enum",
 
     -- WoW API: Chat & Social
     "SendChatMessage",

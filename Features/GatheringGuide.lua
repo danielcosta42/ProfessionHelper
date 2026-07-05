@@ -367,6 +367,7 @@ end
 -- Frame pools
 local wpDotPool = {}     -- waypoint numbered dots
 local trailPool = {}     -- trail dot frames
+local caveMarkerPool = {} -- cave-entrance markers (amber, on the parent zone map)
 local routeFrames = {}   -- all currently active world map frames
 local REF_KEY = "PHGatherRoute"
 
@@ -381,6 +382,7 @@ local GLOW_TEX    = "Interface\\AddOns\\ProfessionHelper\\Media\\route-glow.tga"
 local COL_NORMAL  = { 0.16, 0.86, 0.70 }
 local COL_CURRENT = { 1.00, 0.80, 0.24 }
 local COL_TRAIL   = { 0.22, 0.94, 0.80 }
+local COL_CAVE    = { 1.00, 0.60, 0.16 } -- amber: cave-entrance marker (distinct from the teal route)
 
 -- Trail dots are spaced by real yards (Zygor-style even "ants") using zone size,
 -- so density is consistent across zones instead of varying with map fraction.
@@ -542,6 +544,50 @@ local function CreateTrailDot()
     return f
 end
 
+-- Create an amber "cave entrance" marker for the parent zone map: a node lives in
+-- a cave here; enter it to see the interior route. Hover shows a tooltip.
+local function CreateCaveMarker(caveName, ntype)
+    local m = table.remove(caveMarkerPool)
+    if not m then
+        m = CreateFrame("Frame", nil, UIParent)
+        m:SetFrameStrata("TOOLTIP")
+        m:SetFrameLevel(210)
+        m:SetSize(15, 15)
+        m:EnableMouse(true)
+
+        local glow = m:CreateTexture(nil, "BACKGROUND")
+        glow:SetPoint("TOPLEFT", -8, 8)
+        glow:SetPoint("BOTTOMRIGHT", 8, -8)
+        glow:SetTexture(GLOW_TEX)
+        glow:SetBlendMode("ADD")
+        glow:SetVertexColor(COL_CAVE[1], COL_CAVE[2], COL_CAVE[3], 0.85)
+
+        local ring = m:CreateTexture(nil, "BORDER")
+        ring:SetPoint("TOPLEFT", -2, 2)
+        ring:SetPoint("BOTTOMRIGHT", 2, -2)
+        ring:SetTexture(DOT_TEX)
+        ring:SetVertexColor(0, 0, 0, 0.7)
+
+        local tex = m:CreateTexture(nil, "ARTWORK")
+        tex:SetAllPoints()
+        tex:SetTexture(DOT_TEX)
+        tex:SetVertexColor(COL_CAVE[1], COL_CAVE[2], COL_CAVE[3], 1)
+
+        m.isCave = true
+        m:SetScript("OnEnter", function(self)
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip:AddLine("|cffffa033" .. (self.caveName or (PH.L and PH.L["GATHER_CAVE_TITLE"]) or "Cave") .. "|r")
+            GameTooltip:AddLine((PH.L and PH.L["GATHER_CAVE_DESC"]) or "Enter to see the route inside.", 0.8, 0.8, 0.8, true)
+            GameTooltip:Show()
+        end)
+        m:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
+    m.caveName = caveName
+    m.ntype = ntype
+    m:Show()
+    return m
+end
+
 -- Remove all route visuals from world map
 function GG:ClearRouteDisplay()
     local _, pins = GetHBD()
@@ -551,7 +597,9 @@ function GG:ClearRouteDisplay()
 
     for _, f in ipairs(routeFrames) do
         f:Hide()
-        if f.isDot then
+        if f.isCave then
+            table.insert(caveMarkerPool, f)
+        elseif f.isDot then
             table.insert(wpDotPool, f)
         else
             table.insert(trailPool, f)
@@ -560,8 +608,10 @@ function GG:ClearRouteDisplay()
     wipe(routeFrames)
 end
 
--- Draw full route on the world map using HBDPins
-function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
+-- Draw full route on the world map using HBDPins.
+-- showFlagOverride: pass 0 for a cave/sub-area so its route shows ONLY on the cave
+-- map (a flag < SHOW_PARENT never projects onto the parent zone).
+function GG:PlotRouteOnWorldMap(zoneName, mapID, route, showFlagOverride)
     self:ClearRouteDisplay()
 
     local hbd, pins = GetHBD()
@@ -572,7 +622,7 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
     -- when the world map is on this zone or its continent parent.
     -- SHOW_CURRENT (-1) only exists in Questie's patched HBD and is not
     -- handled by GatherMate2's version, making routes invisible.
-    local showFlag = HBD_PINS_WORLDMAP_SHOW_PARENT or 1
+    local showFlag = showFlagOverride or HBD_PINS_WORLDMAP_SHOW_PARENT or 1
 
     -- First: the connecting ribbon — soft glow dots spaced by real yards (via zone
     -- size) so density is even across zones. Interior points only, so they don't
@@ -610,6 +660,40 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
 
     self.routeMapID = mapID
     self.routeZone = zoneName
+end
+
+-- Place an amber marker on the parent zone map at the doorway of every cave/sub-area
+-- we've collected nodes in (its own uiMapID). Enter the cave to see the interior
+-- route. Nodes in caves are stored under the cave's map id (GetBestMapForUnit), so
+-- we scan the live DB for Micro/Dungeon maps that sit inside this zone.
+function GG:PlotCaveEntranceMarkers(zoneMapID, ntype)
+    if not (C_Map and C_Map.GetMapInfo and C_Map.GetMapRectOnMap and Enum and Enum.UIMapType) then return end
+    local _, pins = GetHBD()
+    if not pins then return end
+    local root = PH.DB:Get("gatherNodes")
+    if type(root) ~= "table" then return end
+
+    for mk, byType in pairs(root) do
+        local caveID = tonumber(mk)
+        local set = type(byType) == "table" and byType[ntype]
+        if caveID and caveID ~= zoneMapID and type(set) == "table" and next(set) then
+            local info = C_Map.GetMapInfo(caveID)
+            local mt = info and info.mapType
+            if mt == Enum.UIMapType.Micro or mt == Enum.UIMapType.Dungeon then
+                local a, b, c, d = C_Map.GetMapRectOnMap(caveID, zoneMapID)
+                if a and b and c and d then
+                    -- center is axis-order-independent; nil rect means "not inside this zone"
+                    local cx = (a + b) / 2
+                    local cy = (c + d) / 2
+                    if cx > 0 and cx < 1 and cy > 0 and cy < 1 then
+                        local m = CreateCaveMarker(info and info.name, ntype)
+                        pins:AddWorldMapIconMap(REF_KEY, m, zoneMapID, cx, cy, HBD_PINS_WORLDMAP_SHOW_PARENT or 1)
+                        table.insert(routeFrames, m)
+                    end
+                end
+            end
+        end
+    end
 end
 
 -- No complex hooks needed — HBDPins handles map display
@@ -857,6 +941,35 @@ function GG:UpdateRouteForStep(step)
 
     local ntype = PROF_NTYPE[GG.profName or ""]
 
+    -- (0) If the player is standing inside a cave / sub-area (its own Micro/Dungeon
+    -- map) that we've collected nodes in, route THAT map directly with its own
+    -- waypoints. showFlag 0 keeps it on the cave map only (no surface projection).
+    if ntype and PH.GatherData and C_Map and C_Map.GetBestMapForUnit and Enum and Enum.UIMapType then
+        local cur = C_Map.GetBestMapForUnit("player")
+        local info = cur and C_Map.GetMapInfo and C_Map.GetMapInfo(cur)
+        local mt = info and info.mapType
+        if cur and (mt == Enum.UIMapType.Micro or mt == Enum.UIMapType.Dungeon) then
+            local nodes = PH.GatherData:GetNodes(cur, ntype)
+            if nodes and #nodes >= 4 then
+                local key = "cave:" .. cur
+                if self.routeZone ~= key then
+                    local nr = BuildNodeRoute(nodes)
+                    if nr then
+                        self.routeIsNodes = true
+                        self.currentRoute = nr
+                        self.currentWP = 1
+                        self:PlotRouteOnWorldMap(info.name or "Cave", cur, nr, 0)
+                        self:SetClosestWaypoint()
+                        self.routeZone = key
+                    else
+                        self:ClearRouteDisplay(); self:ClearMinimapArrow()
+                    end
+                end
+                return
+            end
+        end
+    end
+
     -- How many real nodes (seed + crowd-sourced) we have for a zone/profession.
     local function nodeCount(zoneName)
         local mid = ZONE_MAP_IDS[zoneName]
@@ -929,6 +1042,7 @@ function GG:UpdateRouteForStep(step)
         self.currentRoute = route
         self.currentWP = 1
         self:PlotRouteOnWorldMap(zone, mapID, route)
+        if ntype then self:PlotCaveEntranceMarkers(mapID, ntype) end
         self:SetClosestWaypoint()  -- set nearest WP as current
         print("|cff4dda5d[PH Route]|r " .. zone .. " — " .. #route .. " waypoints plotted")
     end
