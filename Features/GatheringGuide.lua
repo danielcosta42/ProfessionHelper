@@ -373,24 +373,31 @@ local REF_KEY = "PHGatherRoute"
 -- Advance threshold in yards
 local WP_ADVANCE_DIST = 60
 
--- Crisp anti-aliased circle (pure white, tinted per-dot). Full path incl. .tga
--- (the LibSharedMedia convention that loads reliably on Classic/TBC clients).
--- Teal = our accent, gold = current/next WP.
+-- Route art (pure white, tinted per-dot). Full path incl. .tga = the LibSharedMedia
+-- convention that loads reliably on Classic/TBC. DOT = crisp marker, GLOW = soft
+-- radial (halos + the connecting ribbon). Teal = our accent, gold = current/next WP.
 local DOT_TEX     = "Interface\\AddOns\\ProfessionHelper\\Media\\route-dot.tga"
+local GLOW_TEX    = "Interface\\AddOns\\ProfessionHelper\\Media\\route-glow.tga"
 local COL_NORMAL  = { 0.16, 0.86, 0.70 }
 local COL_CURRENT = { 1.00, 0.80, 0.24 }
-local COL_TRAIL   = { 0.16, 0.86, 0.70 }
+local COL_TRAIL   = { 0.22, 0.94, 0.80 }
+
+-- Trail dots are spaced by real yards (Zygor-style even "ants") using zone size,
+-- so density is consistent across zones instead of varying with map fraction.
+local TRAIL_YARDS_WORLD = 18
+local TRAIL_YARDS_MINI  = 24
 
 -- Profession -> collected node type (GatherData).
 local PROF_NTYPE = { Herbalism = "herb", Mining = "ore" }
 
--- Turn a cloud of real node positions into a clean farming loop.
--- 1) Spatially thin so waypoints are evenly spread (dots don't pile up in the
---    dense node clusters); 2) order them with greedy nearest-neighbor.
+-- Turn a cloud of real node positions into a clean farming loop:
+-- 1) spatially thin so waypoints are evenly spread (dots don't pile up in dense
+--    clusters); 2) nearest-neighbor for an initial order; 3) a 2-opt pass to
+--    untangle crossings, which removes the long "backtrack" jumps NN leaves behind.
 local function BuildNodeRoute(nodes)
-    local MINSPACE = 0.045          -- min map-fraction gap between waypoints
+    local MINSPACE = 0.06           -- min map-fraction gap between waypoints
     local MIN2 = MINSPACE * MINSPACE
-    local MAXWP = 50
+    local MAXWP = 30
 
     local kept = {}
     for _, n in ipairs(nodes) do
@@ -413,6 +420,7 @@ local function BuildNodeRoute(nodes)
     end
     if #kept < 2 then return nil end
 
+    -- Nearest-neighbor initial tour.
     local route, used = { kept[1] }, { [1] = true }
     for _ = 2, #kept do
         local cx, cy = route[#route][1], route[#route][2]
@@ -427,10 +435,38 @@ local function BuildNodeRoute(nodes)
         used[best] = true
         route[#route + 1] = kept[best]
     end
+
+    -- 2-opt on the closed loop: reverse a segment whenever it shortens the tour.
+    local n = #route
+    local function dist(a, b)
+        local dx, dy = a[1] - b[1], a[2] - b[2]
+        return math.sqrt(dx * dx + dy * dy)
+    end
+    local improved, passes = true, 0
+    while improved and passes < 40 do
+        improved = false
+        passes = passes + 1
+        for i = 1, n - 1 do
+            for j = i + 2, n do
+                if not (i == 1 and j == n) then
+                    local a, b, c, d = route[i], route[i + 1], route[j], route[(j % n) + 1]
+                    if dist(a, b) + dist(c, d) > dist(a, c) + dist(b, d) + 1e-9 then
+                        local lo, hi = i + 1, j
+                        while lo < hi do
+                            route[lo], route[hi] = route[hi], route[lo]
+                            lo = lo + 1
+                            hi = hi - 1
+                        end
+                        improved = true
+                    end
+                end
+            end
+        end
+    end
     return route
 end
 
--- Create a waypoint numbered dot for the world map
+-- Create a waypoint marker for the world map: coloured glow halo + crisp dot + number.
 local function CreateWPDot(index, isCurrent)
     local dot = table.remove(wpDotPool)
     if not dot then
@@ -438,12 +474,20 @@ local function CreateWPDot(index, isCurrent)
         dot:SetFrameStrata("TOOLTIP")
         dot:SetFrameLevel(200)
 
-        -- soft dark rim/shadow so the dot reads on any map background
-        local shadow = dot:CreateTexture(nil, "BACKGROUND")
-        shadow:SetPoint("TOPLEFT", -2.5, 2.5)
-        shadow:SetPoint("BOTTOMRIGHT", 2.5, -2.5)
+        -- coloured glow halo (Zygor-style marker pop)
+        local glow = dot:CreateTexture(nil, "BACKGROUND")
+        glow:SetPoint("TOPLEFT", -8, 8)
+        glow:SetPoint("BOTTOMRIGHT", 8, -8)
+        glow:SetTexture(GLOW_TEX)
+        glow:SetBlendMode("ADD")
+        dot.glow = glow
+
+        -- soft dark rim so the marker reads on any map background
+        local shadow = dot:CreateTexture(nil, "BORDER")
+        shadow:SetPoint("TOPLEFT", -2, 2)
+        shadow:SetPoint("BOTTOMRIGHT", 2, -2)
         shadow:SetTexture(DOT_TEX)
-        shadow:SetVertexColor(0, 0, 0, 0.55)
+        shadow:SetVertexColor(0, 0, 0, 0.6)
         dot.shadow = shadow
 
         local tex = dot:CreateTexture(nil, "ARTWORK")
@@ -460,14 +504,16 @@ local function CreateWPDot(index, isCurrent)
 
     local c = isCurrent and COL_CURRENT or COL_NORMAL
     dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
-    local s = isCurrent and 17 or 12
+    dot.glow:SetVertexColor(c[1], c[2], c[3], isCurrent and 0.95 or 0.45)
+    local s = isCurrent and 16 or 11
     dot:SetSize(s, s)
     dot.num:SetText("|cff042018" .. index .. "|r")
     dot:Show()
     return dot
 end
 
--- Create a small trail dot (forms the dotted "line" between waypoints)
+-- Create a trail dot: a soft teal glow. Spaced tightly by yards, the overlapping
+-- glows blend into a continuous glowing ribbon (Zygor-style path line).
 local function CreateTrailDot()
     local f = table.remove(trailPool)
     if not f then
@@ -475,22 +521,16 @@ local function CreateTrailDot()
         f:SetFrameStrata("HIGH")
         f:SetFrameLevel(100)
 
-        local shadow = f:CreateTexture(nil, "BACKGROUND")
-        shadow:SetPoint("TOPLEFT", -1, 1)
-        shadow:SetPoint("BOTTOMRIGHT", 1, -1)
-        shadow:SetTexture(DOT_TEX)
-        shadow:SetVertexColor(0, 0, 0, 0.35)
-
         local tex = f:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture(DOT_TEX)
-        tex:SetVertexColor(COL_TRAIL[1], COL_TRAIL[2], COL_TRAIL[3], 0.85)
+        tex:SetTexture(GLOW_TEX)
+        tex:SetVertexColor(COL_TRAIL[1], COL_TRAIL[2], COL_TRAIL[3], 0.8)
         f.tex = tex
 
         f.isDot = false
     end
 
-    f:SetSize(4, 4)
+    f:SetSize(9, 9)
     f:Show()
     return f
 end
@@ -527,17 +567,23 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
     -- handled by GatherMate2's version, making routes invisible.
     local showFlag = HBD_PINS_WORLDMAP_SHOW_PARENT or 1
 
-    -- First: evenly-spaced trail dots between waypoints (a clean dotted line, not
-    -- a dense smear). Interior points only, so they don't sit under the WP dots.
-    local SPACING = 0.02
+    -- First: the connecting ribbon — soft glow dots spaced by real yards (via zone
+    -- size) so density is even across zones. Interior points only, so they don't
+    -- sit under the WP markers.
+    local zw, zh = hbd:GetZoneSize(mapID)
     for i = 1, #route do
         local next_i = (i % #route) + 1
         local x1, y1 = route[i][1], route[i][2]
         local x2, y2 = route[next_i][1], route[next_i][2]
-
         local dx, dy = x2 - x1, y2 - y1
-        local dist = math.sqrt(dx * dx + dy * dy)
-        local count = math.floor(dist / SPACING)
+
+        local count
+        if zw and zw > 0 and zh and zh > 0 then
+            count = math.floor(math.sqrt((dx * zw) ^ 2 + (dy * zh) ^ 2) / TRAIL_YARDS_WORLD)
+        else
+            count = math.floor(math.sqrt(dx * dx + dy * dy) / 0.02)
+        end
+        if count > 60 then count = 60 end
 
         for t = 1, count - 1 do
             local frac = t / count
@@ -571,7 +617,8 @@ function GG:RefreshRouteDots()
             local isCur = (dotIndex == self.currentWP)
             local c = isCur and COL_CURRENT or COL_NORMAL
             f.tex:SetVertexColor(c[1], c[2], c[3], 1)
-            local s = isCur and 17 or 12
+            if f.glow then f.glow:SetVertexColor(c[1], c[2], c[3], isCur and 0.95 or 0.45) end
+            local s = isCur and 16 or 11
             f:SetSize(s, s)
         end
     end
@@ -585,7 +632,7 @@ local minimapDots = {}   -- pool of minimap WP dots
 local minimapTrailPool = {} -- pool of minimap trail dots
 local activeMinimapDots = {} -- currently placed minimap frames
 
--- Create a minimap waypoint numbered dot
+-- Create a minimap waypoint marker: glow halo + crisp dot (number only on "next")
 local function CreateMinimapWPDot(index, isNext)
     local dot = table.remove(minimapDots)
     if not dot then
@@ -593,11 +640,18 @@ local function CreateMinimapWPDot(index, isNext)
         dot:SetFrameStrata("TOOLTIP")
         dot:SetFrameLevel(200)
 
-        local bg = dot:CreateTexture(nil, "BACKGROUND")
+        local glow = dot:CreateTexture(nil, "BACKGROUND")
+        glow:SetPoint("TOPLEFT", -6, 6)
+        glow:SetPoint("BOTTOMRIGHT", 6, -6)
+        glow:SetTexture(GLOW_TEX)
+        glow:SetBlendMode("ADD")
+        dot.glow = glow
+
+        local bg = dot:CreateTexture(nil, "BORDER")
         bg:SetPoint("TOPLEFT", -2, 2)
         bg:SetPoint("BOTTOMRIGHT", 2, -2)
         bg:SetTexture(DOT_TEX)
-        bg:SetVertexColor(0, 0, 0, 0.55)
+        bg:SetVertexColor(0, 0, 0, 0.6)
         dot.bg = bg
 
         local tex = dot:CreateTexture(nil, "ARTWORK")
@@ -614,7 +668,8 @@ local function CreateMinimapWPDot(index, isNext)
 
     local c = isNext and COL_CURRENT or COL_NORMAL
     dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
-    dot:SetSize(isNext and 14 or 10, isNext and 14 or 10)
+    dot.glow:SetVertexColor(c[1], c[2], c[3], isNext and 0.95 or 0.45)
+    dot:SetSize(isNext and 13 or 9, isNext and 13 or 9)
     -- number only on the "next" dot; the small ones stay clean
     if isNext then
         dot.num:SetText("|cff042018" .. index .. "|r")
@@ -626,7 +681,7 @@ local function CreateMinimapWPDot(index, isNext)
     return dot
 end
 
--- Create a minimap trail dot (small teal, dotted-line effect)
+-- Create a minimap trail dot: soft teal glow (blends into a ribbon like the map)
 local function CreateMinimapTrailDot()
     local f = table.remove(minimapTrailPool)
     if not f then
@@ -636,14 +691,14 @@ local function CreateMinimapTrailDot()
 
         local tex = f:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture(DOT_TEX)
+        tex:SetTexture(GLOW_TEX)
         tex:SetVertexColor(COL_TRAIL[1], COL_TRAIL[2], COL_TRAIL[3], 0.8)
         f.tex = tex
 
         f.isWP = false
     end
 
-    f:SetSize(3, 3)
+    f:SetSize(7, 7)
     f:Show()
     return f
 end
@@ -669,16 +724,24 @@ function GG:PlotMinimapRoute()
     local mapID = self.routeMapID
     if not route or not mapID or #route < 2 then return end
 
-    -- First: evenly-spaced trail dots between waypoints (finer than the world map
-    -- since the minimap is zoomed in).
-    local SPACING = 0.008
+    -- First: the connecting ribbon — soft glow dots spaced by real yards, same as
+    -- the world map so density is consistent.
+    local hbd = GetHBD()
+    local zw, zh
+    if hbd then zw, zh = hbd:GetZoneSize(mapID) end
     for i = 1, #route do
         local next_i = (i % #route) + 1
         local x1, y1 = route[i][1], route[i][2]
         local x2, y2 = route[next_i][1], route[next_i][2]
         local dx, dy = x2 - x1, y2 - y1
-        local dist = math.sqrt(dx * dx + dy * dy)
-        local count = math.floor(dist / SPACING)
+
+        local count
+        if zw and zw > 0 and zh and zh > 0 then
+            count = math.floor(math.sqrt((dx * zw) ^ 2 + (dy * zh) ^ 2) / TRAIL_YARDS_MINI)
+        else
+            count = math.floor(math.sqrt(dx * dx + dy * dy) / 0.008)
+        end
+        if count > 40 then count = 40 end
 
         for t = 1, count - 1 do
             local frac = t / count
