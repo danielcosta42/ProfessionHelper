@@ -17,13 +17,17 @@ local GD = PH.GatherData
 
 GD.PREFIX = "PHGather"
 
--- Gather-action spellIDs -> node type (localisation-independent: matched by id).
-local GATHER_SPELLS = {
+-- Gather-action spells -> node type. Matched by spellID (fast path) OR by localized
+-- spell NAME (rank/locale-independent — Fishing has many ranks). IDs verified against
+-- GatherMate2's Collector (herb 2366, mining 2575); Skinning 8613 and Fishing 7620
+-- are added here because GatherMate2 doesn't track them (mob-/water-based, no map seed).
+local GATHER_IDS = {
     [2366] = "herb", -- Herb Gathering
-    [2383] = "herb", -- Find Herbs is passive; keep the gather action(s)
     [2575] = "ore",  -- Mining
-    [2580] = "ore",
+    [8613] = "skin", -- Skinning
+    [7620] = "fish", -- Fishing (all ranks share the name "Fishing")
 }
+local gatherByName -- { [localizedSpellName] = ntype }, built once at init
 
 local function Pack(x, y)
     return math.floor(x * 1000) * 1000 + math.floor(y * 1000)
@@ -133,10 +137,21 @@ end
 function GD:Initialize()
     PH.DB:Ensure("gatherNodes")
 
+    -- Localized-name lookup so ranked/localized casts (esp. Fishing) still match.
+    gatherByName = {}
+    for id, t in pairs(GATHER_IDS) do
+        local n = GetSpellInfo(id)
+        if n then gatherByName[n] = t end
+    end
+
     -- Collect: record the player's position whenever a gather action succeeds.
     PH.Event:On("UNIT_SPELLCAST_SUCCEEDED", function(_, unit, _castGUID, spellID)
         if unit ~= "player" then return end
-        local ntype = GATHER_SPELLS[spellID]
+        local ntype = GATHER_IDS[spellID]
+        if not ntype and spellID then
+            local n = GetSpellInfo(spellID)
+            if n then ntype = gatherByName[n] end
+        end
         if not ntype then return end
         local mapID = C_Map and C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
         if not mapID then return end

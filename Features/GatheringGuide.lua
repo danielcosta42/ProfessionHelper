@@ -387,8 +387,10 @@ local COL_TRAIL   = { 0.22, 0.94, 0.80 }
 local TRAIL_YARDS_WORLD = 18
 local TRAIL_YARDS_MINI  = 24
 
--- Profession -> collected node type (GatherData).
-local PROF_NTYPE = { Herbalism = "herb", Mining = "ore" }
+-- Profession -> collected node type (GatherData). Herb/ore ship with a Wowhead
+-- seed; skin/fish have no seed (GatherMate2 can't map them) so they build up from
+-- crowd-sourced collection over time — same model, just no pre-load.
+local PROF_NTYPE = { Herbalism = "herb", Mining = "ore", Skinning = "skin", Fishing = "fish" }
 
 -- Turn a cloud of real node positions into a clean farming loop:
 -- 1) spatially thin so waypoints are evenly spread (dots don't pile up in dense

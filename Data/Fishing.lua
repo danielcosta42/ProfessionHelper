@@ -48,7 +48,7 @@ ProfessionHelper.Fishing = {
                 },
                 {
                     zone = "Orgrimmar/Stormwind",
-                    faction = "Respective",
+                    faction = "Both",
                     spot = ProfessionHelper.L["FISHING_LOC_2_SPOT"],
                     tips = ProfessionHelper.L["FISHING_LOC_2_TIP"],
                     recommended = ProfessionHelper.L["FISHING_LOC_2_REC"],
