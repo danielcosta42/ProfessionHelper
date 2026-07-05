@@ -236,3 +236,10 @@ precisão real e visual estilo Zygor "com a nossa cara" (teal).
 - (-) Assume que uiMapIDs do GatherMate2_Data == C_Map do cliente 2.5.5 (verdade: GatherMate2 roda
   neste cliente). Se a textura `.tga` não carregar em algum cliente, dots somem (baixo risco).
 - Regeneração do seed é offline (Python), não parte do build de CI.
+
+**Refinamento (v1.28.1):** Rota node — depois do nearest-neighbor, roda **2-opt** (fecha
+cruzamentos; removeu os saltos longos que faziam a rota "zigzagar" — pior aresta de Tirisfal
+0.47→0.18). Afinada a ~30 waypoints (MINSPACE 0.06). Visual "Zygor": fita de **glow suave**
+(`Media/route-glow.tga`, ADD blend) com dots espaçados por **jardas reais** (via `HBD:GetZoneSize`,
+não mais fração de mapa) + halo de brilho nos marcadores. Prévia validada com dados reais de
+Tirisfal antes do deploy.
