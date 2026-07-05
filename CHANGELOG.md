@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.25.0] - 2026-07-05
+
+### Added
+- shared LibChehulMesh transport + marketplace peer gossip & crafters tab
+
+
 ## [1.24.0] - 2026-07-05
 
 ### Added
