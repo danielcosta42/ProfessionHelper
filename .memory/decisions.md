@@ -273,3 +273,14 @@ pedido de "todas as profissões no mesmo modelo e qualidade". Auditoria dos 18 a
 
 **Consequences:** modelo de rota agora uniforme p/ as 3 gathering + fishing. Qualidade de *dados*
 (localização/combos) fica como próximo lote, priorizado pelo usuário.
+
+**Follow-up (v1.30.0) — auditoria resolvida:**
+- **Sinergias localizadas:** as 45 strings de `synergies` (benefit/tip/route) que eram PT hardcoded
+  em 11 arquivos viraram locale keys `SYN_*` (EN/PT/ES). É o gap visível em TODO client (a seção de
+  sinergias aparece em qualquer nível).
+- **Fishing:** rotas agora só de nós reais de água (sem o land loop genérico enganoso — `NODE_ONLY.fish`
+  em GatheringGuide); 2 nomes de zona combinados quebrados corrigidos.
+- **materials={} nos combos = FALSO POSITIVO:** são steps de gathering (não consomem nada). Não mexer.
+- **Adiado (conteúdo não-TBC, invisível no 2.5.5):** farmingLocations hardcoded EN dos tiers 375–525
+  (Wrath/Cata, inalcançável no cap 375) + Inscription/Archaeology (minVersion 30000/40000, não carregam
+  no TBC). Fazer só se rodar clients Wrath/Cata.
