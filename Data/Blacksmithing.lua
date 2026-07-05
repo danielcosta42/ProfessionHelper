@@ -339,18 +339,18 @@ ProfessionHelper.Blacksmithing = {
         {
             profession = "Mining",
             type       = "primary",
-            benefit    = "A sinergia clássica do WoW. Mining fornece todos os bars necessários para Blacksmithing. Economiza 50-80% de custo de leveling.",
-            tip        = "Saronite Bar, Cobalt Bar e Titansteel Bar são os materiais centrais do WotLK. Mine tudo!.",
+            benefit    = ProfessionHelper.L["SYN_BS_MIN_B"],
+            tip        = ProfessionHelper.L["SYN_BS_MIN_T"],
         },
         {
             profession = "Enchanting",
             type       = "gold",
-            benefit    = "Desencante itens craftados descartáveis para materials de Enchanting. Reduz desperdício.",
+            benefit    = ProfessionHelper.L["SYN_BS_ENC_B"],
         },
         {
             profession = "Jewelcrafting",
             type       = "economy",
-            benefit    = "Blacksmiths podem criar soquetes extras em armaduras (Bracer/Gloves). JC preenchem esses soquetes com gemas.",
+            benefit    = ProfessionHelper.L["SYN_BS_JC_B"],
         },
     },
 }

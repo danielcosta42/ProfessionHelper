@@ -42,18 +42,18 @@ ProfessionHelper.Inscription = {
         {
             profession = "Herbalism",
             type       = "primary",
-            benefit    = "Fornece TODAS as herbs para milling gratuitamente. Suba as duas juntas.",
-            route      = "Adder's Tongue (Sholazar Basin) é a melhor herb para Inscription 375-450.",
+            benefit    = ProfessionHelper.L["SYN_INS_HERB_B"],
+            route      = ProfessionHelper.L["SYN_INS_HERB_R"],
         },
         {
             profession = "Enchanting",
             type       = "gold",
-            benefit    = "Vellums de encantamento (craftados pela Inscrição) permitem vender encantamentos no AH.",
+            benefit    = ProfessionHelper.L["SYN_INS_ENC_B"],
         },
         {
             profession = "Alchemy",
             type       = "gold",
-            benefit    = "Scribes vendem glyphs de alta demanda para todas as classes — alta rotatividade.",
+            benefit    = ProfessionHelper.L["SYN_INS_ALC_B"],
         },
     },
 

@@ -458,13 +458,13 @@ ProfessionHelper.Skinning = {
         {
             profession = "Leatherworking",
             type       = "primary",
-            benefit    = "A sinergia mais direta do jogo: cada mob abatido gera leather diretamente para LW. Zero custo de materials.",
-            tip        = "Sholazar Basin (mobs de bestias) é perfeito para Arctic Fur WotLK. Nagrand é o melhor para TBC.",
+            benefit    = ProfessionHelper.L["SYN_SKIN_LW_B"],
+            tip        = ProfessionHelper.L["SYN_SKIN_LW_T"],
         },
         {
             profession = "Enchanting",
             type       = "gold",
-            benefit    = "Skin grandes volumes para LW → craft itens baratos → desencante para materials de Enchanting. Cadeia de ouro.",
+            benefit    = ProfessionHelper.L["SYN_SKIN_ENC_B"],
         },
     },
 }

@@ -312,13 +312,13 @@ ProfessionHelper.Tailoring = {
         {
             profession = "Enchanting",
             type       = "primary",
-            benefit    = "Melhor combinação para casters sem gathering. Craft itens de pano baratos e desencante para materials. Perfeito para leveling.",
-            tip        = "Craft Netherweave Bags — se der lucro no AH, venda. Se não, desencante para Arcane Dust.",
+            benefit    = ProfessionHelper.L["SYN_TLR_ENC_B"],
+            tip        = ProfessionHelper.L["SYN_TLR_ENC_T"],
         },
         {
             profession = "Inscription",
             type       = "gold",
-            benefit    = "Tailors usam Enchanting Vellums (feitos por Scribes) para armazenar encantamentos no AH.",
+            benefit    = ProfessionHelper.L["SYN_TLR_INS_B"],
         },
     },
 }

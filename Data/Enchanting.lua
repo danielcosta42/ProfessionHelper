@@ -346,18 +346,18 @@ ProfessionHelper.Enchanting = {
         {
             profession = "Tailoring",
             type       = "primary",
-            benefit    = "A melhor combinação para quem não tem profissão de gathering. Tailor cria itens para DE, Enchanting processa tudo em materiais e encanta o resultado.",
-            tip        = "Craft Netherweave Bags ou Wool Cloth items — desencante tudo para materials de Enchanting.",
+            benefit    = ProfessionHelper.L["SYN_ENC_TLR_B"],
+            tip        = ProfessionHelper.L["SYN_ENC_TLR_T"],
         },
         {
             profession = "Blacksmithing",
             type       = "gold",
-            benefit    = "Blacksmiths podem ser encantados por Enchanters para maior valor de revenda. Itens craftados DEáveis geram Arcane Dust e Illusion Dust.",
+            benefit    = ProfessionHelper.L["SYN_ENC_BS_B"],
         },
         {
             profession = "Inscription",
             type       = "gold",
-            benefit    = "Scribes criam Enchanting Vellums para vender encantamentos no AH! Alta sinergia de mercado.",
+            benefit    = ProfessionHelper.L["SYN_ENC_INS_B"],
         },
     },
 }

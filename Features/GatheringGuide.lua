@@ -392,6 +392,11 @@ local TRAIL_YARDS_MINI  = 24
 -- crowd-sourced collection over time — same model, just no pre-load.
 local PROF_NTYPE = { Herbalism = "herb", Mining = "ore", Skinning = "skin", Fishing = "fish" }
 
+-- Node types with no sensible hand-drawn land loop: fishing happens at water/pools,
+-- so a generic zone loop would run over land. These route ONLY from real collected
+-- nodes (crowd-sourced fishing spots) and show nothing until enough exist.
+local NODE_ONLY = { fish = true }
+
 -- Turn a cloud of real node positions into a clean farming loop:
 -- 1) spatially thin so waypoints are evenly spread (dots don't pile up in dense
 --    clusters); 2) nearest-neighbor for an initial order; 3) a 2-opt pass to
@@ -868,6 +873,7 @@ function GG:UpdateRouteForStep(step)
         if not zoneName then return false end
         local n, mid = nodeCount(zoneName)
         if not mid then return false end
+        if NODE_ONLY[ntype or ""] then return n >= 6 end
         return n >= 6 or ZONE_ROUTES[zoneName] ~= nil
     end
 
@@ -899,6 +905,7 @@ function GG:UpdateRouteForStep(step)
 
     local mapID = ZONE_MAP_IDS[zone]
     local route = ZONE_ROUTES[zone]
+    if NODE_ONLY[ntype or ""] then route = nil end  -- fishing: water spots only
 
     -- Prefer a route built from REAL nodes (baked-in seed + crowd-sourced via the
     -- mesh) for this profession, so it's accurate; fall back to the hand-drawn loop.

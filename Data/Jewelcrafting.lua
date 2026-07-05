@@ -305,18 +305,18 @@ ProfessionHelper.Jewelcrafting = {
         {
             profession = "Mining",
             type       = "primary",
-            benefit    = "Prospectar ore é o core de JC. Mining fornece Saronite, Titanium e Elementium para prospectar e obter gemas raras.",
-            tip        = "Prospectar Saronite Ore em lotes é a maior fonte de gemas WotLK. Buy low, prospect, sell gems.",
+            benefit    = ProfessionHelper.L["SYN_JC_MIN_B"],
+            tip        = ProfessionHelper.L["SYN_JC_MIN_T"],
         },
         {
             profession = "Enchanting",
             type       = "economy",
-            benefit    = "Gemas e encantamentos são sempre comprados juntos ao montar gear de raid. Combina muito bem.",
+            benefit    = ProfessionHelper.L["SYN_JC_ENC_B"],
         },
         {
             profession = "Blacksmithing",
             type       = "economy",
-            benefit    = "Blacksmiths criam soquetes extras em Bracers e Gloves. JC preenchem com gemas JC exclusivas (Dragon's Eye — 3 por JC, não trocáveis).",
+            benefit    = ProfessionHelper.L["SYN_JC_BS_B"],
         },
     },
 }

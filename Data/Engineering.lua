@@ -626,18 +626,18 @@ ProfessionHelper.Engineering = {
         {
             profession = "Mining",
             type       = "primary",
-            benefit    = "Engineering consome TODOS os tipos de ore/bar. Mining fornece materiais de forma gratuita e permite leveling sem custo.",
-            tip        = "Cobalt, Saronite e Titanium são essenciais para Engineering 350-450. Mine e smelt tudo.",
+            benefit    = ProfessionHelper.L["SYN_ENG_MIN_B"],
+            tip        = ProfessionHelper.L["SYN_ENG_MIN_T"],
         },
         {
             profession = "Blacksmithing",
             type       = "economy",
-            benefit    = "Compartilham os mesmos materiais de Mining. Em raides, ambas têm forte demanda de bars e kits.",
+            benefit    = ProfessionHelper.L["SYN_ENG_BS_B"],
         },
         {
             profession = "Alchemy",
             type       = "gold",
-            benefit    = "Engineers com Alchemy podem criar e usar goggles + flasks/elixirs para máximo de performance. Forte combo PvE.",
+            benefit    = ProfessionHelper.L["SYN_ENG_ALC_B"],
         },
     },
 }

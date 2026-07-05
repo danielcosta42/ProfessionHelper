@@ -639,25 +639,25 @@ ProfessionHelper.Mining = {
         {
             profession = "Blacksmithing",
             type       = "primary",
-            benefit    = "Blacksmiths consomem grandes volumes de ore/bar. Mine e smelt seus próprios materiais economizando 50-70% de custo.",
-            tip        = "Saronite Bar e Cobalt Bar são essenciais para Blacksmithing 350-450.",
+            benefit    = ProfessionHelper.L["SYN_MIN_BS_B"],
+            tip        = ProfessionHelper.L["SYN_MIN_BS_T"],
         },
         {
             profession = "Engineering",
             type       = "primary",
-            benefit    = "Engineering usa quase todos os ores/bars existentes. Mining permite leveling grátis dos dois.",
-            tip        = "Titansteel Bar (CD diário) vale muito no AH — essencial para Engineers e Blacksmiths de alto nível.",
+            benefit    = ProfessionHelper.L["SYN_MIN_ENG_B"],
+            tip        = ProfessionHelper.L["SYN_MIN_ENG_T"],
         },
         {
             profession = "Jewelcrafting",
             type       = "primary",
-            benefit    = "JC prospeta ores para gemas raras. Mine + prospecte Saronite/Titanium para gemas de raid.",
-            tip        = "Prospectar Saronite Ore em grandes volumes é uma das maiores fontes de gemas de raid WotLK.",
+            benefit    = ProfessionHelper.L["SYN_MIN_JC_B"],
+            tip        = ProfessionHelper.L["SYN_MIN_JC_T"],
         },
         {
             profession = "Herbalism",
             type       = "economy",
-            benefit    = "Gathering duplo no mesmo percurso de voo. Maximiza renda por hora de farm.",
+            benefit    = ProfessionHelper.L["SYN_MIN_HERB_B"],
         },
     },
 }

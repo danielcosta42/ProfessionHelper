@@ -307,18 +307,18 @@ ProfessionHelper.Alchemy = {
         {
             profession = "Herbalism",
             type       = "primary",
-            benefit    = "Fornece 100% das herbs gratuitamente. A combinação mais forte do jogo para leveling + renda passiva.",
-            tip        = "Suba Herbalism + Alchemy juntas — role herb em qualquer zona e processe tudo.",
+            benefit    = ProfessionHelper.L["SYN_ALC_HERB_B"],
+            tip        = ProfessionHelper.L["SYN_ALC_HERB_T"],
         },
         {
             profession = "Inscription",
             type       = "gold",
-            benefit    = "Ambas usam herbs. Alquimistas fazem flask/elixir de alta demanda; Scribes fazem glyphs. Compartilhe coleta de herbs.",
+            benefit    = ProfessionHelper.L["SYN_ALC_INS_B"],
         },
         {
             profession = "Jewelcrafting",
             type       = "gold",
-            benefit    = "Elixir of Expertise (+35 Expertise) é BiS para JC durante leveling de raides. Alta demanda no AH.",
+            benefit    = ProfessionHelper.L["SYN_ALC_JC_B"],
         },
     },
 }

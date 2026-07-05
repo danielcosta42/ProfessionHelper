@@ -292,13 +292,13 @@ ProfessionHelper.Leatherworking = {
         {
             profession = "Skinning",
             type       = "primary",
-            benefit    = "Sinergia clássica: Skinner fornece leather diretamente para LW. Zero custo de materials, leveling completo.",
-            tip        = "Nagrand (Talbuks, Clefthoofs) é a melhor zona para Knothide Leather. WotLK: Dragonblight/Howling Fjord para Arctic Fur.",
+            benefit    = ProfessionHelper.L["SYN_LW_SKIN_B"],
+            tip        = ProfessionHelper.L["SYN_LW_SKIN_T"],
         },
         {
             profession = "Enchanting",
             type       = "gold",
-            benefit    = "Craft itens de couro descartáveis e desencante para materials de Enchanting. Cadeia de valor total.",
+            benefit    = ProfessionHelper.L["SYN_LW_ENC_B"],
         },
     },
 }

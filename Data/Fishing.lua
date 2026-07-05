@@ -126,7 +126,7 @@ ProfessionHelper.Fishing = {
                     recommended = ProfessionHelper.L["FISHING_LOC_10_REC"],
                 },
                 {
-                    zone = "Alterac Mountains / Swamp of Sorrows",
+                    zone = "Alterac Mountains",
                     faction = "Both",
                     spot = ProfessionHelper.L["FISHING_LOC_11_SPOT"],
                     tips = ProfessionHelper.L["FISHING_LOC_11_TIP"],
@@ -233,7 +233,7 @@ ProfessionHelper.Fishing = {
                     },
                 },
                 {
-                    zone = "Terokkar Forest - Highland Mixed Schools",
+                    zone = "Terokkar Forest",
                     faction = "Both",
                     spot = ProfessionHelper.L["FISHING_LOC_21_SPOT"],
                     tips = ProfessionHelper.L["FISHING_LOC_21_TIP"],

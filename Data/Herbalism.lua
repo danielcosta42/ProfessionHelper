@@ -555,19 +555,19 @@ ProfessionHelper.Herbalism = {
         {
             profession = "Alchemy",
             type       = "primary",
-            benefit    = "A sinergia número 1 do jogo: herbs direto para flasks, elixires e poções. Mil% de retorno sobre custo zero.",
-            tip        = "Northrend: Adder's Tongue (Sholazar Basin) e Goldclover (Grizzly Hills) são as herbs mais versáteis.",
+            benefit    = ProfessionHelper.L["SYN_HERB_ALC_B"],
+            tip        = ProfessionHelper.L["SYN_HERB_ALC_T"],
         },
         {
             profession = "Inscription",
             type       = "primary",
-            benefit    = "Herbs são moaías para Pigments → Inks → Glyphs. Use o Ink Trader em Dalaran para simplificar.",
-            tip        = "Colheita de herbs baratas (Goldclover, Adder's Tongue) cobre TODO o nivelamento de Inscription.",
+            benefit    = ProfessionHelper.L["SYN_HERB_INS_B"],
+            tip        = ProfessionHelper.L["SYN_HERB_INS_T"],
         },
         {
             profession = "Mining",
             type       = "economy",
-            benefit    = "Gathering duplo: herb+ore em uma única volta do mapa. Ideal para acumular materiais para craftings.",
+            benefit    = ProfessionHelper.L["SYN_HERB_MIN_B"],
         },
     },
 }
