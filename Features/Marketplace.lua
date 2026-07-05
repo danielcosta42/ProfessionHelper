@@ -161,7 +161,9 @@ end
 -- (RecipeTracker). Lets the UI resolve a real icon + tooltip for craftables.
 function MP:OutputItemID(name)
     if not name then return nil end
-    return PH.DB:Get("craftOutputs." .. name)
+    local co = PH.DB:Get("craftOutputs")
+    local v = (type(co) == "table") and co[name]
+    return (type(v) == "number") and v or nil
 end
 
 -- Cooldown state for a cooldown-gated recipe (transmute, cloths), or nil.

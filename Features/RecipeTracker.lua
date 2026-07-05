@@ -54,15 +54,18 @@ function RT:ScanOpenTradeSkill()
     PH.DB:Ensure(basePath)
 
     local count = 0
+    -- Crafted-item id map: index by the literal recipe NAME (a dot-path would
+    -- corrupt the tree for names containing a "."), for marketplace icons/matching.
+    PH.DB:Ensure("craftOutputs")
+    local craftOutputs = PH.DB:Get("craftOutputs")
     for i = 1, GetNumTradeSkills() do
         local skillName, skillType = GetTradeSkillInfo(i)
         if skillName and skillType ~= "header" then
             PH.DB:Set(basePath .. "." .. skillName, true)
-            -- Capture the crafted item's id (for marketplace icons + exact matching).
             local link = GetTradeSkillItemLink and GetTradeSkillItemLink(i)
             local itemID = link and tonumber(link:match("item:(%d+)"))
-            if itemID then
-                PH.DB:Set("craftOutputs." .. skillName, itemID)
+            if itemID and type(craftOutputs) == "table" then
+                craftOutputs[skillName] = itemID
             end
             count = count + 1
         end

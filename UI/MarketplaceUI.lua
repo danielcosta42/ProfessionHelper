@@ -61,13 +61,14 @@ end
 
 -- Resolve an item's icon + a tooltip-able link from an itemID (preferred) or name.
 local function ItemIconFor(itemID, name)
+    if type(itemID) ~= "number" then itemID = nil end
     if itemID and GetItemInfo then GetItemInfo(itemID) end -- prime the cache (async load)
     local ic = GetItemIcon and GetItemIcon(itemID or name)
     return ic or "Interface\\Icons\\INV_Misc_QuestionMark"
 end
 
 local function ItemLinkFor(itemID, name)
-    if itemID then
+    if type(itemID) == "number" then
         return "item:" .. itemID
     end
     if name and GetItemInfo then
