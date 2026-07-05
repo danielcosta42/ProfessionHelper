@@ -56,6 +56,7 @@ Data\Dailies.lua
 Data\Specializations.lua
 Data\Primals.lua
 Data\BiS.lua
+Data\GatherSeed.lua
 Features\TSMIntegration.lua
 Features\BagScanner.lua
 Features\RecipeTracker.lua
@@ -69,6 +70,7 @@ Features\CooldownTracker.lua
 Features\FishingAssist.lua
 Features\RepTracker.lua
 Features\Marketplace.lua
+Features\GatherData.lua
 Core\Init.lua
 UI\Main.lua
 UI\FarmTrackerUI.lua

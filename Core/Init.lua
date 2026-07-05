@@ -576,6 +576,7 @@ local function OnAddonLoaded()
     if PH.AltManager      then PH.AltManager:Initialize()       end
     if PH.FishingAssist   then PH.FishingAssist:Initialize()    end
     if PH.Marketplace     then PH.Marketplace:Initialize()      end
+    if PH.GatherData      then PH.GatherData:Initialize()       end
 
     -- 4. Minimap button
     PH:CreateMinimapButton()

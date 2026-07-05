@@ -373,6 +373,63 @@ local REF_KEY = "PHGatherRoute"
 -- Advance threshold in yards
 local WP_ADVANCE_DIST = 60
 
+-- Crisp anti-aliased circle (pure white, tinted per-dot). Full path incl. .tga
+-- (the LibSharedMedia convention that loads reliably on Classic/TBC clients).
+-- Teal = our accent, gold = current/next WP.
+local DOT_TEX     = "Interface\\AddOns\\ProfessionHelper\\Media\\route-dot.tga"
+local COL_NORMAL  = { 0.16, 0.86, 0.70 }
+local COL_CURRENT = { 1.00, 0.80, 0.24 }
+local COL_TRAIL   = { 0.16, 0.86, 0.70 }
+
+-- Profession -> collected node type (GatherData).
+local PROF_NTYPE = { Herbalism = "herb", Mining = "ore" }
+
+-- Turn a cloud of real node positions into a clean farming loop.
+-- 1) Spatially thin so waypoints are evenly spread (dots don't pile up in the
+--    dense node clusters); 2) order them with greedy nearest-neighbor.
+local function BuildNodeRoute(nodes)
+    local MINSPACE = 0.045          -- min map-fraction gap between waypoints
+    local MIN2 = MINSPACE * MINSPACE
+    local MAXWP = 50
+
+    local kept = {}
+    for _, n in ipairs(nodes) do
+        local x, y = n[1], n[2]
+        local ok = true
+        for _, k in ipairs(kept) do
+            local dx, dy = x - k[1], y - k[2]
+            if dx * dx + dy * dy < MIN2 then ok = false; break end
+        end
+        if ok then
+            kept[#kept + 1] = { x, y }
+            if #kept >= MAXWP then break end
+        end
+    end
+
+    -- Very small / tight zones can thin down to <2: fall back to the raw cloud.
+    if #kept < 2 then
+        kept = {}
+        for _, n in ipairs(nodes) do kept[#kept + 1] = { n[1], n[2] } end
+    end
+    if #kept < 2 then return nil end
+
+    local route, used = { kept[1] }, { [1] = true }
+    for _ = 2, #kept do
+        local cx, cy = route[#route][1], route[#route][2]
+        local best, bd = nil, math.huge
+        for j, p in ipairs(kept) do
+            if not used[j] then
+                local d = (p[1] - cx) ^ 2 + (p[2] - cy) ^ 2
+                if d < bd then bd = d; best = j end
+            end
+        end
+        if not best then break end
+        used[best] = true
+        route[#route + 1] = kept[best]
+    end
+    return route
+end
+
 -- Create a waypoint numbered dot for the world map
 local function CreateWPDot(index, isCurrent)
     local dot = table.remove(wpDotPool)
@@ -381,16 +438,17 @@ local function CreateWPDot(index, isCurrent)
         dot:SetFrameStrata("TOOLTIP")
         dot:SetFrameLevel(200)
 
-        local border = dot:CreateTexture(nil, "BORDER")
-        border:SetPoint("TOPLEFT", -2, 2)
-        border:SetPoint("BOTTOMRIGHT", 2, -2)
-        border:SetTexture("Interface\\Buttons\\WHITE8X8")
-        border:SetVertexColor(0, 0, 0, 0.9)
-        dot.border = border
+        -- soft dark rim/shadow so the dot reads on any map background
+        local shadow = dot:CreateTexture(nil, "BACKGROUND")
+        shadow:SetPoint("TOPLEFT", -2.5, 2.5)
+        shadow:SetPoint("BOTTOMRIGHT", 2.5, -2.5)
+        shadow:SetTexture(DOT_TEX)
+        shadow:SetVertexColor(0, 0, 0, 0.55)
+        dot.shadow = shadow
 
         local tex = dot:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture("Interface\\Buttons\\WHITE8X8")
+        tex:SetTexture(DOT_TEX)
         dot.tex = tex
 
         local num = dot:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -400,19 +458,16 @@ local function CreateWPDot(index, isCurrent)
         dot.isDot = true
     end
 
-    if isCurrent then
-        dot.tex:SetVertexColor(0.15, 1.0, 0.4, 1)
-        dot:SetSize(18, 18)
-    else
-        dot.tex:SetVertexColor(1, 1, 1, 0.95)
-        dot:SetSize(14, 14)
-    end
-    dot.num:SetText("|cff000000" .. index .. "|r")
+    local c = isCurrent and COL_CURRENT or COL_NORMAL
+    dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
+    local s = isCurrent and 17 or 12
+    dot:SetSize(s, s)
+    dot.num:SetText("|cff042018" .. index .. "|r")
     dot:Show()
     return dot
 end
 
--- Create a small trail dot (forms the "line" between waypoints)
+-- Create a small trail dot (forms the dotted "line" between waypoints)
 local function CreateTrailDot()
     local f = table.remove(trailPool)
     if not f then
@@ -420,16 +475,22 @@ local function CreateTrailDot()
         f:SetFrameStrata("HIGH")
         f:SetFrameLevel(100)
 
+        local shadow = f:CreateTexture(nil, "BACKGROUND")
+        shadow:SetPoint("TOPLEFT", -1, 1)
+        shadow:SetPoint("BOTTOMRIGHT", 1, -1)
+        shadow:SetTexture(DOT_TEX)
+        shadow:SetVertexColor(0, 0, 0, 0.35)
+
         local tex = f:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture("Interface\\Buttons\\WHITE8X8")
-        tex:SetVertexColor(1, 1, 1, 0.9)
+        tex:SetTexture(DOT_TEX)
+        tex:SetVertexColor(COL_TRAIL[1], COL_TRAIL[2], COL_TRAIL[3], 0.85)
         f.tex = tex
 
         f.isDot = false
     end
 
-    f:SetSize(3, 3)
+    f:SetSize(4, 4)
     f:Show()
     return f
 end
@@ -466,7 +527,9 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
     -- handled by GatherMate2's version, making routes invisible.
     local showFlag = HBD_PINS_WORLDMAP_SHOW_PARENT or 1
 
-    -- First: draw trail dots between all waypoints (line effect)
+    -- First: evenly-spaced trail dots between waypoints (a clean dotted line, not
+    -- a dense smear). Interior points only, so they don't sit under the WP dots.
+    local SPACING = 0.02
     for i = 1, #route do
         local next_i = (i % #route) + 1
         local x1, y1 = route[i][1], route[i][2]
@@ -474,15 +537,12 @@ function GG:PlotRouteOnWorldMap(zoneName, mapID, route)
 
         local dx, dy = x2 - x1, y2 - y1
         local dist = math.sqrt(dx * dx + dy * dy)
-        local count = math.max(15, math.floor(dist * 300))
+        local count = math.floor(dist / SPACING)
 
-        for t = 0, count do
+        for t = 1, count - 1 do
             local frac = t / count
-            local mx = x1 + dx * frac
-            local my = y1 + dy * frac
-
             local trail = CreateTrailDot()
-            pins:AddWorldMapIconMap(REF_KEY, trail, mapID, mx, my, showFlag)
+            pins:AddWorldMapIconMap(REF_KEY, trail, mapID, x1 + dx * frac, y1 + dy * frac, showFlag)
             table.insert(routeFrames, trail)
         end
     end
@@ -508,13 +568,11 @@ function GG:RefreshRouteDots()
     for _, f in ipairs(routeFrames) do
         if f.isDot then
             dotIndex = dotIndex + 1
-            if dotIndex == self.currentWP then
-                f.tex:SetVertexColor(0.15, 1.0, 0.4, 1)
-                f:SetSize(18, 18)
-            else
-                f.tex:SetVertexColor(1, 1, 1, 0.95)
-                f:SetSize(14, 14)
-            end
+            local isCur = (dotIndex == self.currentWP)
+            local c = isCur and COL_CURRENT or COL_NORMAL
+            f.tex:SetVertexColor(c[1], c[2], c[3], 1)
+            local s = isCur and 17 or 12
+            f:SetSize(s, s)
         end
     end
 end
@@ -535,16 +593,16 @@ local function CreateMinimapWPDot(index, isNext)
         dot:SetFrameStrata("TOOLTIP")
         dot:SetFrameLevel(200)
 
-        local bg = dot:CreateTexture(nil, "BORDER")
+        local bg = dot:CreateTexture(nil, "BACKGROUND")
         bg:SetPoint("TOPLEFT", -2, 2)
         bg:SetPoint("BOTTOMRIGHT", 2, -2)
-        bg:SetTexture("Interface\\Buttons\\WHITE8X8")
-        bg:SetVertexColor(0, 0, 0, 0.9)
+        bg:SetTexture(DOT_TEX)
+        bg:SetVertexColor(0, 0, 0, 0.55)
         dot.bg = bg
 
         local tex = dot:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture("Interface\\Buttons\\WHITE8X8")
+        tex:SetTexture(DOT_TEX)
         dot.tex = tex
 
         local num = dot:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
@@ -554,20 +612,21 @@ local function CreateMinimapWPDot(index, isNext)
         dot.isWP = true
     end
 
+    local c = isNext and COL_CURRENT or COL_NORMAL
+    dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
+    dot:SetSize(isNext and 14 or 10, isNext and 14 or 10)
+    -- number only on the "next" dot; the small ones stay clean
     if isNext then
-        dot:SetSize(14, 14)
-        dot.tex:SetVertexColor(0.15, 1.0, 0.4, 1)
+        dot.num:SetText("|cff042018" .. index .. "|r")
+        dot.num:Show()
     else
-        dot:SetSize(10, 10)
-        dot.tex:SetVertexColor(1, 1, 1, 0.95)
+        dot.num:Hide()
     end
-    dot.num:SetText("|cff000000" .. index .. "|r")
-    dot.num:Show()
     dot:Show()
     return dot
 end
 
--- Create a minimap trail dot (no border, small, white)
+-- Create a minimap trail dot (small teal, dotted-line effect)
 local function CreateMinimapTrailDot()
     local f = table.remove(minimapTrailPool)
     if not f then
@@ -577,14 +636,14 @@ local function CreateMinimapTrailDot()
 
         local tex = f:CreateTexture(nil, "ARTWORK")
         tex:SetAllPoints()
-        tex:SetTexture("Interface\\Buttons\\WHITE8X8")
-        tex:SetVertexColor(1, 1, 1, 0.9)
+        tex:SetTexture(DOT_TEX)
+        tex:SetVertexColor(COL_TRAIL[1], COL_TRAIL[2], COL_TRAIL[3], 0.8)
         f.tex = tex
 
         f.isWP = false
     end
 
-    f:SetSize(2, 2)
+    f:SetSize(3, 3)
     f:Show()
     return f
 end
@@ -610,21 +669,21 @@ function GG:PlotMinimapRoute()
     local mapID = self.routeMapID
     if not route or not mapID or #route < 2 then return end
 
-    -- First: trail dots between waypoints (line effect)
+    -- First: evenly-spaced trail dots between waypoints (finer than the world map
+    -- since the minimap is zoomed in).
+    local SPACING = 0.008
     for i = 1, #route do
         local next_i = (i % #route) + 1
         local x1, y1 = route[i][1], route[i][2]
         local x2, y2 = route[next_i][1], route[next_i][2]
         local dx, dy = x2 - x1, y2 - y1
         local dist = math.sqrt(dx * dx + dy * dy)
-        local count = math.max(8, math.floor(dist * 300))
+        local count = math.floor(dist / SPACING)
 
-        for t = 0, count do
+        for t = 1, count - 1 do
             local frac = t / count
-            local mx = x1 + dx * frac
-            local my = y1 + dy * frac
             local trail = CreateMinimapTrailDot()
-            pins:AddMinimapIconMap(MINIMAP_REF, trail, mapID, mx, my, false, false)
+            pins:AddMinimapIconMap(MINIMAP_REF, trail, mapID, x1 + dx * frac, y1 + dy * frac, false, false)
             table.insert(activeMinimapDots, trail)
         end
     end
@@ -726,19 +785,40 @@ function GG:UpdateRouteForStep(step)
 
     BuildZoneMapIDs()
 
-    -- Find zone: prefer one matching player zone, else best location
+    local ntype = PROF_NTYPE[GG.profName or ""]
+
+    -- How many real nodes (seed + crowd-sourced) we have for a zone/profession.
+    local function nodeCount(zoneName)
+        local mid = ZONE_MAP_IDS[zoneName]
+        if mid and ntype and PH.GatherData then
+            return #PH.GatherData:GetNodes(mid, ntype), mid
+        end
+        return 0, mid
+    end
+
+    -- A zone is usable if we can map it AND have either real node data OR a
+    -- hand-drawn fallback loop. (Seed data now covers far more zones than the
+    -- hardcoded routes, so we no longer require ZONE_ROUTES to exist.)
+    local function usable(zoneName)
+        if not zoneName then return false end
+        local n, mid = nodeCount(zoneName)
+        if not mid then return false end
+        return n >= 6 or ZONE_ROUTES[zoneName] ~= nil
+    end
+
+    -- Find zone: prefer the one matching the player's current zone, else first usable.
     local zone = nil
     local pZone = self:GetPlayerZone()
     if step.locations then
         for _, loc in ipairs(step.locations) do
-            if loc.zone == pZone and ZONE_ROUTES[loc.zone] then
+            if loc.zone == pZone and usable(loc.zone) then
                 zone = loc.zone
                 break
             end
         end
         if not zone then
             for _, loc in ipairs(step.locations) do
-                if ZONE_ROUTES[loc.zone] then
+                if usable(loc.zone) then
                     zone = loc.zone
                     break
                 end
@@ -754,6 +834,17 @@ function GG:UpdateRouteForStep(step)
 
     local mapID = ZONE_MAP_IDS[zone]
     local route = ZONE_ROUTES[zone]
+
+    -- Prefer a route built from REAL nodes (baked-in seed + crowd-sourced via the
+    -- mesh) for this profession, so it's accurate; fall back to the hand-drawn loop.
+    self.routeIsNodes = false
+    if mapID and ntype and PH.GatherData then
+        local nodes = PH.GatherData:GetNodes(mapID, ntype)
+        if nodes and #nodes >= 6 then
+            local nr = BuildNodeRoute(nodes)
+            if nr then route = nr; self.routeIsNodes = true end
+        end
+    end
 
     if not mapID or not route then
         self:ClearRouteDisplay()
