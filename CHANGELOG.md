@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.28.0] - 2026-07-05
+
+### Added
+- accurate gather routes from real Wowhead node data + polished waypoints
+
+
 ## [1.27.1] - 2026-07-05
 
 ### Fixed
