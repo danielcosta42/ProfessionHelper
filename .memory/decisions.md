@@ -243,3 +243,33 @@ cruzamentos; removeu os saltos longos que faziam a rota "zigzagar" — pior ares
 (`Media/route-glow.tga`, ADD blend) com dots espaçados por **jardas reais** (via `HBD:GetZoneSize`,
 não mais fração de mapa) + halo de brilho nos marcadores. Prévia validada com dados reais de
 Tirisfal antes do deploy.
+
+---
+
+## ADR-0010 — Modelo de rota estendido a Skinning/Fishing + auditoria de dados (v1.29.0)
+
+**Status:** Aceito (parcial — parity feito; gaps de qualidade catalogados).
+
+**Context:** Depois do sucesso das rotas de herb/ore (seed Wowhead + node route + 2-opt + glow),
+pedido de "todas as profissões no mesmo modelo e qualidade". Auditoria dos 18 arquivos de Data.
+
+**Decision:**
+- **Skinning (8613) e Fishing (7620)** entram no mesmo pipeline de coleta crowd-source do GatherData
+  → PROF_NTYPE skin/fish → node route + 2-opt + glow. **Sem seed** (GatherMate2 não mapeia mob/água),
+  então preenchem pelo uso e via mesh. Coleta agora casa por **nome de spell** (além do ID) p/ pegar
+  os vários ranks de Fishing + locales. Removidos IDs falsos (2383 = tracking Find Herbs, não coleta).
+- **Fishing.lua `type="gathering"`** (apesar do registry dizer "secondary") — é *load-bearing*: é o que
+  faz o Fishing mostrar a rota (Main.lua:933 usa `profData.type`). NÃO mudar.
+- Corrigido `faction="Respective"` inválido (Fishing.lua) → "Both" (escondia a location de todos).
+
+**Gaps de qualidade achados (pendentes, NÃO corrigidos — precisam de decisão/verificação):**
+1. Texto de `synergies` hardcoded em **português** em ~11 arquivos EN (Alchemy:310, BS:342, Eng:629…) —
+   inconsistência de localização (users EN/ES veem PT).
+2. farmingLocations de Herb/Mining: tiers 1–375 usam locale keys, 375–525 hardcoded EN. Inscription/
+   Archaeology 100% hardcoded EN.
+3. `materials = {}` vazio em TODOS os 23 steps dos 3 guias combo.
+4. Nomes de zona vagos no Fishing ("Any Starting Zone") não resolvem mapID → rota não aparece.
+5. Drift de chaves em farmingLocations (Fishing usa spot/recommended; Skinning add mobs) — cosmético.
+
+**Consequences:** modelo de rota agora uniforme p/ as 3 gathering + fishing. Qualidade de *dados*
+(localização/combos) fica como próximo lote, priorizado pelo usuário.
