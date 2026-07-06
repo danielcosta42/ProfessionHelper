@@ -75,6 +75,7 @@ Features\FishingAssist.lua
 Features\RepTracker.lua
 Features\Marketplace.lua
 Features\GatherData.lua
+Features\GatherPins.lua
 Core\Init.lua
 UI\Main.lua
 UI\FarmTrackerUI.lua

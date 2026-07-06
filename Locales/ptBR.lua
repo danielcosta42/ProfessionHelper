@@ -1067,4 +1067,10 @@ ProfessionHelper._Locales["ptBR"] = {
     -- Gathering: cave entrance marker
     ["GATHER_CAVE_TITLE"] = "Caverna",
     ["GATHER_CAVE_DESC"] = "Há nós lá dentro — entre na caverna para ver a rota.",
+
+
+    -- Live gather-node pins (/ph pins)
+    ["GATHER_PINS_ON"] = "Pins de nós LIGADOS — |cff5cdb66ervas|r |cfff29438minério|r |cffcc945ccouro|r |cff57b8ffpesca|r",
+    ["GATHER_PINS_OFF"] = "Pins de nós DESLIGADOS",
+    ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - liga/desliga os pins de nós de coleta no mapa",
 }

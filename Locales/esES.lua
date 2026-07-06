@@ -1067,4 +1067,10 @@ ProfessionHelper._Locales["esES"] = {
     -- Gathering: cave entrance marker
     ["GATHER_CAVE_TITLE"] = "Cueva",
     ["GATHER_CAVE_DESC"] = "Hay nodos dentro: entra en la cueva para ver la ruta.",
+
+
+    -- Live gather-node pins (/ph pins)
+    ["GATHER_PINS_ON"] = "Pines de nodos ACTIVADOS — |cff5cdb66hierbas|r |cfff29438mineral|r |cffcc945cdesuello|r |cff57b8ffpesca|r",
+    ["GATHER_PINS_OFF"] = "Pines de nodos DESACTIVADOS",
+    ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - activa/desactiva los pines de nodos en el mapa",
 }

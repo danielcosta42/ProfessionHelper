@@ -1067,4 +1067,10 @@ ProfessionHelper._Locales["enUS"] = {
     -- Gathering: cave entrance marker
     ["GATHER_CAVE_TITLE"] = "Cave",
     ["GATHER_CAVE_DESC"] = "There are nodes inside — enter the cave to see the route.",
+
+
+    -- Live gather-node pins (/ph pins)
+    ["GATHER_PINS_ON"] = "Node pins ON — |cff5cdb66herbs|r |cfff29438ore|r |cffcc945cskinning|r |cff57b8fffishing|r",
+    ["GATHER_PINS_OFF"] = "Node pins OFF",
+    ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - toggle live gather-node pins on the world map",
 }

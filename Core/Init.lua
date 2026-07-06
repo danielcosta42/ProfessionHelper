@@ -291,6 +291,13 @@ function PH:HandleSlashCommand(msg)
     elseif cmd == "fish" or cmd == "fishing" then
         self:ShowFishingAssistUI()
 
+    elseif cmd == "pins" or cmd == "nodes" then
+        if PH.GatherPins then
+            local on = PH.GatherPins:Toggle()
+            PH.Logger.Info(on and (self.L["GATHER_PINS_ON"] or "Node pins ON")
+                              or (self.L["GATHER_PINS_OFF"] or "Node pins OFF"))
+        end
+
     elseif cmd == "options" or cmd == "config" or cmd == "settings" then
         self:ShowOptionsUI()
 
@@ -315,6 +322,7 @@ function PH:HandleSlashCommand(msg)
         PH.Logger.Info(self.L["CMD_HELP_ALTS"])
         PH.Logger.Info(self.L["CMD_HELP_MARKET"])
         PH.Logger.Info(self.L["CMD_HELP_DE"])
+        PH.Logger.Info(self.L["CMD_HELP_PINS"])
         PH.Logger.Info(self.L["FA_CMD_HELP"])
         PH.Logger.Info(self.L["CMD_HELP_OPTIONS"])
         PH.Logger.Info(self.L["CMD_HELP_HELP"])
@@ -577,6 +585,7 @@ local function OnAddonLoaded()
     if PH.FishingAssist   then PH.FishingAssist:Initialize()    end
     if PH.Marketplace     then PH.Marketplace:Initialize()      end
     if PH.GatherData      then PH.GatherData:Initialize()       end
+    if PH.GatherPins      then PH.GatherPins:Initialize()       end
 
     -- 4. Minimap button
     PH:CreateMinimapButton()

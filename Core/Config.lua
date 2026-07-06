@@ -16,6 +16,7 @@ Config.DEFAULTS = {
     selectedProfession    = nil,
     showFarmingTips       = true,
     debug                 = false,
+    nodePins              = false, -- live gather-node pins on the world map (/ph pins)
 }
 
 -------------------------------------------------------------------------------
