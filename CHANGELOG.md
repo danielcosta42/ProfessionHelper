@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.33.0] - 2026-07-06
+
+### Added
+- crowd-sourced price index over the mesh
+
+
 ## [1.32.0] - 2026-07-06
 
 ### Added
