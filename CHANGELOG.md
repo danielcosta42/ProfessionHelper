@@ -2,6 +2,16 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.30.0] - 2026-07-06
+
+### Added
+- cave-aware gather routes — entrance marker + interior route
+- localize profession synergies (EN/PT/ES) + fishing polish
+
+### Other
+- Shared mesh -> LibChehulMesh v3 (AceComm-3.0 + ChatThrottleLib; realm bus now YELL). Identical file across the Chehul family.
+
+
 ## [1.29.0] - 2026-07-05
 
 ### Added
