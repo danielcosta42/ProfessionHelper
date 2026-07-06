@@ -86,9 +86,11 @@ function PH.TSM:GetItemPrice(itemName, priceSource)
         end
     end
 
-    -- Cache write on successful live-addon fetch
+    -- Cache write on successful live-addon fetch + share it over the mesh so peers
+    -- without an AH addon get a real price too (crowd-sourced price index).
     if price and price > 0 then
         WriteToCache(itemName, price, version)
+        PH.TSM:SharePrice(itemID, price)
         return price
     end
 
@@ -258,6 +260,80 @@ function PH.TSM:OpenShoppingScan(searchString)
     ShowCopyPopup(searchString)
     PH.Logger.Info(PH.L["TSM_PASTE_MSG"])
     return true
+end
+
+-------------------------------------------------------------------------------
+-- Crowd-sourced price index
+-- Share observed live AH prices over the shared mesh so peers WITHOUT TSM/
+-- Auctionator still get real prices — filled into the same 24h cache that
+-- GetItemPrice already falls back to. Batched + coalesced = light traffic. Peer
+-- data only fills gaps (never clobbers a price seen locally in the last 2h).
+-------------------------------------------------------------------------------
+PH.TSM.NET_PREFIX = "PHPrice"
+local pendingShare = {}   -- [itemID] = price, accumulated between timer flushes
+local idToName            -- lazy itemID -> itemName map (from PH.Materials)
+
+local function BuildIdMap()
+    idToName = {}
+    if type(PH.Materials) == "table" then
+        for name, m in pairs(PH.Materials) do
+            if type(m) == "table" and m.id then idToName[m.id] = name end
+        end
+    end
+end
+
+-- Queue an observed live price to share (deduped by item; flushed on a timer).
+function PH.TSM:SharePrice(itemID, price)
+    if not itemID or not price or price <= 0 then return end
+    if PH.Config:Get("price_share") == false then return end
+    pendingShare[itemID] = price
+end
+
+local function FlushPrices()
+    if not next(pendingShare) then return end
+    local mesh = _G.ChehulMesh
+    if not mesh then pendingShare = {}; return end
+    local parts, n = {}, 0
+    for id, price in pairs(pendingShare) do
+        parts[#parts + 1] = id .. ":" .. price
+        pendingShare[id] = nil -- consume; anything past the cap carries to the next flush
+        n = n + 1
+        if n >= 20 then break end
+    end
+    local payload = "PRB|" .. table.concat(parts, ";")
+    mesh:Guild(PH.TSM.NET_PREFIX, payload)                      -- guildies share a market
+    mesh:Realm(PH.TSM.NET_PREFIX, payload, PH.TSM.NET_PREFIX)   -- + zone-wide (AH cities)
+end
+
+-- A peer's price batch arrives: fill our cache for any item without fresh local data.
+function PH.TSM:OnNet(payload)
+    if type(payload) ~= "string" then return end
+    local proto, body = payload:match("^(PRB)|(.+)$")
+    if proto ~= "PRB" or not body then return end
+    if not idToName then BuildIdMap() end
+    for pair in string.gmatch(body, "[^;]+") do
+        local ids, ps = pair:match("^(%d+):(%d+)$")
+        local itemID, price = tonumber(ids), tonumber(ps)
+        if itemID and price and price > 0 then
+            local name = idToName[itemID]
+            if name then
+                local e = PH.DB:Get("ahPriceCache." .. name)
+                if not e or not e.ts or (time() - e.ts) > 7200 then
+                    WriteToCache(name, price, "peer")
+                end
+            end
+        end
+    end
+end
+
+function PH.TSM:InitNet()
+    BuildIdMap()
+    if _G.ChehulMesh then
+        _G.ChehulMesh:Register(PH.TSM.NET_PREFIX, function(payload) PH.TSM:OnNet(payload) end)
+    end
+    if C_Timer and C_Timer.NewTicker and not self._priceTicker then
+        self._priceTicker = C_Timer.NewTicker(20, FlushPrices)
+    end
 end
 
 -- Format copper value into gold/silver/copper display

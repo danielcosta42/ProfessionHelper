@@ -586,6 +586,7 @@ local function OnAddonLoaded()
     if PH.Marketplace     then PH.Marketplace:Initialize()      end
     if PH.GatherData      then PH.GatherData:Initialize()       end
     if PH.GatherPins      then PH.GatherPins:Initialize()       end
+    if PH.TSM and PH.TSM.InitNet then PH.TSM:InitNet()          end
 
     -- 4. Minimap button
     PH:CreateMinimapButton()
