@@ -2,6 +2,16 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.36.1] - 2026-07-06
+
+### Changed
+- Shared cross-addon presence (ChehulNet) bumped to v3: the HELLO now carries this
+  character's **layer** (`mapID:zoneUID`), detected via a built-in minimal detector, so
+  ProfessionHelper users (crafters!) are locatable by layer across the whole Chehul mesh —
+  a PartyLens user can now see "this Enchanter is on layer 3" and hop to them. Also answers
+  the `ChehulPing` RTT probe, so the network monitor can measure round-trip to PH users.
+  Ship-identical shared file across the Chehul addon family.
+
 ## [1.36.0] - 2026-07-06
 
 ### Added
