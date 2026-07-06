@@ -9,7 +9,9 @@ if not PH or not CN then
 end
 
 CN:Register("ph", function()
-    -- Advertise the professions this character can craft.
+    -- Advertise this character's professions, split into what it can craft vs
+    -- gather, so peers (and the marketplace) know both sides. e.g.
+    --   "craft:Alchemy/Enchanting,gather:Herbalism/Mining"
     if not (PH.AltManager and PH.Identity) then
         return ""
     end
@@ -17,14 +19,20 @@ CN:Register("ph", function()
     if type(list) ~= "table" or #list == 0 then
         return ""
     end
-    local names = {}
+    local craft, gather = {}, {}
     for _, prof in ipairs(list) do
-        if prof.name then
-            names[#names + 1] = prof.name
+        local name = prof.name
+        if name then
+            local data = PH.GetProfessionData and PH:GetProfessionData(name)
+            if data and data.type == "gathering" then
+                gather[#gather + 1] = name
+            else
+                craft[#craft + 1] = name
+            end
         end
     end
-    if #names == 0 then
-        return ""
-    end
-    return "craft:" .. table.concat(names, "/")
+    local parts = {}
+    if #craft > 0 then parts[#parts + 1] = "craft:" .. table.concat(craft, "/") end
+    if #gather > 0 then parts[#parts + 1] = "gather:" .. table.concat(gather, "/") end
+    return table.concat(parts, ",")
 end, nil)

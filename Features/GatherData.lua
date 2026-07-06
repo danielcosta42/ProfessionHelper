@@ -111,7 +111,9 @@ function GD:Count(mapID, ntype)
     return #self:GetNodes(mapID, ntype)
 end
 
--- Broadcast a node to mesh peers (guild + nearby). Off via gather_share = false.
+-- Broadcast a freshly-collected node to mesh peers. Guild + group + nearby (SAY) for
+-- instant delivery, PLUS the realm bus (zone-wide YELL, coalesced per node) so simply
+-- USING the addon feeds the whole realm's shared map. Off via gather_share = false.
 function GD:Broadcast(mapID, ntype, x, y)
     if PH.Config:Get("gather_share") == false then return end
     local mesh = _G.ChehulMesh
@@ -120,7 +122,9 @@ function GD:Broadcast(mapID, ntype, x, y)
         "GN1", mapID, ntype, math.floor(x * 10000), math.floor(y * 10000),
     }, "|")
     mesh:Guild(GD.PREFIX, payload)
+    mesh:Group(GD.PREFIX, payload)
     mesh:Proximity(GD.PREFIX, payload)
+    mesh:Realm(GD.PREFIX, payload) -- realm-wide (zone-wide YELL, coalesced by node)
 end
 
 -- A peer's node arrives over the mesh: store it (never re-broadcast).
@@ -131,6 +135,50 @@ function GD:OnNet(payload)
     mapID, xi, yi = tonumber(mapID), tonumber(xi), tonumber(yi)
     if mapID and ntype and xi and yi then
         self:Record(mapID, ntype, xi / 10000, yi / 10000, false)
+    end
+end
+
+-- Seedless node types (skin/fish have no baked-in Wowhead data) rely entirely on
+-- crowd-sourcing, so periodically radiate a small rotating window of the CURRENT
+-- zone's collected ones over the realm bus — the accumulated DB converges for
+-- everyone actually there. Herb/ore are skipped: everyone already ships the seed,
+-- so re-broadcasting them would be pure redundant traffic.
+local AMBIENT_TYPES = { skin = true, fish = true }
+local AMBIENT_BATCH = 4
+GD._ambientCursor = 0
+
+function GD:AmbientSync()
+    if PH.Config:Get("gather_share") == false then return end
+    local mesh = _G.ChehulMesh
+    if not mesh or not (C_Map and C_Map.GetBestMapForUnit) then return end
+    local mapID = C_Map.GetBestMapForUnit("player")
+    if not mapID then return end
+    local root = PH.DB:Get("gatherNodes")
+    local byType = type(root) == "table" and root[tostring(mapID)]
+    if type(byType) ~= "table" then return end
+
+    -- Flatten this zone's seedless nodes into a stable, ordered list.
+    local list = {}
+    for t in pairs(AMBIENT_TYPES) do
+        local set = byType[t]
+        if type(set) == "table" then
+            for p in pairs(set) do list[#list + 1] = { t, p } end
+        end
+    end
+    if #list == 0 then return end
+    table.sort(list, function(a, b)
+        if a[1] ~= b[1] then return a[1] < b[1] end
+        return a[2] < b[2]
+    end)
+
+    -- Radiate a rotating window (coalesced per node by the realm queue).
+    for _ = 1, math.min(AMBIENT_BATCH, #list) do
+        GD._ambientCursor = (GD._ambientCursor % #list) + 1
+        local item = list[GD._ambientCursor]
+        local x, y = Unpack(item[2])
+        mesh:Realm(GD.PREFIX, table.concat({
+            "GN1", mapID, item[1], math.floor(x * 10000), math.floor(y * 10000),
+        }, "|"))
     end
 end
 
@@ -166,5 +214,10 @@ function GD:Initialize()
     -- Receive peer nodes over the shared mesh.
     if _G.ChehulMesh then
         _G.ChehulMesh:Register(GD.PREFIX, function(payload) self:OnNet(payload) end)
+    end
+
+    -- Ambient realm-wide sync of seedless nodes for wherever the player is (bounded).
+    if C_Timer and C_Timer.NewTicker and not self._ambientTicker then
+        self._ambientTicker = C_Timer.NewTicker(30, function() self:AmbientSync() end)
     end
 end
