@@ -2,6 +2,15 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.36.1] - 2026-07-06
+
+### Fixed
+- complete luacheck WoW globals (UnitIsPlayer/UnitPlayerControlled/UnitGUID) for the ChehulNet v3 layer detector; drop manual toc/changelog bump (CI auto-versions)
+
+### Other
+- Release 1.36.1: ChehulNet shared presence v3 - HELLO carries layer (mapID:zoneUID) via built-in detector, ProfessionHelper crafters now locatable by layer across the Chehul mesh; answers ChehulPing RTT probe. Ship-identical shared file
+
+
 ## [1.36.0] - 2026-07-06
 
 ### Added
