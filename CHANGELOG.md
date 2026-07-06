@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.37.0] - 2026-07-06
+
+### Added
+- network alert popups (ChehulNet v4) — receive ChehulAlert and show a dismissible popup in ProfessionHelper's blue identity; Dismiss persists the id to ProfessionHelperDB so it never shows again
+
+
 ## [1.36.1] - 2026-07-06
 
 ### Fixed
