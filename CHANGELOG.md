@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.37.2] - 2026-07-06
+
+### Fixed
+- operator sees own network alert too (ChehulNet v6) — no self-skip, popup confirms on the sender's own client; still deduped + allowlist-gated
+
+
 ## [1.37.1] - 2026-07-06
 
 ### Fixed
