@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.31.0] - 2026-07-06
+
+### Added
+- PH pulls its weight on ChehulNet — yell gather data realm-wide + richer presence
+
+
 ## [1.30.0] - 2026-07-06
 
 ### Added
