@@ -8,6 +8,21 @@ if not PH or not CN then
     return
 end
 
+-- Show network alerts in ProfessionHelper's identity (blue). Forever-dismissed ids persist
+-- in our SavedVariables (ProfessionHelperDB.alertDismissed), resolved at call time.
+if CN.EnableAlerts then
+    CN:EnableAlerts({
+        accent = { 0.30, 0.65, 1.0 },
+        title = "Profession Helper",
+        priority = 1,
+        store = function()
+            ProfessionHelperDB = ProfessionHelperDB or {}
+            ProfessionHelperDB.alertDismissed = ProfessionHelperDB.alertDismissed or {}
+            return ProfessionHelperDB.alertDismissed
+        end,
+    })
+end
+
 CN:Register("ph", function()
     -- Advertise this character's professions, split into what it can craft vs
     -- gather, so peers (and the marketplace) know both sides. e.g.
