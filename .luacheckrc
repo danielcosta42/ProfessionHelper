@@ -3,6 +3,14 @@
 std = "lua51"
 max_line_length = false
 
+-- Vendored third-party libraries (Ace3 / ChatThrottleLib) — not our code, they
+-- carry their own globals; don't lint them. LibChehulMesh + LibStub ARE ours/linted.
+exclude_files = {
+    "Libs/AceComm-3.0.lua",
+    "Libs/CallbackHandler-1.0.lua",
+    "Libs/ChatThrottleLib.lua",
+}
+
 -- Suppress warnings that are false positives or acceptable in WoW addon code
 ignore = {
     "211",  -- unused variable / unused function (positional API returns, dead utility code)
@@ -157,6 +165,8 @@ read_globals = {
     "IsInGuild",
     "IsInGroup",
     "IsInRaid",
+    "IsInInstance",
+    "UnitIsGhost",
     "Ambiguate",
     "strsplit",
     "JoinPermanentChannel",
