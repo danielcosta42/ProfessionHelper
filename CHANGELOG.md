@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.34.0] - 2026-07-06
+
+### Added
+- "who can craft X now?" live mesh query (/ph who <item>)
+
+
 ## [1.33.0] - 2026-07-06
 
 ### Added
