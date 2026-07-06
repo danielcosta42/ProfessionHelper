@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.35.0] - 2026-07-06
+
+### Added
+- raid consumable checklist (/ph raid <role>)
+
+
 ## [1.34.0] - 2026-07-06
 
 ### Added
