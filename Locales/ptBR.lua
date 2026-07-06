@@ -1088,4 +1088,6 @@ ProfessionHelper._Locales["ptBR"] = {
     ["RAID_HEADER"] = "Consumíveis de raid - %s (verde=estocado, vermelho=faltando):",
     ["RAID_CRAFT"] = "faz",
     ["CMD_HELP_RAID"] = "|cff30a5ff/ph raid <papel>|r - checklist de consumíveis de raid (tem + faz)",
+    -- Cross-alt cooldown notify
+    ["CD_ALT_READY"] = "%s: cooldown de %s está pronto",
 }

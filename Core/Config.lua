@@ -18,6 +18,7 @@ Config.DEFAULTS = {
     debug                 = false,
     nodePins              = false, -- live gather-node pins on the world map (/ph pins)
     price_share           = true,  -- share observed AH prices over the mesh (crowd-sourced index)
+    cd_alt_notify         = true,  -- notify when an alt's craft cooldown comes up
 }
 
 -------------------------------------------------------------------------------

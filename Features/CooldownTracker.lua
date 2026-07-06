@@ -116,6 +116,35 @@ function CD:CheckAndNotify()
     end
 end
 
+-- Notify from ANY character when an ALT's cooldown has come up, so you don't have
+-- to log into each alt to find out. Uses the same per-entry `notified` flag; the
+-- cooldowns DB is keyed by charKey, so every alt's timers are visible from here.
+function CD:CheckAltCooldowns()
+    if PH.Config:Get("cd_alt_notify") == false then return end
+    if not (PH.Identity and PH.DB) then return end
+    local cur = PH.Identity:GetCharKey()
+    local root = PH.DB:Get("cooldowns")
+    if type(root) ~= "table" then return end
+    local now = time()
+    for charKey, entries in pairs(root) do
+        if charKey ~= cur and type(entries) == "table" then
+            local who = charKey:match("^([^-]+)") or charKey
+            for _, def in ipairs(self.DATABASE) do
+                local entry = entries[def.key]
+                if entry and entry.ts and entry.cdHours and not entry.notified then
+                    if (now - entry.ts) >= (entry.cdHours * 3600) then
+                        PH.Logger.Info(string.format(
+                            "|cffffd700[CD]|r " .. (PH.L["CD_ALT_READY"] or "%s: %s is ready"),
+                            "|cffffffff" .. who .. "|r",
+                            "|cff00ff00" .. def.label .. "|r"))
+                        entry.notified = true -- live SavedVariables ref; persists
+                    end
+                end
+            end
+        end
+    end
+end
+
 -- Returns seconds remaining on a cooldown entry (0 = ready / no data).
 function CD:GetRemainingSeconds(charKey, key)
     local entry = PH.DB:Get("cooldowns." .. charKey .. "." .. key)

@@ -1088,4 +1088,6 @@ ProfessionHelper._Locales["esES"] = {
     ["RAID_HEADER"] = "Consumibles de banda - %s (verde=en stock, rojo=falta):",
     ["RAID_CRAFT"] = "fabrica",
     ["CMD_HELP_RAID"] = "|cff30a5ff/ph raid <rol>|r - lista de consumibles de banda (tienes + fabricas)",
+    -- Cross-alt cooldown notify
+    ["CD_ALT_READY"] = "%s: el cooldown de %s está listo",
 }

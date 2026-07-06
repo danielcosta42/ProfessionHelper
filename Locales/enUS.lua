@@ -1088,4 +1088,6 @@ ProfessionHelper._Locales["enUS"] = {
     ["RAID_HEADER"] = "Raid consumables - %s (green=stocked, red=missing):",
     ["RAID_CRAFT"] = "craft",
     ["CMD_HELP_RAID"] = "|cff30a5ff/ph raid <role>|r - raid consumable checklist (have + craftable)",
+    -- Cross-alt cooldown notify
+    ["CD_ALT_READY"] = "%s: %s cooldown is ready",
 }
