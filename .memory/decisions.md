@@ -311,3 +311,31 @@ retorna o mapID da caverna, então o nó já é gravado sob o mapa da caverna (n
   (sem como distinguir — 2D). Dados de caverna são crowd-source (sem seed) → marcadores surgem com uso.
 - (-) Não testável ao vivo (precisa coletar em caverna). Auto-advance pode não rodar em micro-map (HBD
   pode não ter world coords) — a rota mostra mesmo assim.
+
+---
+
+## ADR-0012 — PH como produtor de dados da ChehulNet: yell realm-wide + presence rica (v1.32.0)
+
+**Status:** Aceito. "PH é o maior addon, faça parte do presence e yelle os dados ao redor."
+
+**Context:** LibChehulMesh v3 (do usuário, sincronizada na família) roda em AceComm+ChatThrottleLib;
+o bus realm-wide agora é **YELL** (zone-wide, timer-safe, estilo NovaWorldBuffs — `M:Realm(prefix,
+payload, key)` coalesce + flush 34%/25s). Marketplace e presence já usavam `:Realm`; **GatherData não**
+(só Guild+Proximity) — o dado mais rico do PH (nós crowd-source) não vazava da guild/40yd.
+
+**Decision:**
+- **GatherData:Broadcast** agora manda todo nó novo tb por `:Group` e `:Realm` (YELL zone-wide,
+  coalescido por nó). Usar o addon alimenta o mapa do realm inteiro.
+- **AmbientSync** (ticker 30s, bounded): radia uma janela rotativa (4/ciclo) dos nós **seedless**
+  (skin/fish — sem seed Wowhead) da zona atual pelo `:Realm`, então o DB acumulado converge pra quem
+  está lá. Herb/ore são PULADOS (todo mundo já tem o seed → tráfego redundante). No-op se sem nós/sem share.
+- **Presence caps** (ChehulNetWire) agora separam `craft:` e `gather:`
+  ("craft:Alch/Ench,gather:Herb/Mining"). O parser do marketplace `craft:([^,]+)` para na vírgula →
+  compatível E mais correto (gatherer não aparece mais como "crafter"). Consumido em
+  Marketplace:GetCrafters + MarketplaceUI (ChehulNet:Count("ph") = "Crafters online").
+
+**Consequences:**
+- (+) PH vira o hub de dados do mesh; skin/fish (sem seed) crescem realm-wide pelo uso.
+- (-) YELL é zone/layer-local — cross-zona/layer ainda depende de guild+whisper+movimento (limite do v3).
+- (-) Tráfego extra por YELL, mas bounded (coalesce + 34% flush + ambient só seedless/zona atual).
+  Desliga tudo via `gather_share=false`. Não testável ao vivo (precisa de 2 contas/peers).
