@@ -1073,4 +1073,13 @@ ProfessionHelper._Locales["enUS"] = {
     ["GATHER_PINS_ON"] = "Node pins ON — |cff5cdb66herbs|r |cfff29438ore|r |cffcc945cskinning|r |cff57b8fffishing|r",
     ["GATHER_PINS_OFF"] = "Node pins OFF",
     ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - toggle live gather-node pins on the world map",
+
+    -- Who-can-craft query (/ph who)
+    ["WHO_USAGE"] = "Usage: /ph who <item>",
+    ["WHO_NO_MESH"] = "Network unavailable — no crafter mesh.",
+    ["WHO_SEARCHING"] = "Searching crafters for '%s'...",
+    ["WHO_NONE"] = "No crafters found for '%s' (nearby / guild / realm).",
+    ["WHO_HEADER"] = "Crafters for '%s':",
+    ["WHO_CD_READY"] = "CD ready",
+    ["CMD_HELP_WHO"] = "|cff30a5ff/ph who <item>|r - find online crafters who can make an item",
 }

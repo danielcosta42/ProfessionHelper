@@ -1073,4 +1073,13 @@ ProfessionHelper._Locales["esES"] = {
     ["GATHER_PINS_ON"] = "Pines de nodos ACTIVADOS — |cff5cdb66hierbas|r |cfff29438mineral|r |cffcc945cdesuello|r |cff57b8ffpesca|r",
     ["GATHER_PINS_OFF"] = "Pines de nodos DESACTIVADOS",
     ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - activa/desactiva los pines de nodos en el mapa",
+
+    -- Who-can-craft query (/ph who)
+    ["WHO_USAGE"] = "Uso: /ph who <objeto>",
+    ["WHO_NO_MESH"] = "Red no disponible — sin malla de artesanos.",
+    ["WHO_SEARCHING"] = "Buscando quién hace '%s'...",
+    ["WHO_NONE"] = "Nadie hace '%s' (cerca / hermandad / reino).",
+    ["WHO_HEADER"] = "Artesanos para '%s':",
+    ["WHO_CD_READY"] = "CD listo",
+    ["CMD_HELP_WHO"] = "|cff30a5ff/ph who <objeto>|r - encuentra artesanos en línea que fabrican un objeto",
 }

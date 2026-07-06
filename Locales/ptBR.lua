@@ -1073,4 +1073,13 @@ ProfessionHelper._Locales["ptBR"] = {
     ["GATHER_PINS_ON"] = "Pins de nós LIGADOS — |cff5cdb66ervas|r |cfff29438minério|r |cffcc945ccouro|r |cff57b8ffpesca|r",
     ["GATHER_PINS_OFF"] = "Pins de nós DESLIGADOS",
     ["CMD_HELP_PINS"] = "|cff30a5ff/ph pins|r - liga/desliga os pins de nós de coleta no mapa",
+
+    -- Who-can-craft query (/ph who)
+    ["WHO_USAGE"] = "Uso: /ph who <item>",
+    ["WHO_NO_MESH"] = "Rede indisponível — sem malha de crafters.",
+    ["WHO_SEARCHING"] = "Procurando quem faz '%s'...",
+    ["WHO_NONE"] = "Ninguém faz '%s' (perto / guilda / realm).",
+    ["WHO_HEADER"] = "Quem faz '%s':",
+    ["WHO_CD_READY"] = "CD pronto",
+    ["CMD_HELP_WHO"] = "|cff30a5ff/ph who <item>|r - encontra crafters online que fazem um item",
 }

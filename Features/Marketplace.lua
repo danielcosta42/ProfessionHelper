@@ -441,6 +441,126 @@ function MP:WhisperFor(entry)
 end
 
 -------------------------------------------------------------------------------
+-- "Who can craft X now?" — a live mesh query. You ask; PH peers who know a
+-- matching recipe whisper back, including whether the relevant cooldown is up.
+-------------------------------------------------------------------------------
+MP.WHO_PREFIX = "PHWho"
+
+-- Responder: if I know a recipe matching the query, whisper it back to the asker
+-- (with cooldown state for CD-gated crafts). Capped so a broad query can't spam.
+function MP:WhoRespond(query, asker)
+    if type(query) ~= "string" or query == "" or not asker then return end
+    local mesh = _G.ChehulMesh
+    if not mesh or not PH.Identity then return end
+    local charKey = PH.Identity:GetCharKey()
+    local known = charKey and PH.DB:Get("knownRecipes." .. charKey)
+    if type(known) ~= "table" then return end
+
+    local cds = {}
+    if PH.CooldownTracker and PH.CooldownTracker.GetAllForCurrentChar then
+        for _, c in ipairs(PH.CooldownTracker:GetAllForCurrentChar()) do
+            if c.label then cds[c.label:lower()] = c end
+        end
+    end
+
+    local sent = 0
+    for _, recipes in pairs(known) do
+        if type(recipes) == "table" then
+            for recipeName in pairs(recipes) do
+                if sent >= 3 then break end
+                if type(recipeName) == "string" and recipeName:lower():find(query, 1, true) then
+                    local cd, rn = "", recipeName:lower()
+                    for label, c in pairs(cds) do
+                        if rn:find(label, 1, true) or label:find(rn, 1, true) then
+                            cd = c.ready and "R" or tostring(c.remaining or 0)
+                            break
+                        end
+                    end
+                    mesh:Whisper(MP.WHO_PREFIX, "CR1|" .. recipeName .. "|" .. cd, asker)
+                    sent = sent + 1
+                end
+            end
+        end
+        if sent >= 3 then break end
+    end
+end
+
+-- Asker: collect one reply.
+function MP:WhoReceive(recipeName, cd, sender)
+    local r = self._whoResults
+    if not r or type(recipeName) ~= "string" or recipeName == "" then return end
+    local key = (sender or "") .. "\t" .. recipeName
+    if r.seen[key] then return end
+    r.seen[key] = true
+    r.list[#r.list + 1] = { who = sender, recipe = recipeName, cd = cd or "" }
+end
+
+-- Asker: broadcast a query, then report what came back after a short window.
+function MP:WhoMakes(query)
+    query = tostring(query or ""):gsub("^%s+", ""):gsub("%s+$", ""):lower()
+    if query == "" then
+        PH.Logger.Info(PH.L["WHO_USAGE"] or "Usage: /ph who <item>")
+        return
+    end
+    local mesh = _G.ChehulMesh
+    if not mesh then
+        PH.Logger.Info(PH.L["WHO_NO_MESH"] or "Network unavailable.")
+        return
+    end
+    self._whoResults = { query = query, list = {}, seen = {} }
+    local m = "CQ1|" .. query
+    mesh:Guild(MP.WHO_PREFIX, m)
+    mesh:Group(MP.WHO_PREFIX, m)
+    mesh:Proximity(MP.WHO_PREFIX, m)
+    mesh:Realm(MP.WHO_PREFIX, m, MP.WHO_PREFIX)
+    PH.Logger.Info(string.format(PH.L["WHO_SEARCHING"] or "Searching crafters for \"%s\"...", query))
+    if C_Timer and C_Timer.After then
+        C_Timer.After(6, function() self:WhoReport() end)
+    end
+end
+
+function MP:WhoReport()
+    local r = self._whoResults
+    self._whoResults = nil
+    if not r then return end
+    if #r.list == 0 then
+        PH.Logger.Info(string.format(PH.L["WHO_NONE"] or "No crafters found for \"%s\".", r.query))
+        return
+    end
+    table.sort(r.list, function(a, b)
+        local ar, br = (a.cd == "R") and 0 or 1, (b.cd == "R") and 0 or 1
+        if ar ~= br then return ar < br end
+        return (a.who or "") < (b.who or "")
+    end)
+    PH.Logger.Info(string.format(PH.L["WHO_HEADER"] or "Crafters for \"%s\":", r.query))
+    for _, e in ipairs(r.list) do
+        local link = "|Hplayer:" .. (e.who or "") .. "|h[" .. (e.who or "?") .. "]|h"
+        local cdStr = ""
+        if e.cd == "R" then
+            cdStr = " |cff4dda5d(" .. (PH.L["WHO_CD_READY"] or "CD ready") .. ")|r"
+        elseif e.cd ~= "" then
+            local secs = tonumber(e.cd)
+            if secs and secs > 0 and PH.CooldownTracker then
+                cdStr = " |cffffa033(CD " .. PH.CooldownTracker:FormatRemaining(secs) .. ")|r"
+            end
+        end
+        PH.Logger.Info("  |cff30a5ff" .. e.recipe .. "|r \226\128\148 " .. link .. cdStr)
+    end
+end
+
+-- Mesh handler for the who-query prefix.
+function MP:OnWhoNet(payload, sender)
+    if type(payload) ~= "string" or not sender then return end
+    local op, a, b = strsplit("|", payload)
+    if op == "CQ1" then
+        if Short(sender) == PH.Identity:GetCharName() then return end -- ignore my own query
+        self:WhoRespond(a or "", sender)
+    elseif op == "CR1" then
+        self:WhoReceive(a or "", b or "", Short(sender))
+    end
+end
+
+-------------------------------------------------------------------------------
 -- Init
 -------------------------------------------------------------------------------
 
@@ -464,6 +584,9 @@ function MP:Initialize()
     if _G.ChehulMesh then
         _G.ChehulMesh:Register(MP.NET_PREFIX, function(payload, sender)
             self:OnNet(payload, sender)
+        end)
+        _G.ChehulMesh:Register(MP.WHO_PREFIX, function(payload, sender)
+            self:OnWhoNet(payload, sender)
         end)
     end
     if C_Timer and C_Timer.NewTicker then
