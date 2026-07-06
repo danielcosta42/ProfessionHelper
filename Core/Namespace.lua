@@ -10,7 +10,7 @@ _G.ProfessionHelper = _G.ProfessionHelper or {}
 local PH = _G.ProfessionHelper
 
 -- Addon metadata
-PH.version = "1.37.0"
+PH.version = "1.37.1"
 PH.author  = "Chehul @ DreamScyther-US"
 PH.github  = "https://github.com/danielcosta42"
 PH.license = "MIT License - Free for personal use"
