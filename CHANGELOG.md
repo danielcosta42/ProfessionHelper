@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.36.0] - 2026-07-06
+
+### Added
+- cross-alt cooldown notifications
+
+
 ## [1.35.0] - 2026-07-06
 
 ### Added
