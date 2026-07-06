@@ -8,7 +8,7 @@
 ## Notes-enUS: Complete profession leveling guide with smart routes, shopping lists & TSM integration
 ## Notes-esES: Guía completa de profesiones con rutas inteligentes, listas de compras e integración TSM
 ## Author: Chehul @ DreamScyther-US
-## Version: 1.29.0
+## Version: 1.29.1
 ## X-Website: https://github.com/danielcosta42
 ## X-Category: Professions
 ## X-License: Free for personal use
@@ -18,6 +18,10 @@
 ## SavedVariables: ProfessionHelperDB
 ## OptionalDeps: TradeSkillMaster, TradeSkillMaster_AppHelper, Auctionator, GatherMate2
 
+Libs\LibStub.lua
+Libs\CallbackHandler-1.0.lua
+Libs\ChatThrottleLib.lua
+Libs\AceComm-3.0.lua
 Libs\LibChehulMesh.lua
 Locales\ptBR.lua
 Locales\enUS.lua
