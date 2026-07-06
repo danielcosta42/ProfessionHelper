@@ -282,6 +282,11 @@ function PH:HandleSlashCommand(msg)
             self.Marketplace:WhoMakes(cmd:match("^who%s+(.+)$"))
         end
 
+    elseif cmd == "raid" or cmd:sub(1, 5) == "raid " then
+        if PH.RaidConsumables and PH.RaidConsumables.Print then
+            PH.RaidConsumables:Print(cmd:match("^raid%s+(.+)$"))
+        end
+
     elseif cmd == "market" or cmd == "marketplace" then
         if not (self.MainFrame and self.MainFrame:IsShown()) then
             self:ToggleMainWindow()
@@ -327,6 +332,7 @@ function PH:HandleSlashCommand(msg)
         PH.Logger.Info(self.L["CMD_HELP_ALTS"])
         PH.Logger.Info(self.L["CMD_HELP_MARKET"])
         PH.Logger.Info(self.L["CMD_HELP_WHO"])
+        PH.Logger.Info(self.L["CMD_HELP_RAID"])
         PH.Logger.Info(self.L["CMD_HELP_DE"])
         PH.Logger.Info(self.L["CMD_HELP_PINS"])
         PH.Logger.Info(self.L["FA_CMD_HELP"])

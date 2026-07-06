@@ -1082,4 +1082,10 @@ ProfessionHelper._Locales["enUS"] = {
     ["WHO_HEADER"] = "Crafters for '%s':",
     ["WHO_CD_READY"] = "CD ready",
     ["CMD_HELP_WHO"] = "|cff30a5ff/ph who <item>|r - find online crafters who can make an item",
+
+    -- Raid consumables (/ph raid)
+    ["RAID_USAGE"] = "Usage: /ph raid tank | melee | caster | healer",
+    ["RAID_HEADER"] = "Raid consumables - %s (green=stocked, red=missing):",
+    ["RAID_CRAFT"] = "craft",
+    ["CMD_HELP_RAID"] = "|cff30a5ff/ph raid <role>|r - raid consumable checklist (have + craftable)",
 }

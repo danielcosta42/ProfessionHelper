@@ -1082,4 +1082,10 @@ ProfessionHelper._Locales["esES"] = {
     ["WHO_HEADER"] = "Artesanos para '%s':",
     ["WHO_CD_READY"] = "CD listo",
     ["CMD_HELP_WHO"] = "|cff30a5ff/ph who <objeto>|r - encuentra artesanos en línea que fabrican un objeto",
+
+    -- Raid consumables (/ph raid)
+    ["RAID_USAGE"] = "Uso: /ph raid tank | melee | caster | healer",
+    ["RAID_HEADER"] = "Consumibles de banda - %s (verde=en stock, rojo=falta):",
+    ["RAID_CRAFT"] = "fabrica",
+    ["CMD_HELP_RAID"] = "|cff30a5ff/ph raid <rol>|r - lista de consumibles de banda (tienes + fabricas)",
 }
