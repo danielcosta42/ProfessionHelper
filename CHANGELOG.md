@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.32.0] - 2026-07-06
+
+### Added
+- live gather-node pins on the world map (/ph pins)
+
+
 ## [1.31.0] - 2026-07-06
 
 ### Added
