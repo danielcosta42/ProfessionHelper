@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.37.4] - 2026-07-07
+
+### Fixed
+- bump Interface-BCC to 20506 for TBC Anniversary 2.5.6
+
+
 ## [1.37.3] - 2026-07-06
 
 ### Fixed
