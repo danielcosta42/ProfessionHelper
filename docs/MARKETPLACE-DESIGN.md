@@ -1,7 +1,7 @@
 # ProfessionHelper — Crafter Marketplace (Design & Feasibility)
 
 > Status: **Design proposal** (not yet implemented)
-> Target client: WoW Classic **Anniversary / TBC Classic 2.5.5** (interface 20505)
+> Target client: WoW Classic **Anniversary / TBC Classic 2.5.6** (interface 20506)
 > Companion addon: **PartyLens** (same author) — see [§8 Cross-addon synergy](#8-cross-addon-synergy-chehulnet)
 > Last updated: 2026-07-04
 
