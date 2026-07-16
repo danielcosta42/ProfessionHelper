@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.37.5] - 2026-07-16
+
+### Fixed
+- stop per-node YELL flood that tripped the chat rate limit
+
+
 ## [1.37.4] - 2026-07-07
 
 ### Fixed
