@@ -2,6 +2,12 @@
 
 All notable changes to Profession Helper will be documented in this file.
 
+## [1.37.6] - 2026-07-16
+
+### Fixed
+- pace + bound the realm YELL flush so it can't trip the chat rate limit
+
+
 ## [1.37.5] - 2026-07-16
 
 ### Fixed
